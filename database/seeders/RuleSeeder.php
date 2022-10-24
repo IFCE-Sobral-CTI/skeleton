@@ -16,40 +16,74 @@ class RuleSeeder extends Seeder
      */
     public function run()
     {
-        $groups = Group::where('description', 'Páginas')->first();
-        $permissions = Group::where('description', 'Permissões')->first();
-        $rules = Group::where('description', 'Regras')->first();
-        $users = Group::where('description', 'Usuários')->first();
-
-        $data = [
-            ['description' => 'Página inicial', 'control' => 'groups.viewAny', 'group_id' => $groups->id, 'created_at' => now(), 'updated_at' => now()],
-            ['description' => 'Detalhar', 'control' => 'groups.view', 'group_id' => $groups->id, 'created_at' => now(), 'updated_at' => now()],
-            ['description' => 'Criar', 'control' => 'groups.create', 'group_id' => $groups->id, 'created_at' => now(), 'updated_at' => now()],
-            ['description' => 'Atualizar', 'control' => 'groups.update', 'group_id' => $groups->id, 'created_at' => now(), 'updated_at' => now()],
-            ['description' => 'Apagar', 'control' => 'groups.delete', 'group_id' => $groups->id, 'created_at' => now(), 'updated_at' => now()],
-
-            ['description' => 'Página inicial', 'control' => 'users.viewAny', 'group_id' => $users->id, 'created_at' => now(), 'updated_at' => now()],
-            ['description' => 'Detalhar', 'control' => 'users.view', 'group_id' => $users->id, 'created_at' => now(), 'updated_at' => now()],
-            ['description' => 'Criar', 'control' => 'users.create', 'group_id' => $users->id, 'created_at' => now(), 'updated_at' => now()],
-            ['description' => 'Atualizar', 'control' => 'users.update', 'group_id' => $users->id, 'created_at' => now(), 'updated_at' => now()],
-            ['description' => 'Atualizar de senha', 'control' => 'users.update.password', 'group_id' => $users->id, 'created_at' => now(), 'updated_at' => now()],
-            ['description' => 'Apagar', 'control' => 'users.delete', 'group_id' => $users->id, 'created_at' => now(), 'updated_at' => now()],
-            ['description' => 'Perfil', 'control' => 'users.profile', 'group_id' => $users->id, 'created_at' => now(), 'updated_at' => now()],
-
-            ['description' => 'Página inicial', 'control' => 'rules.viewAny', 'group_id' => $rules->id, 'created_at' => now(), 'updated_at' => now()],
-            ['description' => 'Detalhar', 'control' => 'rules.view', 'group_id' => $rules->id, 'created_at' => now(), 'updated_at' => now()],
-            ['description' => 'Criar', 'control' => 'rules.create', 'group_id' => $rules->id, 'created_at' => now(), 'updated_at' => now()],
-            ['description' => 'Atualizar', 'control' => 'rules.update', 'group_id' => $rules->id, 'created_at' => now(), 'updated_at' => now()],
-            ['description' => 'Apagar', 'control' => 'rules.delete', 'group_id' => $rules->id, 'created_at' => now(), 'updated_at' => now()],
-
-            ['description' => 'Página inicial', 'control' => 'permissions.viewAny', 'group_id' => $permissions->id, 'created_at' => now(), 'updated_at' => now()],
-            ['description' => 'Detalhar', 'control' => 'permissions.view', 'group_id' => $permissions->id, 'created_at' => now(), 'updated_at' => now()],
-            ['description' => 'Criar', 'control' => 'permissions.create', 'group_id' => $permissions->id, 'created_at' => now(), 'updated_at' => now()],
-            ['description' => 'Atualizar', 'control' => 'permissions.update', 'group_id' => $permissions->id, 'created_at' => now(), 'updated_at' => now()],
-            ['description' => 'Apagar', 'control' => 'permissions.delete', 'group_id' => $permissions->id, 'created_at' => now(), 'updated_at' => now()],
-            ['description' => 'Modificar regras', 'control' => 'permissions.rules', 'group_id' => $permissions->id, 'created_at' => now(), 'updated_at' => now()],
+        /**
+         * @var array $groups
+         */
+        $groups = [
+            'groups' => ['group' => Group::firstOrCreate(['description' => 'Páginas'])],
+            'rules' => ['group' => Group::firstOrCreate(['description' => 'Regras'])],
+            'permissions' => [
+                'group' => Group::firstOrCreate(['description' => 'Permissões']),
+                'additional' => [
+                    'Modificar regras' => 'permissions.rules',
+                ]
+            ],
+            'users' => [
+                'group' => Group::firstOrCreate(['description' => 'Usuários']),
+                'additional' => [
+                    'Perfil' => 'users.profile',
+                    'Atualizar de senha' => 'users.update.password',
+                ]
+            ],
         ];
 
-        Rule::insert($data);
+        foreach($groups as $key => $value) {
+            Rule::insert($this->getInserts($key, $value['group'], $value['additional']??[]));
+        }
+    }
+
+    /**
+     * Generates an array of data to be inserted into the table
+     *
+     * @param string $page
+     * @param Group $group
+     * @param array $additional
+     *
+     * @return array
+     */
+    private function getInserts(string $page, Group $group, array $additional = []): array
+    {
+        $descriptions = array_merge($this->getDescriptionControl($page), $additional);
+
+        $insert = [];
+
+        foreach($descriptions as $key => $value) {
+            $insert[] = [
+                'description' => $key,
+                'control' => $value,
+                'group_id' => $group->id,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ];
+        }
+
+        return $insert;
+    }
+
+    /**
+     * Generate an array with descriptions and their controls
+     *
+     * @param string $page
+     * @return array
+     */
+    private function getDescriptionControl(string $page): array
+    {
+        return [
+            'Página inicial' => $page.'.viewAny',
+            'Detalhas' => $page.'.view',
+            'Criar' => $page.'.create',
+            'Atualizar' => $page.'.update',
+            'Apagar' => $page.'.delete',
+        ];
     }
 }

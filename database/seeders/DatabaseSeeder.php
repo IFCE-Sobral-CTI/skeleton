@@ -19,19 +19,18 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
         $this->call([
-            GroupSeeder::class,
             RuleSeeder::class,
             PermissionSeeder::class,
         ]);
 
-        User::factory(23)->create();
+        // User::factory(23)->create();
 
         User::factory()->create([
-            'name' => 'Alan Freire',
-            'email' => 'alan.freire@ifce.edu.br',
+            'name' => 'Coordenadoria de Tecnologia da Informação',
+            'email' => 'ti.sobral@ifce.edu.br',
             'password' => Hash::make('qwe123'),
             'status' => 1,
-            'registry' => 3024033,
+            'registry' => 1000000,
             'permission_id' => Permission::where('description', 'Administrador')->first()->id
         ]);
     }
