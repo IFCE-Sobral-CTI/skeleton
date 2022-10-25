@@ -83,7 +83,19 @@ Para acessar a dashboard use as seguintes credenciais
 
 ### TELAS
 
-[Gerenciamento de Usuários]: https://github.com/CTI-Sobral-IFCE/skeleton/blob/main/public/screenshots/users-admin.png?raw=true
+Gerenciamento de Usuários
+
+![Gerenciamento de Usuários](https://github.com/CTI-Sobral-IFCE/skeleton/blob/main/public/screenshots/users-admin.png?raw=true "Admin users")
+
+![Formulário de novo Usuários](https://github.com/CTI-Sobral-IFCE/skeleton/blob/main/public/screenshots/users-create.png?raw=true "Create users")
+
+![Detalhes do Usuários](https://github.com/CTI-Sobral-IFCE/skeleton/blob/main/public/screenshots/users-show.png?raw=true "Show users")
+
+Gerenciamento de permissões
+
+![Gerenciamento de Permissões](https://github.com/CTI-Sobral-IFCE/skeleton/blob/main/public/screenshots/permissions-show.png?raw=true "Show permissions")
+
+<font size="1">*A permissão Administrador não precisa de nenhuma regra pois, por padrão, já acessa todos as páginas.*</font>
 
 ### CRÉDITOS
 
