@@ -29,7 +29,7 @@ git remote remove origin
 Adicione o repositório do seu projeto.
 
 ```sh
-git remote add origin https://github.com/USER/REPO>.git
+git remote add origin https://github.com/USER/REPO.git
 ```
 
 Faça uma cópia do arquivo ```.env```:
@@ -80,6 +80,10 @@ O sistema está distribuído em duas partes do front-end.
 Para acessar a dashboard use as seguintes credenciais
 * Usuário: ti.sobral@ifce.edu.br
 * Senha: qwe123
+
+### TELAS
+
+[Gerenciamento de Usuários]: https://github.com/CTI-Sobral-IFCE/skeleton/blob/main/public/screenshots/users-admin.png?raw=true
 
 ### CRÉDITOS
 
