@@ -7,6 +7,7 @@ use App\Http\Requests\StoreGroupRequest;
 use App\Http\Requests\UpdateGroupRequest;
 use App\Models\Group;
 use Exception;
+use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -18,30 +19,27 @@ class GroupController extends Controller
     /**
      * Display a listing of the resource.
      *
+     * @param Request $request
      * @return Response
+     * @throws AuthorizationException
      */
     public function index(Request $request): Response
     {
         $this->authorize('groups.viewAny', Group::class);
 
-        $result = Group::search($request->term);
-
-        return Inertia::render('Group/Index', [
-            'groups' => $result['data'],
-            'count' => $result['count'],
-            'termSearch' => $request->term,
-            'page', $request->page,
+        return Inertia::render('Group/Index', array_merge(Group::search($request), [
             'can' => [
                 'create' => Auth::user()->can('groups.create'),
-                'view' => Auth::user()->can('groups.view'),
+              'view' => Auth::user()->can('groups.view'),
             ],
-        ]);
+        ]));
     }
 
     /**
      * Show the form for creating a new resource.
      *
      * @return Response
+     * @throws AuthorizationException
      */
     public function create(): Response
     {
@@ -53,8 +51,9 @@ class GroupController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  StoreGroupRequest  $request
+     * @param StoreGroupRequest $request
      * @return RedirectResponse
+     * @throws AuthorizationException
      */
     public function store(StoreGroupRequest $request): RedirectResponse
     {
@@ -71,8 +70,9 @@ class GroupController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  Group  $group
+     * @param Group $group
      * @return Response
+     * @throws AuthorizationException
      */
     public function show(Group $group): Response
     {
@@ -90,10 +90,11 @@ class GroupController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\Group  $group
-     * @return \Illuminate\Http\Response
+     * @param Group $group
+     * @return Response
+     * @throws AuthorizationException
      */
-    public function edit(Group $group)
+    public function edit(Group $group): Response
     {
         $this->authorize('groups.update', $group);
 
@@ -105,11 +106,12 @@ class GroupController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \App\Http\Requests\UpdateGroupRequest  $request
-     * @param  \App\Models\Group  $group
-     * @return \Illuminate\Http\Response
+     * @param UpdateGroupRequest $request
+     * @param Group $group
+     * @return RedirectResponse
+     * @throws AuthorizationException
      */
-    public function update(UpdateGroupRequest $request, Group $group)
+    public function update(UpdateGroupRequest $request, Group $group): RedirectResponse
     {
         $this->authorize('groups.update', $group);
 
@@ -124,8 +126,9 @@ class GroupController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  Group  $group
+     * @param Group $group
      * @return RedirectResponse
+     * @throws AuthorizationException
      */
     public function destroy(Group $group): RedirectResponse
     {

@@ -3,13 +3,17 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Query\Builder;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Http\Request;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 
+/**
+ * @method static search(Request $request)
+ */
 class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
@@ -78,19 +82,21 @@ class User extends Authenticatable
     }
 
     /**
-     * @param $query
-     * @param string $term
+     * @param Builder $query
+     * @param Request $request
      * @return array
      */
-    public function scopeSearch($query, $term = ''): array
+    public function scopeSearch(Builder $query, Request $request): array
     {
         $query->with('permission')
-            ->where('name', 'like', "%{$term}%")
-            ->orWhere('email', 'like', "%{$term}%");
+            ->where('name', 'like', "%{$request->term}%")
+            ->orWhere('email', 'like', "%{$request->term}%");
 
         return [
             'count' => $query->count(),
-            'data' => $query->orderBy('name', 'ASC')->paginate(env('APP_PAGINATION'))->appends(['term' => $term]),
+            'users' => $query->orderBy('name', 'ASC')->paginate(env('APP_PAGINATION'))->appends(['term' => $request->term]),
+            'page' => $request->page?? 1,
+            'termSearch' => $request->term,
         ];
     }
 }

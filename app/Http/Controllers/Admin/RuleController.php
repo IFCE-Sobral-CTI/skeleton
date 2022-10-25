@@ -28,19 +28,13 @@ class RuleController extends Controller
     {
         $this->authorize('rules.viewAny', Rule::class);
 
-        $result = Rule::search($request->term);
-
-        return Inertia::render('Rule/Index', [
-            'rules' => $result['data'],
-            'count' => $result['count'],
-            'page' => $request->page?? 1,
-            'termSearch' => $request->term,
+        return Inertia::render('Rule/Index', array_merge(Rule::search($request), [
             'can' => [
                 'viewAny' => Auth::user()->can('rules.viewAny'),
-                'view' => Auth::user()->can('rules.view'),
-                'create' => Auth::user()->can('rules.create'),
+            'view' => Auth::user()->can('rules.view'),
+            'create' => Auth::user()->can('rules.create'),
             ],
-        ]);
+        ]));
     }
 
     /**

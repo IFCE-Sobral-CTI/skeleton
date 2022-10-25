@@ -30,19 +30,12 @@ class PermissionController extends Controller
     {
         $this->authorize('permissions.viewAny', Permission::class);
 
-        $result = Permission::search($request->term);
-
-        return Inertia::render('Permission/Index', [
-            'permissions' => $result['data'],
-            'count' => $result['count'],
-            'page' => $request->page?? 1,
-            'termSearch' => $request->term,
+        return Inertia::render('Permission/Index', array_merge(Permission::search($request), [
             'can' => [
-                'viewAny' => Auth::user()->can('permissions.viewAny'),
                 'view' => Auth::user()->can('permissions.view'),
                 'create' => Auth::user()->can('permissions.create'),
             ]
-        ]);
+        ]));
     }
 
     /**

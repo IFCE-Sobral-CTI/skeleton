@@ -30,18 +30,12 @@ class UserController extends Controller
     {
         $this->authorize('users.viewAny', User::class);
 
-        $result = User::search($request->term);
-
-        return Inertia::render('User/Index', [
-            'users' => $result['data'],
-            'count' => $result['count'],
-            'page' => $request->page?? 1,
-            'termSearch' => $request->term,
+        return Inertia::render('User/Index', array_merge(User::search($request), [
             'can' => [
                 'create' => Auth::user()->can('users.create'),
                 'view' => Auth::user()->can('users.view'),
             ]
-        ]);
+        ]));
     }
 
     /**
