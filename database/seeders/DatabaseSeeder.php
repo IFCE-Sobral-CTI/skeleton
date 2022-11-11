@@ -21,6 +21,7 @@ class DatabaseSeeder extends Seeder
         $this->call([
             RuleSeeder::class,
             PermissionSeeder::class,
+            UserSeeder::class,
         ]);
 
         // User::factory(23)->create();

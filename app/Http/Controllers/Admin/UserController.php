@@ -200,6 +200,9 @@ class UserController extends Controller
     {
         $this->authorize('users.delete', $user);
 
+        if ($user->id === 1)
+            return redirect()->route('users.index')->with('flash', ['status' => 'danger', 'message' => 'Erro ao tentar apagar o registro!']);
+
         try {
             $user->delete();
             return redirect()->route('users.index')->with('flash', ['status' => 'success', 'message' => 'Registro apagado com sucesso!']);

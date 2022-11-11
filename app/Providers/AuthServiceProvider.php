@@ -31,7 +31,6 @@ class AuthServiceProvider extends ServiceProvider
     {
         $this->registerPolicies();
 
-
         if (Schema::hasTable('rules')) {
             $rules = $rule->with('permissions')->get();
 
@@ -41,7 +40,7 @@ class AuthServiceProvider extends ServiceProvider
                 });
             }
 
-            Gate::before(function($user, $ability) {
+            Gate::before(function(User $user, $ability) {
                 if ($user->isAdmin())
                     return true;
             });

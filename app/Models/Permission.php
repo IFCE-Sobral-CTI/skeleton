@@ -11,7 +11,11 @@ use Illuminate\Http\Request;
 
 /**
  * @method static search(Request $request)
- * @property string description
+ *
+ * @property int $id
+ * @property string $description
+ * @property Rule $rule
+ * @property User $uses
  */
 class Permission extends Model
 {

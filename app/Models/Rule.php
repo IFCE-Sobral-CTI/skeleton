@@ -11,9 +11,12 @@ use Illuminate\Http\Request;
 
 /**
  * @method static search(mixed $term)
+ * @method static hasControl()
+ *
  * @property string description
  * @property string control
  * @property string group
+ * @property Permission $permissions
  */
 class Rule extends Model
 {
@@ -55,12 +58,12 @@ class Rule extends Model
     /**
      * @param Builder $query
      * @param Request $request
+     *
      * @return array
      */
     public function scopeSearch(Builder $query, Request $request): array
     {
-        $query->with('group')
-            ->whereHas('group', function(Builder $query) use ($request) {
+        $query->withWhereHas('group', function(Builder $query) use ($request) {
                 $query->where('description', 'like', "%{$request->term}%");
             })
             ->orWhere('description', 'like', "%{$request->term}%")
@@ -75,11 +78,12 @@ class Rule extends Model
     }
 
     /**
-     * @param $query
-     * @param $control
+     * @param Builder $query
+     * @param string $control
+     *
      * @return bool
      */
-    public function scopeHasControl($query, $control): bool
+    public function scopeHasControl(Builder $query, string $control): bool
     {
         return (bool) $query->where('control', $control)->count();
     }

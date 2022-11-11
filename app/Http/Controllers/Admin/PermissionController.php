@@ -142,6 +142,9 @@ class PermissionController extends Controller
     {
         $this->authorize('permissions.delete', $permission);
 
+        if ($permission->id == 1)
+            return redirect()->route('permissions.index')->with('flash', ['status' => 'danger', 'message' => 'Erro ao tentar apagar o registro!']);
+
         try {
             $permission->delete();
             return redirect()->route('permissions.index')->with('flash', ['status' => 'success', 'message' => 'Registro apagado com sucesso.']);
@@ -160,7 +163,7 @@ class PermissionController extends Controller
     public function rules(Permission $permission): Response
     {
         $this->authorize('permissions.rules', $permission);
-        
+
         $permission = Permission::with('rules')->find($permission->id);
 
         return Inertia::render('Permission/Rules', [
@@ -168,8 +171,6 @@ class PermissionController extends Controller
             'permission' => $permission,
         ]);
     }
-
-
 
     /**
      * Update rules the specified resource in storage.

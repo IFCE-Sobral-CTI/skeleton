@@ -10,20 +10,32 @@ use Illuminate\Http\Request;
 
 /**
  * @method static search(Request $request)
+ *
+ * @property string $description
+ * @property Rule $rules
  */
 class Group extends Model
 {
     use HasFactory;
 
+    /**
+     * @var string[]
+     */
     protected $fillable = [
         'description',
     ];
 
+    /**
+     * @var string[]
+     */
     protected $casts = [
         'created_at' => 'datetime:d/m/Y H:i:s',
         'updated_at' => 'datetime:d/m/Y H:i:s',
     ];
 
+    /**
+     * @return HasMany
+     */
     public function rules(): HasMany
     {
         return $this->hasMany(Rule::class);

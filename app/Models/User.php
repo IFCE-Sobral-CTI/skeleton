@@ -13,6 +13,11 @@ use Laravel\Sanctum\HasApiTokens;
 
 /**
  * @method static search(Request $request)
+ * @property int $id
+ * @property string $name
+ * @property string $email
+ * @property int $status
+ * @property Permission $permission
  */
 class User extends Authenticatable
 {
@@ -32,6 +37,7 @@ class User extends Authenticatable
         'password',
         'registry',
         'status',
+        'email_verified_at',
         'permission_id',
     ];
 
@@ -69,7 +75,7 @@ class User extends Authenticatable
      */
     public function isAdmin(): bool
     {
-        return $this->permission->description === 'Administrador';
+        return $this->permission->id == 'Administrador';
     }
 
     /**
