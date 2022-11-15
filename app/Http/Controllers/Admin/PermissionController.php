@@ -121,6 +121,10 @@ class PermissionController extends Controller
     {
         $this->authorize('permissions.update', $permission);
 
+        // Não permite apagar a permissão administrador
+        if ($permission->description == 'Administrador')
+            return redirect()->route('permissions.index')->with('flash', ['status' => 'danger', 'message' => 'Você não tem permissão modificar esse registro!']);
+
         $data = $request->validated();
 
         try {
@@ -142,8 +146,9 @@ class PermissionController extends Controller
     {
         $this->authorize('permissions.delete', $permission);
 
-        if ($permission->id == 1)
-            return redirect()->route('permissions.index')->with('flash', ['status' => 'danger', 'message' => 'Erro ao tentar apagar o registro!']);
+        // Não permite apagar a permissão administrador
+        if ($permission->description == 'Administrador')
+            return redirect()->route('permissions.index')->with('flash', ['status' => 'danger', 'message' => 'Você não tem permissão para apager esse registro!']);
 
         try {
             $permission->delete();
