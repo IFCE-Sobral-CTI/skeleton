@@ -8,6 +8,8 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Http\Request;
+use Spatie\Activitylog\LogOptions;
+use Spatie\Activitylog\Traits\LogsActivity;
 
 /**
  * @method static search(mixed $term)
@@ -20,7 +22,7 @@ use Illuminate\Http\Request;
  */
 class Rule extends Model
 {
-    use HasFactory;
+    use HasFactory, LogsActivity;
 
     /**
      * @var array $fillable
@@ -38,6 +40,21 @@ class Rule extends Model
         'created_at' => 'datetime:d/m/Y H:i:s',
         'updated_at' => 'datetime:d/m/Y H:i:s',
     ];
+
+    /**
+     * @return LogOptions
+     */
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->logOnly([
+                'description',
+                'control',
+                'group.description'
+            ])
+            ->logOnlyDirty()
+            ->dontSubmitEmptyLogs();
+    }
 
     /**
      * @return BelongsToMany
@@ -63,7 +80,8 @@ class Rule extends Model
      */
     public function scopeSearch(Builder $query, Request $request): array
     {
-        $query->withWhereHas('group', function(Builder $query) use ($request) {
+        $query->with('group')
+            ->whereHas('group', function(Builder $query) use ($request) {
                 $query->where('description', 'like', "%{$request->term}%");
             })
             ->orWhere('description', 'like', "%{$request->term}%")

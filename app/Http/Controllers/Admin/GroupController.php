@@ -30,7 +30,7 @@ class GroupController extends Controller
         return Inertia::render('Group/Index', array_merge(Group::search($request), [
             'can' => [
                 'create' => Auth::user()->can('groups.create'),
-              'view' => Auth::user()->can('groups.view'),
+                'view' => Auth::user()->can('groups.view'),
             ],
         ]));
     }

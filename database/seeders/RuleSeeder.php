@@ -20,6 +20,10 @@ class RuleSeeder extends Seeder
          * @var array $groups
          */
         $groups = [
+            'activities' => [
+                'group' => Group::firstOrCreate(['description' => 'Logs']),
+                'only' => ['Página inicial' => 'viewAny', 'Detalhes' => 'view'],
+            ],
             'groups' => ['group' => Group::firstOrCreate(['description' => 'Páginas'])],
             'rules' => ['group' => Group::firstOrCreate(['description' => 'Regras'])],
             'permissions' => [
@@ -38,7 +42,7 @@ class RuleSeeder extends Seeder
         ];
 
         foreach($groups as $key => $value) {
-            Rule::insert($this->getInserts($key, $value['group'], $value['additional']??[]));
+            Rule::insert($this->getInserts(page: $key, group: $value['group'], additional: $value['additional']??[], only: $value['only']?? []));
         }
     }
 
@@ -48,12 +52,12 @@ class RuleSeeder extends Seeder
      * @param string $page
      * @param Group $group
      * @param array $additional
-     *
+     * @param array $only
      * @return array
      */
-    private function getInserts(string $page, Group $group, array $additional = []): array
+    private function getInserts(string $page, Group $group, array $additional = [], array $only = []): array
     {
-        $descriptions = array_merge($this->getDescriptionControl($page), $additional);
+        $descriptions = array_merge($this->getDescriptionControl($page, $only), $additional);
 
         $insert = [];
 
@@ -74,13 +78,24 @@ class RuleSeeder extends Seeder
      * Generate an array with descriptions and their controls
      *
      * @param string $page
+     * @param array $only
      * @return array
      */
-    private function getDescriptionControl(string $page): array
+    private function getDescriptionControl(string $page, array $only = []): array
     {
+        if (!empty($only)) {
+            $items = [];
+
+            foreach ($only as $k => $v) {
+                $items[$k] = sprintf('%s.%s', $page, $v);
+            }
+
+            return $items;
+        }
+
         return [
             'Página inicial' => $page.'.viewAny',
-            'Detalhas' => $page.'.view',
+            'Detalhes' => $page.'.view',
             'Criar' => $page.'.create',
             'Atualizar' => $page.'.update',
             'Apagar' => $page.'.delete',

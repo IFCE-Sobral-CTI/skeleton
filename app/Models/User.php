@@ -10,6 +10,9 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Http\Request;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use Spatie\Activitylog\LogOptions;
+use Spatie\Activitylog\Traits\CausesActivity;
+use Spatie\Activitylog\Traits\LogsActivity;
 
 /**
  * @method static search(Request $request)
@@ -21,7 +24,7 @@ use Laravel\Sanctum\HasApiTokens;
  */
 class User extends Authenticatable
 {
-    use HasApiTokens, HasFactory, Notifiable;
+    use HasApiTokens, HasFactory, Notifiable, LogsActivity, CausesActivity;
 
     const ACTIVE = 1;
     const INACTIVE = 0;
@@ -63,6 +66,22 @@ class User extends Authenticatable
     ];
 
     /**
+     * @return LogOptions
+     */
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->logOnly([
+                'name',
+                'email',
+                'registry',
+                'permission.name'
+            ])
+            ->logOnlyDirty()
+            ->dontSubmitEmptyLogs();
+    }
+
+    /**
      * @return BelongsTo
      */
     public function permission(): BelongsTo
@@ -75,7 +94,7 @@ class User extends Authenticatable
      */
     public function isAdmin(): bool
     {
-        return $this->permission->id == 'Administrador';
+        return $this->permission->description === 'Administrador';
     }
 
     /**

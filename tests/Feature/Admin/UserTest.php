@@ -34,7 +34,7 @@ class UserTest extends TestCase
     public function test_users_can_access_page_index()
     {
         $response = $this->actingAs($this->user)->get(route('users.index'));
-        $this->assertAuthenticated();
+
         $response->assertStatus(200);
     }
 
