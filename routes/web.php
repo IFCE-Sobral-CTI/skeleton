@@ -41,7 +41,7 @@ Route::prefix('admin')->middleware(['auth', 'verified'])->group(function() {
     Route::get('permissions/{permission}/rules', [PermissionController::class, 'rules'])->name('permissions.rules');
     Route::put('permissions/{permission}/rules', [PermissionController::class, 'syncRules'])->name('permissions.rules.sync');
     Route::resource('groups', GroupController::class);
-    Route::resource('activities', ActivityController::class)->only(['index', 'show']);
+    Route::resource('activities', ActivityController::class)->only(['index', 'show', 'destroy']);
 });
 
 require __DIR__.'/auth.php';

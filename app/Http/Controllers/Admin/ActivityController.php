@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Activity as ModelsActivity;
+use Exception;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -22,29 +24,11 @@ class ActivityController extends Controller
     {
         $this->authorize('activities.showAny', Activity::class);
 
-        $activities = Activity::with(['causer', 'subject'])->orderBy('created_at', 'DESC')->paginate(env('APP_PAGINATION'))->appends(['term' => $request->term?? '']);
-
-        $data = $activities->map(function($item) {
-            $subject = explode('\\', $item->subject_type);
-            return [
-                'id' => $item->id,
-                'description' => $item->description,
-                'causer' => explode(' ', $item->causer?->name?? '-')[0],
-                'subject' => end($subject),
-                'created_at' => $item->created_at->format('d/m/Y H:i:s')
-            ];
-        });
-        dd($data);
-        return Inertia::render('Activity/Index', [
-            'activities' => $data,
-            'pagination' => $activities,
-            'count' => Activity::count(),
-            'page' => $request->page,
-            'termSearch' => $request->term,
+        return Inertia::render('Activity/Index', array_merge(ModelsActivity::search($request), [
             'can' => [
                 'view' => Auth::user()->can('activities.view'),
             ]
-        ]);
+        ]));
     }
 
     /**
@@ -58,19 +42,32 @@ class ActivityController extends Controller
     {
         $this->authorize('activities.view', $activity);
 
+        $activity = Activity::with(['causer:id,name', 'subject'])->find($activity->id);
+
+        //dd($activity);
+
         return Inertia::render('Activity/Show', [
             'activity' => $activity,
+            'can' => [
+                'delete' => Auth::user()->can('activities.delete'),
+            ]
         ]);
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param  Activity  $activity
+     * @return Response
      */
-    public function destroy($id)
+    public function destroy(Activity $activity)
     {
-        //
+        try {
+            $activity->delete();
+        } catch (Exception $e) {
+            return to_route('activities.show', $activity)->with('flash', ['status' => 'error', 'message' => $e->getMessage()]);
+        }
+
+        return to_route('activities.index')->with('flash', ['status' => 'success', 'message' => 'Registro apagado com sucesso.']);
     }
 }

@@ -4,12 +4,13 @@ import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import { Inertia } from "@inertiajs/inertia";
 import { Link } from "@inertiajs/inertia-react";
 import React, { useEffect, useState } from "react";
+import Description from "./Components/Description";
 
-function Index({ activities, count, page, termSearch, pagination, can }) {
+function Index({ activities, count, page, termSearch, can }) {
     const [term, setTerm] = useState(termSearch?? '');
     const [currentPage, setCurrentPage] = useState(page);
 
-    console.log('Data', activities);
+    // console.log(activities.data);
 
     useEffect(() => {
         const debounce = setTimeout(() => {
@@ -20,12 +21,12 @@ function Index({ activities, count, page, termSearch, pagination, can }) {
         return () => clearTimeout(debounce);
     }, [term]);
 
-    const table = activities.map((item, index) => {
+    const table = activities.data.map((item, index) => {
         return (
             <tr key={index} className={"border-t transition hover:bg-neutral-100 " + (index % 2 == 0? 'bg-neutral-50': '')}>
-                <td className="px-1 py-3 font-light"><Link href={can.view? route('activities.show', item.id): route('activities.index', {term: term, page: currentPage})}>{item.description}</Link></td>
-                <td className="px-1 py-3 font-light"><Link href={can.view? route('activities.show', item.id): route('activities.index', {term: term, page: currentPage})}>{item.causer}</Link></td>
-                <td className="px-1 py-3 font-light"><Link href={can.view? route('activities.show', item.id): route('activities.index', {term: term, page: currentPage})}>{item.subject}</Link></td>
+                <td className="px-1 py-3 font-light"><Link href={can.view? route('activities.show', item.id): route('activities.index', {term: term, page: currentPage})}><Description title={item.description} /></Link></td>
+                <td className="px-1 py-3 font-light"><Link href={can.view? route('activities.show', item.id): route('activities.index', {term: term, page: currentPage})}>{item.causer?.name.split(' ').reverse().pop()?? '-'}</Link></td>
+                <td className="px-1 py-3 font-light"><Link href={can.view? route('activities.show', item.id): route('activities.index', {term: term, page: currentPage})}>{item.subject_type.split('\\').pop()}</Link></td>
                 <td className="px-1 py-3 font-light"><Link href={can.view? route('activities.show', item.id): route('activities.index', {term: term, page: currentPage})}>{item.created_at}</Link></td>
                 <td className="flex justify-end py-3 pr-2 text-neutral-400">
                     <Link href={can.view? route('activities.show', item.id): route('activities.index', {term: term, page: currentPage})}>
@@ -42,14 +43,6 @@ function Index({ activities, count, page, termSearch, pagination, can }) {
         <>
             <AuthenticatedLayout titleChildren={'Gerenciamento de Páginas'} breadcrumbs={[{ label: 'Páginas', url: route('activities.index') }]}>
                 <div className="flex gap-2 md:flex-row md:gap-4">
-                    {can.create && <Panel className={'inline-flex'}>
-                        <Link href={route('activities.create')} className="inline-flex items-center justify-between gap-2 px-3 py-2 font-light text-white transition bg-blue-500 border border-transparent rounded-md focus:ring hover:bg-blue-600 focus:ring-sky-300">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="w-5 h-5" viewBox="0 0 16 16">
-                                <path fillRule="evenodd" d="M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2Z" />
-                            </svg>
-                            <span>Nova</span>
-                        </Link>
-                    </Panel>}
                     <Panel className={'flex-1 relative'}>
                         <input type="search" value={term} onChange={e => setTerm(e.target.value)} className="w-full border rounded-md focus:ring focus:ring-green-200 focus:border-green" placeholder="Faça sua pesquisa" />
                         <span className="absolute z-10 flex items-center p-2 top-4 right-2 md:right-4 h-7 md:h-10">
@@ -63,9 +56,9 @@ function Index({ activities, count, page, termSearch, pagination, can }) {
                     <table className="w-full table-auto text-neutral-600">
                         <thead>
                             <tr className="border-b">
-                                <th className="px-1 pt-3 font-semibold text-left">Descrição</th>
+                                <th className="px-1 pt-3 font-semibold text-left">Ação</th>
                                 <th className="px-1 pt-3 font-semibold text-left">Usuário</th>
-                                <th className="px-1 pt-3 font-semibold text-left">Assunto</th>
+                                <th className="px-1 pt-3 font-semibold text-left">Módulo afetado</th>
                                 <th></th>
                             </tr>
                         </thead>
@@ -73,7 +66,7 @@ function Index({ activities, count, page, termSearch, pagination, can }) {
                             {table}
                         </tbody>
                     </table>
-                    <Pagination data={pagination} count={count} />
+                    <Pagination data={activities} count={count} />
                 </Panel>
             </AuthenticatedLayout>
         </>
