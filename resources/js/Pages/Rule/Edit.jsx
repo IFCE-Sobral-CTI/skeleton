@@ -1,11 +1,7 @@
 import React from "react";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
-import { Head, useForm } from "@inertiajs/inertia-react";
+import { Head, useForm } from "@inertiajs/react";
 import Panel from "@/Components/Dashboard/Panel";
-import Input from "@/Components/Form/Input";
-import InputError from "@/Components/InputError";
-import Button from "@/Components/Form/Button";
-import Select from "@/Components/Form/Select";
 import Form from "./Components/Form";
 
 function Edit({ rule, groups }) {

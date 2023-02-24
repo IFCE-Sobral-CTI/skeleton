@@ -1,7 +1,7 @@
-import Panel from '@/Components/Dashboard/Panel';
-import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import React from 'react';
 import 'tw-elements';
+import Panel from '@/Components/Dashboard/Panel';
+import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 
 export default function Dashboard({breadcrumbs, children}) {
     return (

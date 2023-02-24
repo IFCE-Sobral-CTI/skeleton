@@ -1,6 +1,5 @@
-import { Link } from "@inertiajs/inertia-react";
+import { Link } from "@inertiajs/react";
 import React from "react";
-import Panel from "./Panel";
 
 function Breadcrumbs({ href = [] }) {
     const separator = ' / ';

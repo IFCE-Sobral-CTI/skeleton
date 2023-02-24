@@ -1,11 +1,9 @@
 import React, { useEffect } from 'react';
+import { Head, Link, useForm } from '@inertiajs/react';
 import Checkbox from '@/Components/Checkbox';
 import GuestLayout from '@/Layouts/GuestLayout';
 import InputError from '@/Components/InputError';
 import InputLabel from '@/Components/InputLabel';
-import PrimaryButton from '@/Components/PrimaryButton';
-import TextInput from '@/Components/TextInput';
-import { Head, Link, useForm } from '@inertiajs/inertia-react';
 import Button from '@/Components/Form/Button';
 import Input from '@/Components/Form/Input';
 
@@ -36,7 +34,7 @@ export default function Login({ status, canResetPassword }) {
         <GuestLayout>
             <Head title="Autenticação" />
 
-            {status && <div className="mb-4 font-medium text-sm text-green-600">{status}</div>}
+            {status && <div className="mb-4 text-sm font-medium text-green-600">{status}</div>}
 
             <form onSubmit={submit}>
                 <div>
@@ -46,7 +44,7 @@ export default function Login({ status, canResetPassword }) {
                         type="text"
                         name="email"
                         value={data.email}
-                        className="mt-1 block w-full"
+                        className="block w-full mt-1"
                         autoComplete="username"
                         isFocused={true}
                         handleChange={onHandleChange}
@@ -61,7 +59,7 @@ export default function Login({ status, canResetPassword }) {
                         type="password"
                         name="password"
                         value={data.password}
-                        className="mt-1 block w-full"
+                        className="block w-full mt-1"
                         autoComplete="current-password"
                         handleChange={onHandleChange}
                     />
@@ -76,11 +74,11 @@ export default function Login({ status, canResetPassword }) {
                     </label>
                 </div>
 
-                <div className="flex items-center gap-4 justify-end mt-4">
+                <div className="flex items-center justify-end gap-4 mt-4">
                     {canResetPassword && (
                         <Link
                             href={route('password.request')}
-                            className="underline text-sm text-gray-600 hover:text-gray-900"
+                            className="text-sm text-gray-600 underline hover:text-gray-900"
                         >
                             Esqueceu a senha?
                         </Link>

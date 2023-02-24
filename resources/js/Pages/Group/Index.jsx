@@ -1,9 +1,9 @@
+import React, { useEffect, useState } from "react";
+import { Inertia } from "@inertiajs/inertia";
+import { Link } from "@inertiajs/react";
 import Pagination from "@/Components/Dashboard/Pagination";
 import Panel from "@/Components/Dashboard/Panel";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
-import { Inertia } from "@inertiajs/inertia";
-import { Link } from "@inertiajs/inertia-react";
-import React, { useEffect, useState } from "react";
 
 function Index({ groups, count, page, termSearch, can }) {
     const [term, setTerm] = useState(termSearch?? '');

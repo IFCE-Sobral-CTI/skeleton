@@ -1,5 +1,5 @@
 import React from "react";
-import {Link, useForm, usePage} from "@inertiajs/inertia-react";
+import {Link, useForm, usePage} from "@inertiajs/react";
 import 'tw-elements';
 
 function Navbar() {

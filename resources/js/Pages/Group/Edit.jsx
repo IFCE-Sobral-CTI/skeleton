@@ -1,6 +1,6 @@
 import React from "react";
+import { Head, useForm } from "@inertiajs/react";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
-import { Head, useForm } from "@inertiajs/inertia-react";
 import Panel from "@/Components/Dashboard/Panel";
 import Form from "./Components/Form";
 

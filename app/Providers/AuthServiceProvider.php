@@ -29,8 +29,6 @@ class AuthServiceProvider extends ServiceProvider
      */
     public function boot(Rule $rule)
     {
-        $this->registerPolicies();
-
         if (Schema::hasTable('rules')) {
             $rules = $rule->with('permissions')->get();
 
@@ -45,7 +43,5 @@ class AuthServiceProvider extends ServiceProvider
                     return true;
             });
         }
-
-
     }
 }
