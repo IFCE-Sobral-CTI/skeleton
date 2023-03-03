@@ -1,18 +1,21 @@
 import React from "react";
-import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import { Head, useForm } from "@inertiajs/react";
+import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import Panel from "@/Components/Dashboard/Panel";
 import Input from "@/Components/Form/Input";
 import InputError from "@/Components/InputError";
 import Button from "@/Components/Form/Button";
 import Select from "@/Components/Form/Select";
 
-function Edit({ user }) {
-    const { data, setData, put, processing, errors } = useForm({
-        name: user.name,
-        email: user.email,
-        status: user.status.toString(),
-        registry: user.registry,
+function Create({ permissions }) {
+    const { data, setData, post, processing, errors } = useForm({
+        name: "",
+        email: "",
+        password: "",
+        password_confirmation: "",
+        status: '',
+        registry: "",
+        permission_id: "",
     });
 
     const onHandleChange = (event) => {
@@ -21,22 +24,35 @@ function Edit({ user }) {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        put(route('users.update', user.id), {data});
+        post(route('users.store'), {data});
     };
 
     return (
         <>
-            <Head title="Editar Usuário" />
-            <AuthenticatedLayout titleChildren={'Editar Usuário'} breadcrumbs={[{ label: 'Usuários', url: route('users.index') }, { label: user.name, url: route('users.show', user.id) }, { label: 'Editar'}]}>
+            <Head title="Novo Usuário" />
+            <AuthenticatedLayout titleChildren={'Cadastro de Novo Usuário'} breadcrumbs={[{ label: 'Usuários', url: route('users.index') }, { label: 'Novo', url: route('users.create') }]}>
                 <Panel>
                     <form onSubmit={handleSubmit} autoComplete="off">
                         <div className="mb-4">
                             <label htmlFor="status" className="font-light">Status</label>
                             <Select value={data.status} name={'status'} handleChange={onHandleChange} required={true} placeholder="Digite a matricula">
+                                <option>Selecione uma opção</option>
                                 <option value="1">Ativo</option>
                                 <option value="0">Inativo</option>
                             </Select>
                             <InputError message={errors.status} />
+                        </div>
+                        <div className="mb-4">
+                            <label htmlFor="permission_id" className="font-light">Permissão de acesso</label>
+                            <Select value={data.permission_id} name={'permission_id'} handleChange={onHandleChange} required={true} placeholder="Digite a matricula">
+                                <option>Selecione uma opção</option>
+                                {permissions.map((item, index) => {
+                                    return (
+                                        <option value={item.id} key={index}>{item.description}</option>
+                                    );
+                                })}
+                            </Select>
+                            <InputError message={errors.permission_id} />
                         </div>
                         <div className="mb-4">
                             <label htmlFor="name" className="font-light">Nome</label>
@@ -53,6 +69,16 @@ function Edit({ user }) {
                             <Input type={'number'} value={data.registry} name={'registry'} handleChange={onHandleChange} required={true} placeholder="Digite a matricula" />
                             <InputError message={errors.registry} />
                         </div>
+                        <div className="mb-4">
+                            <label htmlFor="password" className="font-light">Senha</label>
+                            <Input type={'password'} value={data.password} name={'password'} handleChange={onHandleChange} required={true} placeholder="Digite a senha" />
+                            <InputError message={errors.password} />
+                        </div>
+                        <div className="mb-4">
+                            <label htmlFor="password_confirmation" className="font-light">Confirmação de senha</label>
+                            <Input type={'password'} value={data.password_confirmation} name={'password_confirmation'} handleChange={onHandleChange} required={true} placeholder="Digite a confirmação de senha" />
+                            <InputError message={errors.password_confirmation} />
+                        </div>
                         <div className="flex items-center justify-center gap-4 mt-6">
                             <Button type={'submit'} processing={processing} color={'green'} className={"gap-2"}>
                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="w-5 h-5" viewBox="0 0 16 16">
@@ -60,7 +86,7 @@ function Edit({ user }) {
                                 </svg>
                                 <span>Enviar</span>
                             </Button>
-                            <Button href={route('users.show', user.id)} className={'gap-2'}>
+                            <Button href={route('users.index')} className={'gap-2'}>
                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="w-5 h-5" viewBox="0 0 16 16">
                                     <path fillRule="evenodd" d="M14.5 1.5a.5.5 0 0 1 .5.5v4.8a2.5 2.5 0 0 1-2.5 2.5H2.707l3.347 3.346a.5.5 0 0 1-.708.708l-4.2-4.2a.5.5 0 0 1 0-.708l4-4a.5.5 0 1 1 .708.708L2.707 8.3H12.5A1.5 1.5 0 0 0 14 6.8V2a.5.5 0 0 1 .5-.5z"/>
                                 </svg>
@@ -74,5 +100,5 @@ function Edit({ user }) {
     )
 }
 
-export default Edit;
+export default Create;
 

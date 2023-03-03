@@ -7,15 +7,13 @@ import InputError from "@/Components/InputError";
 import Button from "@/Components/Form/Button";
 import Select from "@/Components/Form/Select";
 
-function Create({ permissions }) {
-    const { data, setData, post, processing, errors } = useForm({
-        name: "",
-        email: "",
-        password: "",
-        password_confirmation: "",
-        status: "0",
-        registry: "",
-        permission_id: "",
+function Edit({ user, permissions }) {
+    const { data, setData, put, processing, errors } = useForm({
+        name: user.name,
+        email: user.email,
+        status: user.status.toString(),
+        registry: user.registry,
+        permission_id: user.permission_id
     });
 
     const onHandleChange = (event) => {
@@ -24,13 +22,13 @@ function Create({ permissions }) {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        post(route('users.store'), {data});
+        put(route('users.update', user.id), {data});
     };
 
     return (
         <>
-            <Head title="Novo Usuário" />
-            <AuthenticatedLayout titleChildren={'Cadastro de Novo Usuário'} breadcrumbs={[{ label: 'Usuários', url: route('users.index') }, { label: 'Novo', url: route('users.create') }]}>
+            <Head title="Editar Usuário" />
+            <AuthenticatedLayout titleChildren={'Editar Usuário'} breadcrumbs={[{ label: 'Usuários', url: route('users.index') }, { label: user.name, url: route('users.show', user.id) }, { label: 'Editar'}]}>
                 <Panel>
                     <form onSubmit={handleSubmit} autoComplete="off">
                         <div className="mb-4">
@@ -67,16 +65,6 @@ function Create({ permissions }) {
                             <Input type={'number'} value={data.registry} name={'registry'} handleChange={onHandleChange} required={true} placeholder="Digite a matricula" />
                             <InputError message={errors.registry} />
                         </div>
-                        <div className="mb-4">
-                            <label htmlFor="password" className="font-light">Senha</label>
-                            <Input type={'password'} value={data.password} name={'password'} handleChange={onHandleChange} required={true} placeholder="Digite a senha" />
-                            <InputError message={errors.password} />
-                        </div>
-                        <div className="mb-4">
-                            <label htmlFor="password_confirmation" className="font-light">Confirmação de senha</label>
-                            <Input type={'password'} value={data.password_confirmation} name={'password_confirmation'} handleChange={onHandleChange} required={true} placeholder="Digite a confirmação de senha" />
-                            <InputError message={errors.password_confirmation} />
-                        </div>
                         <div className="flex items-center justify-center gap-4 mt-6">
                             <Button type={'submit'} processing={processing} color={'green'} className={"gap-2"}>
                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="w-5 h-5" viewBox="0 0 16 16">
@@ -84,7 +72,7 @@ function Create({ permissions }) {
                                 </svg>
                                 <span>Enviar</span>
                             </Button>
-                            <Button href={route('users.index')} className={'gap-2'}>
+                            <Button href={route('users.show', user.id)} className={'gap-2'}>
                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="w-5 h-5" viewBox="0 0 16 16">
                                     <path fillRule="evenodd" d="M14.5 1.5a.5.5 0 0 1 .5.5v4.8a2.5 2.5 0 0 1-2.5 2.5H2.707l3.347 3.346a.5.5 0 0 1-.708.708l-4.2-4.2a.5.5 0 0 1 0-.708l4-4a.5.5 0 1 1 .708.708L2.707 8.3H12.5A1.5 1.5 0 0 0 14 6.8V2a.5.5 0 0 1 .5-.5z"/>
                                 </svg>
@@ -98,5 +86,5 @@ function Create({ permissions }) {
     )
 }
 
-export default Create;
+export default Edit;
 

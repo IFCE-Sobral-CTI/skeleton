@@ -28,7 +28,7 @@ class RuleController extends Controller
     {
         $this->authorize('rules.viewAny', Rule::class);
 
-        return Inertia::render('Rule/Index', array_merge(Rule::search($request), [
+        return Inertia::render('Auth/Rule/Index', array_merge(Rule::search($request), [
             'can' => [
                 'viewAny' => Auth::user()->can('rules.viewAny'),
             'view' => Auth::user()->can('rules.view'),
@@ -47,7 +47,7 @@ class RuleController extends Controller
     {
         $this->authorize('rules.create', Rule::class);
 
-        return Inertia::render('Rule/Create', [
+        return Inertia::render('Auth/Rule/Create', [
             'groups' => Group::select('id', 'description')->get(),
         ]);
     }
@@ -84,7 +84,7 @@ class RuleController extends Controller
     {
         $this->authorize('rules.view', $rule);
 
-        return Inertia::render('Rule/Show', [
+        return Inertia::render('Auth/Rule/Show', [
             'rule' => Rule::with('group')->find($rule->id),
             'can' => [
                 'update' => Auth::user()->can('rules.update'),
@@ -104,7 +104,7 @@ class RuleController extends Controller
     {
         $this->authorize('rules.update', $rule);
 
-        return Inertia::render('Rule/Edit', [
+        return Inertia::render('Auth/Rule/Edit', [
             'rule' => $rule,
             'groups' => Group::select('id', 'description')->get(),
             'can' => [

@@ -30,7 +30,7 @@ class UserController extends Controller
     {
         $this->authorize('users.viewAny', User::class);
 
-        return Inertia::render('User/Index', array_merge(User::search($request), [
+        return Inertia::render('Auth/User/Index', array_merge(User::search($request), [
             'can' => [
                 'create' => Auth::user()->can('users.create'),
                 'view' => Auth::user()->can('users.view'),
@@ -48,7 +48,7 @@ class UserController extends Controller
     {
         $this->authorize('users.create', User::class);
 
-        return Inertia::render('User/Create', [
+        return Inertia::render('Auth/User/Create', [
             'permissions' => Permission::select('id', 'description')->get(),
         ]);
     }
@@ -86,7 +86,7 @@ class UserController extends Controller
     {
         $this->authorize('users.view', $user);
 
-        return Inertia::render('User/Show', [
+        return Inertia::render('Auth/User/Show', [
             'user' => User::with('permission')->find($user->id),
             'can' => [
                 'update' => Auth::user()->can('users.update'),
@@ -108,7 +108,7 @@ class UserController extends Controller
 
         $user = Auth::user();
 
-        return Inertia::render('User/Profile', [
+        return Inertia::render('Auth/User/Profile', [
             'user' => User::with('permission')->find($user->id),
         ]);
     }
@@ -124,8 +124,9 @@ class UserController extends Controller
     {
         $this->authorize('users.update', $user);
 
-        return Inertia::render('User/Edit', [
+        return Inertia::render('Auth/User/Edit', [
             'user' => $user,
+            'permissions' => Permission::select('id', 'description')->get(),
         ]);
     }
 
@@ -140,7 +141,7 @@ class UserController extends Controller
     {
         $this->authorize('users.update.password', $user);
 
-        return Inertia::render('User/EditPassword', [
+        return Inertia::render('Auth/User/EditPassword', [
             'user' => $user,
         ]);
     }

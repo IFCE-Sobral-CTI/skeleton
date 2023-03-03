@@ -27,7 +27,7 @@ class GroupController extends Controller
     {
         $this->authorize('groups.viewAny', Group::class);
 
-        return Inertia::render('Group/Index', array_merge(Group::search($request), [
+        return Inertia::render('Auth/Group/Index', array_merge(Group::search($request), [
             'can' => [
                 'create' => Auth::user()->can('groups.create'),
                 'view' => Auth::user()->can('groups.view'),
@@ -45,7 +45,7 @@ class GroupController extends Controller
     {
         $this->authorize('groups.create', Group::class);
 
-        return Inertia::render('Group/Create');
+        return Inertia::render('Auth/Group/Create');
     }
 
     /**
@@ -78,7 +78,7 @@ class GroupController extends Controller
     {
         $this->authorize('groups.view', $group);
 
-        return Inertia::render('Group/Show', [
+        return Inertia::render('Auth/Group/Show', [
             'group' => $group,
             'can' => [
                 'update' => Auth::user()->can('groups.update'),
@@ -98,7 +98,7 @@ class GroupController extends Controller
     {
         $this->authorize('groups.update', $group);
 
-        return Inertia::render('Group/Edit', [
+        return Inertia::render('Auth/Group/Edit', [
             'group' => $group
         ]);
     }

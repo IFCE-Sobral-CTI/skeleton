@@ -24,7 +24,7 @@ class ActivityController extends Controller
     {
         $this->authorize('activities.showAny', Activity::class);
 
-        return Inertia::render('Activity/Index', array_merge(ModelsActivity::search($request), [
+        return Inertia::render('Auth/Activity/Index', array_merge(ModelsActivity::search($request), [
             'can' => [
                 'view' => Auth::user()->can('activities.view'),
             ]
@@ -46,7 +46,7 @@ class ActivityController extends Controller
 
         //dd($activity);
 
-        return Inertia::render('Activity/Show', [
+        return Inertia::render('Auth/Activity/Show', [
             'activity' => $activity,
             'can' => [
                 'delete' => Auth::user()->can('activities.delete'),
