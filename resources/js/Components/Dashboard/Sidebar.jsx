@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from "react";
-import { Link } from "@inertiajs/react";
 import 'tw-elements';
+import { Link } from "@inertiajs/react";
+import React, { useEffect, useState } from "react";
 
 function Sidebar({ can }) {
     const [width, setWidth] = useState(window.innerWidth);
@@ -25,7 +25,7 @@ function Sidebar({ can }) {
 
     return (
         <>
-            <nav id="sidebar" className={"collapse collapse-horizontal mr-2 p-2 " + (width >= 1024? 'show': '')}>
+            <nav id="sidebar" className={"!visible mr-2 p-2 " + (width >= 1024? '': 'hidden')} data-te-collapse-item data-te-collapse-horizontal>
                 <div className="flex flex-col w-48 gap-3 md:w-64">
                     <Link
                         href={route('admin')}
@@ -46,10 +46,13 @@ function Sidebar({ can }) {
                                     : ''
                                 ) + `text-gray-600 p-3 rounded-lg hover:bg-white hover:shadow-md transition flex items-center gap-4 focus:ring-0`}
                             type="button"
-                            data-bs-toggle="collapse"
-                            data-bs-target="#accessCollapse"
-                            aria-expanded="false"
+
+                            data-te-collapse-init
+                            data-te-target="#accessCollapse"
+                            data-te-ripple-init
+                            data-te-ripple-color="light"
                             aria-controls="accessCollapse"
+                            aria-expanded="false"
                             onClick={toggleChevronAccess}
                         >
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="w-5 h-5" viewBox="0 0 16 16">
@@ -70,7 +73,8 @@ function Sidebar({ can }) {
                             </span>
                         </button>
                         <div
-                            className={'flex flex-col gap-1 collapse pl-2 ' + (chevronAccess? 'show': '')}
+                            className={'flex flex-col gap-1 pl-2 transition !visible ' + (chevronAccess? '': 'hidden')}
+                            data-te-collapse-item
                             id="accessCollapse"
                         >
                             {can.users_viewAny && <Link
