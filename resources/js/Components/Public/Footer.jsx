@@ -18,7 +18,7 @@ export default function Footer() {
                 <section className="flex justify-between gap-4 mt-2 font-light md:flex-col md:gap-0">
                     <span className="hidden font-normal md:inline-block">Links úteis:</span>
                     <Link className="pr-4 underline border-r md:ml-2 md:border-0 border-neutral-400">Fale conosco</Link>
-                    <Link className="pr-4 underline border-r md:ml-2 md:border-0 border-neutral-400">FAQ</Link>
+                    <Link href={route('faq')} className="pr-4 underline border-r md:ml-2 md:border-0 border-neutral-400">FAQ</Link>
                     <Link className="underline md:ml-2">Reportar erro</Link>
                 </section>
             </footer>

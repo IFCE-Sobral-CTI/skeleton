@@ -6,6 +6,7 @@ namespace Database\Seeders;
 
 use App\Models\Permission;
 use App\Models\User;
+use Database\Factories\FaqFactory;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
 
@@ -33,6 +34,10 @@ class DatabaseSeeder extends Seeder
             'status' => 1,
             'registry' => 1000000,
             'permission_id' => Permission::where('description', 'Administrador')->first()->id
+        ]);
+
+        $this->call([
+            FaqSeeder::class,
         ]);
     }
 }

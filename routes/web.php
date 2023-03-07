@@ -3,12 +3,14 @@
 use App\Http\Controllers\Admin\ActivityController;
 use App\Http\Controllers\Admin\GroupController;
 use App\Http\Controllers\Admin\HomeController;
+use App\Http\Controllers\HomeController as Home;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\PermissionController;
 use App\Http\Controllers\Admin\RuleController;
+use App\Http\Controllers\Admin\FaqController;
 
 /*
 |--------------------------------------------------------------------------
@@ -30,6 +32,8 @@ Route::get('/', function () {
     ]);
 })->name('home');
 
+Route::get('faq', [Home::class, 'faq'])->name('faq');
+
 Route::prefix('admin')->middleware(['auth', 'verified'])->group(function() {
     Route::get('/', [HomeController::class, 'index'])->name('admin');
     Route::resource('users', UserController::class);
@@ -42,6 +46,7 @@ Route::prefix('admin')->middleware(['auth', 'verified'])->group(function() {
     Route::put('permissions/{permission}/rules', [PermissionController::class, 'syncRules'])->name('permissions.rules.sync');
     Route::resource('groups', GroupController::class);
     Route::resource('activities', ActivityController::class)->only(['index', 'show', 'destroy']);
+    Route::resource('faqs', FaqController::class);
 });
 
 require __DIR__.'/auth.php';
