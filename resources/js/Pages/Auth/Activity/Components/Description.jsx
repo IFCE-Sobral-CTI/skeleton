@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import Badge from "@/Components/Badge";
 
 export default function Description({ title }) {
     const [result, setResult] = useState('');
@@ -6,16 +7,16 @@ export default function Description({ title }) {
     useEffect(() => {
         switch(title) {
             case 'created':
-                setResult(<span className="px-2 py-0.5 rounded-md text-sm font-light text-white bg-green-500">Criou um registro</span>);
+                setResult(<Badge color="green">Criou um registro</Badge>);
                 break;
             case 'updated':
-                setResult(<span className="px-2 py-0.5 rounded-md text-sm font-light text-white bg-yellow-500">Atualizou um registro</span>);
+                setResult(<Badge color="yellow">Atualizou um registro</Badge>);
                 break;
             case 'deleted':
-                setResult(<span className="px-2 py-0.5 rounded-md text-sm font-light text-white bg-red-500">Apagou um registro</span>);
+                setResult(<Badge color="red">Apagou um registro</Badge>);
                 break;
             default:
-                setResult(<span className="px-2 py-0.5 rounded-md text-sm font-light bg-cyan-500">Informe</span>);
+                setResult(<Badge color="cyan">Informe</Badge>);
                 break;
         }
     }, []);
