@@ -73,7 +73,7 @@ function Sidebar({ can }) {
                             </span>
                         </button>
                         <div
-                            className={'flex flex-col gap-1 pl-2 transition !visible ' + (chevronAccess? '': 'hidden')}
+                            className={'flex flex-col gap-1 pl-2 transition bg-neutral-200 rounded-md !visible ' + (chevronAccess? '': 'hidden')}
                             data-te-collapse-item
                             id="accessCollapse"
                         >
