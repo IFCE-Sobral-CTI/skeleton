@@ -18,6 +18,7 @@ class Faq extends Model
         'question',
         'answer',
         'user_id',
+        'tag_id',
     ];
 
     protected $casts = [
@@ -34,7 +35,8 @@ class Faq extends Model
             ->logOnly([
                 'question',
                 'answer',
-                'user.name'
+                'user.name',
+                'tag.description',
             ])
             ->logOnlyDirty()
             ->dontSubmitEmptyLogs();
@@ -45,9 +47,16 @@ class Faq extends Model
         return $this->belongsTo(User::class);
     }
 
+    public function tag(): BelongsTo
+    {
+        return $this->belongsTo(Tag::class);
+    }
+
     public function scopeSearch(Builder $query, Request $request): array
     {
-        $query->where('answer', 'like', '%'.$request->term.'%')->orWhere('question', 'like', '%'.$request->term.'%');
+        $query->with(['tag'])
+            ->where('answer', 'like', '%'.$request->term.'%')
+            ->orWhere('question', 'like', '%'.$request->term.'%');
 
         return [
             'count' => $query->count(),

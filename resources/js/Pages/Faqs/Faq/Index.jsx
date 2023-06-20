@@ -3,6 +3,7 @@ import { Link, router } from "@inertiajs/react";
 import Pagination from "@/Components/Dashboard/Pagination";
 import Panel from "@/Components/Dashboard/Panel";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
+import Badge from "@/Components/Badge";
 
 function Index({ faqs, count, page, termSearch, can }) {
     const [term, setTerm] = useState(termSearch?? '');
@@ -20,6 +21,11 @@ function Index({ faqs, count, page, termSearch, can }) {
     const table = faqs.data.map((item, index) => {
         return (
             <tr key={index} className={"border-t transition hover:bg-neutral-100 " + (index % 2 == 0? 'bg-neutral-50': '')}>
+                <td className="px-1 py-3 font-light">
+                    <Link href={can.view? route('faqs.show', item.id): route('faqs.index', {term: term, page: currentPage})}>
+                        <Badge>{item.tag.description}</Badge>
+                    </Link>
+                </td>
                 <td className="px-1 py-3 font-light"><Link href={can.view? route('faqs.show', item.id): route('faqs.index', {term: term, page: currentPage})}>{item.question}</Link></td>
                 <td className="px-1 py-3 font-light"><Link href={can.view? route('faqs.show', item.id): route('faqs.index', {term: term, page: currentPage})} dangerouslySetInnerHTML={{ __html: item.answer }}></Link></td>
                 <td className="flex justify-end py-3 pr-2 text-neutral-400">
@@ -58,6 +64,7 @@ function Index({ faqs, count, page, termSearch, can }) {
                     <table className="w-full table-auto text-neutral-600">
                         <thead>
                             <tr className="border-b">
+                                <th className="px-1 pt-3 font-semibold text-left">Tag</th>
                                 <th className="px-1 pt-3 font-semibold text-left">Pergunta</th>
                                 <th className="px-1 pt-3 font-semibold text-left">Resposta</th>
                                 <th></th>

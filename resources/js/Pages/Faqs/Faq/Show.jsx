@@ -5,6 +5,8 @@ import Panel from "@/Components/Dashboard/Panel";
 import Button from "@/Components/Form/Button";
 import DeleteModal from "@/Components/Dashboard/DeleteModal";
 import { decode, encode } from "html-entities";
+import ShowField from "@/Components/Dashboard/ShowField";
+import Badge from "@/Components/Badge";
 
 function Show({ faq, can }) {
     return (
@@ -12,22 +14,21 @@ function Show({ faq, can }) {
             <Head title="Detalhes da Página" />
             <AuthenticatedLayout titleChildren={'Detalhes do FAQ'} breadcrumbs={[{ label: 'FAQ', url: route('faqs.index') }, { label: faq.question, url: route('faqs.show', faq.id) }]}>
                 <Panel className={'flex flex-col gap-4'}>
-                    <div className="flex flex-col">
-                        <div className="text-sm font-light">Pergunta</div>
-                        <div className="">{faq.question}</div>
-                    </div>
-                    <div className="flex flex-col">
-                        <div className="text-sm font-light">Resposta</div>
-                        <div className="" dangerouslySetInnerHTML={{ __html: faq.answer }}></div>
-                    </div>
-                    <div className="flex flex-col">
-                        <div className="text-sm font-light">Criado em</div>
-                        <div className="">{faq.created_at}</div>
-                    </div>
-                    <div className="flex flex-col">
-                        <div className="text-sm font-light">Atualizado em</div>
-                        <div className="">{faq.updated_at}</div>
-                    </div>
+                    <ShowField label={'Tag'}>
+                        <Badge>{faq.tag.description}</Badge>
+                    </ShowField>
+                    <ShowField label={'Pergunta'}>
+                        {faq.question}
+                    </ShowField>
+                    <ShowField label={'Resposta'}>
+                        <span dangerouslySetInnerHTML={{ __html: faq.answer }}></span>
+                    </ShowField>
+                    <ShowField label={'Criado em'}>
+                        {faq.created_at}
+                    </ShowField>
+                    <ShowField label={'Atualizado em'}>
+                        {faq.updated_at}
+                    </ShowField>
                 </Panel>
                 <Panel className={'flex flex-wrap items-center justify-center gap-1 md:gap-4'}>
                     <Button href={route('faqs.index')} className={'gap-2'}>
