@@ -1,12 +1,20 @@
-import 'tw-elements';
+import {
+    Modal,
+    initTE,
+} from "tw-elements";
+
 import { useForm } from "@inertiajs/react";
+import { useEffect } from "react";
 
 export default function DeleteModal({ url }) {
     const { delete: destroy, processing } = useForm();
 
+    useEffect(() => {
+        initTE({ Modal });
+    });
+
     const submit = (e) => {
         e.preventDefault();
-        console.log('Clicou');
         destroy(url, {
             preserveScroll: true
         });
@@ -18,6 +26,7 @@ export default function DeleteModal({ url }) {
                 type="button"
                 data-te-toggle="modal"
                 data-te-target="#delete-modal"
+
                 className="inline-flex items-center gap-2 px-4 py-2 text-sm tracking-widest text-white transition duration-150 ease-in-out bg-red-500 border border-transparent rounded-md active:bg-red-700 hover:bg-red-600"
             >
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="w-5 h-5" role="img" aria-hidden="true" viewBox="0 0 16 16">
@@ -83,7 +92,6 @@ export default function DeleteModal({ url }) {
                             type="button"
                             className="flex items-center px-6 py-2.5 bg-gray-600 text-white font-light leading-tight rounded shadow-md hover:bg-gray-700 hover:shadow-lg focus:bg-gray-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-gray-800 active:shadow-lg transition duration-150 ease-in-out"
                             data-te-modal-dismiss
-                            data-te-ripple-init
                             data-te-ripple-color="light"
                         >
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="w-5 h-5 mr-3" role="img" aria-hidden="true" viewBox="0 0 16 16">
@@ -96,7 +104,6 @@ export default function DeleteModal({ url }) {
                                 type="submit"
                                 className="flex items-center px-6 py-2.5 bg-red-600 text-white font-light leading-tight rounded shadow-md hover:bg-red-700 hover:shadow-lg focus:bg-red-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-red-800 active:shadow-lg transition duration-150 ease-in-out ml-1"
                                 data-te-modal-dismiss
-                                data-te-ripple-init
                                 data-te-ripple-color="light"
                                 disabled={processing}
                             >
