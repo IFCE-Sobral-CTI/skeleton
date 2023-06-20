@@ -26,6 +26,7 @@ class RuleSeeder extends Seeder
             ],
             'groups' => ['group' => Group::firstOrCreate(['description' => 'Páginas'])],
             'faqs' => ['group' => Group::firstOrCreate(['description' => 'FAQ'])],
+            'tags' => ['group' => Group::firstOrCreate(['description' => 'Tags'])],
             'rules' => ['group' => Group::firstOrCreate(['description' => 'Regras'])],
             'permissions' => [
                 'group' => Group::firstOrCreate(['description' => 'Permissões']),
