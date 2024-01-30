@@ -1,4 +1,4 @@
-import React, { Children, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { twMerge } from 'tailwind-merge';
 
 export default function Badge({color, children, className}) {
