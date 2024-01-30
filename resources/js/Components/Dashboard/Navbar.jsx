@@ -1,10 +1,18 @@
-import 'tw-elements';
-import React from "react";
+import React, { useEffect } from "react";
 import {Link, useForm, usePage} from "@inertiajs/react";
+import {
+    Dropdown,
+    initTE,
+} from "tw-elements";
 
 function Navbar() {
     const { auth, title } = usePage().props;
     const { post } = useForm();
+
+    useEffect(() => {
+        initTE({Dropdown})
+    }, []);
+
     const onHandleLogout = () => {
         post(route('logout'));
     }

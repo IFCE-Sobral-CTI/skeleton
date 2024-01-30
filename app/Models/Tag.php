@@ -6,19 +6,17 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Http\Request;
 use Spatie\Activitylog\LogOptions;
 use Spatie\Activitylog\Traits\LogsActivity;
 
-class Faq extends Model
+class Tag extends Model
 {
     use HasFactory, LogsActivity;
 
     protected $fillable = [
-        'question',
-        'answer',
-        'user_id',
-        'tag_id',
+        'description',
     ];
 
     protected $casts = [
@@ -33,36 +31,36 @@ class Faq extends Model
     {
         return LogOptions::defaults()
             ->logOnly([
-                'question',
-                'answer',
-                'user.name',
-                'tag.description',
+                'description',
             ])
             ->logOnlyDirty()
             ->dontSubmitEmptyLogs();
     }
 
-    public function user(): BelongsTo
+    public function faqs(): HasMany
     {
-        return $this->belongsTo(User::class);
-    }
-
-    public function tag(): BelongsTo
-    {
-        return $this->belongsTo(Tag::class);
+        return $this->hasMany(Faq::class);
     }
 
     public function scopeSearch(Builder $query, Request $request): array
     {
-        $query->with(['tag'])
-            ->where('answer', 'like', '%'.$request->term.'%')
-            ->orWhere('question', 'like', '%'.$request->term.'%');
+        $query->where('description', 'like', '%'.$request->term.'%');
 
         return [
             'count' => $query->count(),
-            'faqs' => $query->orderBy('question', 'ASC')->paginate(env('APP_PAGINATION'))->appends(['term' => $request->term]),
+            'data' => $query->orderBy('description', 'ASC')->paginate(env('APP_PAGINATION'))->appends(['term' => $request->term]),
             'page' => $request->page?? 1,
             'termSearch' => $request->term,
         ];
+    }
+
+    public function scopeGetTagsForSelect(Builder $query)
+    {
+        return $query->get()->map(function($item) {
+            return [
+                'id' => $item->id,
+                'name' => $item->description
+            ];
+        });
     }
 }

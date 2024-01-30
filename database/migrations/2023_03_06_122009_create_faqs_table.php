@@ -15,7 +15,14 @@ return new class extends Migration
             $table->id();
             $table->text('question');
             $table->text('answer');
-            $table->foreignId('user_id')->constrained();
+            $table->foreignId('tag_id')
+                ->constrained()
+                ->onUpdate('cascade')
+                ->onDelete('cascade');
+            $table->foreignId('user_id')
+                ->constrained()
+                ->onUpdate('cascade')
+                ->onDelete('cascade');
             $table->timestamps();
         });
     }

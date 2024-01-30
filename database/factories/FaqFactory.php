@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\Tag;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -20,7 +21,8 @@ class FaqFactory extends Factory
         return [
             'question' => fake()->sentence(),
             'answer' => fake()->text(),
-            'user_id' => User::all()->random()->id
+            'user_id' => User::all()->random()->id,
+            'tag_id' => Tag::all()->random()->id,
         ];
     }
 }

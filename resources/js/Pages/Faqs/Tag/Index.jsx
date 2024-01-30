@@ -4,7 +4,7 @@ import Pagination from "@/Components/Dashboard/Pagination";
 import Panel from "@/Components/Dashboard/Panel";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 
-function Index({ faqs, count, page, termSearch, can }) {
+function Index({ data, count, page, termSearch, can }) {
     const [term, setTerm] = useState(termSearch?? '');
     const [currentPage, setCurrentPage] = useState(page);
 
@@ -17,13 +17,16 @@ function Index({ faqs, count, page, termSearch, can }) {
         return () => clearTimeout(debounce);
     }, [term]);
 
-    const table = faqs.data.map((item, index) => {
+    const table = data.data.map((item, index) => {
         return (
             <tr key={index} className={"border-t transition hover:bg-neutral-100 " + (index % 2 == 0? 'bg-neutral-50': '')}>
-                <td className="px-1 py-3 font-light"><Link href={can.view? route('faqs.show', item.id): route('faqs.index', {term: term, page: currentPage})}>{item.question}</Link></td>
-                <td className="px-1 py-3 font-light"><Link href={can.view? route('faqs.show', item.id): route('faqs.index', {term: term, page: currentPage})} dangerouslySetInnerHTML={{ __html: item.answer }}></Link></td>
+                <td className="px-1 py-3 font-light">
+                    <Link href={can.view? route('tags.show', item.id): route('tags.index', {term: term, page: currentPage})}>
+                        {item.description}
+                    </Link>
+                </td>
                 <td className="flex justify-end py-3 pr-2 text-neutral-400">
-                    <Link href={can.view? route('faqs.show', item.id): route('faqs.index', {term: term, page: currentPage})}>
+                    <Link href={can.view? route('tags.show', item.id): route('tags.index', {term: term, page: currentPage})}>
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="w-5 h-5" viewBox="0 0 16 16">
                             <path fillRule="evenodd" d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z" />
                         </svg>
@@ -35,14 +38,17 @@ function Index({ faqs, count, page, termSearch, can }) {
 
     return (
         <>
-            <AuthenticatedLayout titleChildren={'Gerenciamento de FAQ'} breadcrumbs={[{ label: 'FAQ', url: route('faqs.index') }]}>
+            <AuthenticatedLayout
+                titleChildren={'Gerenciamento de Tag'}
+                breadcrumbs={[{ label: 'Tags', url: route('tags.index') }]}
+            >
                 <div className="flex gap-2 md:flex-row md:gap-4">
                     {can.create && <Panel className={'inline-flex'}>
-                        <Link href={route('faqs.create')} className="inline-flex items-center justify-between gap-2 px-3 py-2 font-light text-white transition bg-blue-500 border border-transparent rounded-md focus:ring hover:bg-blue-600 focus:ring-sky-300">
+                        <Link href={route('tags.create')} className="inline-flex items-center justify-between gap-2 px-3 py-2 font-light text-white transition bg-blue-500 border border-transparent rounded-md focus:ring hover:bg-blue-600 focus:ring-sky-300">
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="w-5 h-5" viewBox="0 0 16 16">
                                 <path fillRule="evenodd" d="M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2Z" />
                             </svg>
-                            <span>Novo</span>
+                            <span>Nova</span>
                         </Link>
                     </Panel>}
                     <Panel className={'flex-1 relative'}>
@@ -58,8 +64,7 @@ function Index({ faqs, count, page, termSearch, can }) {
                     <table className="w-full table-auto text-neutral-600">
                         <thead>
                             <tr className="border-b">
-                                <th className="px-1 pt-3 font-semibold text-left">Pergunta</th>
-                                <th className="px-1 pt-3 font-semibold text-left">Resposta</th>
+                                <th className="px-1 pt-3 font-semibold text-left">Descrição</th>
                                 <th></th>
                             </tr>
                         </thead>
@@ -67,7 +72,7 @@ function Index({ faqs, count, page, termSearch, can }) {
                             {table}
                         </tbody>
                     </table>
-                    <Pagination data={faqs} count={count} />
+                    <Pagination data={data} count={count} />
                 </Panel>
             </AuthenticatedLayout>
         </>

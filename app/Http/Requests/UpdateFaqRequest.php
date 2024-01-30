@@ -24,6 +24,7 @@ class UpdateFaqRequest extends FormRequest
         return [
             'question' => 'required',
             'answer' => 'required',
+            'tag_id' => 'required|exists:tags,id'
         ];
     }
 }

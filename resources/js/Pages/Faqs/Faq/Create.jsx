@@ -5,10 +5,11 @@ import Panel from "@/Components/Dashboard/Panel";
 import Form from "./Components/Form";
 import { encode } from "html-entities";
 
-function Create() {
+function Create({ tags }) {
     const { data, setData, post, processing, errors } = useForm({
         question: "",
         answer: "",
+        tag_id: "",
     });
 
     const onHandleChange = (event) => {
@@ -26,7 +27,14 @@ function Create() {
             <Head title="Novo FAQ" />
             <AuthenticatedLayout titleChildren={'Cadastro de novo FAQ'} breadcrumbs={[{ label: 'FAQ', url: route('faqs.index') }, { label: 'Novo', url: route('faqs.create') }]}>
                 <Panel>
-                    <Form data={data} errors={errors} processing={processing} onHandleChange={onHandleChange} handleSubmit={handleSubmit} />
+                    <Form
+                        data={data}
+                        errors={errors}
+                        processing={processing}
+                        onHandleChange={onHandleChange}
+                        handleSubmit={handleSubmit}
+                        tags={tags}
+                    />
                 </Panel>
             </AuthenticatedLayout>
         </>

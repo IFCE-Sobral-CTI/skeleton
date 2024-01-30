@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreFaqRequest;
 use App\Http\Requests\UpdateFaqRequest;
 use App\Models\Faq;
+use App\Models\Tag;
 use Exception;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -22,10 +23,10 @@ class FaqController extends Controller
     {
         $this->authorize('faqs.viewAny', Faq::class);
 
-        return Inertia::render('Faq/Index', array_merge(Faq::search($request), [
+        return Inertia::render('Faqs/Faq/Index', array_merge(Faq::search($request), [
             'can' => [
-                'create' => Auth::user()->can('faqs.create'),
-                'view' => Auth::user()->can('faqs.view'),
+                'create' => $request->user()->can('faqs.create'),
+                'view' => $request->user()->can('faqs.view'),
             ],
         ]));
     }
@@ -37,7 +38,9 @@ class FaqController extends Controller
     {
         $this->authorize('faqs.create', Faq::class);
 
-        return Inertia::render('Faq/Create');
+        return Inertia::render('Faqs/Faq/Create', [
+            'tags' => fn() => Tag::getTagsForSelect()
+        ]);
     }
 
     /**
@@ -48,7 +51,7 @@ class FaqController extends Controller
         $this->authorize('faqs.create', Faq::class);
 
         try {
-            $faq = Auth::user()->faqs()->create($request->validated());
+            $faq = $request->user()->faqs()->create($request->validated());
             return redirect()->route('faqs.show', $faq)->with('flash', ['status' => 'success', 'message' => 'Registro criado com sucesso.']);
         } catch (Exception $e) {
             return redirect()->route('faqs.index')->with('flash', ['status' => 'danger', 'message' => $e->getMessage()]);
@@ -58,15 +61,15 @@ class FaqController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Faq $faq)
+    public function show(Request $request, Faq $faq)
     {
         $this->authorize('faqs.view', $faq);
 
-        return Inertia::render('Faq/Show', [
-            'faq' => $faq,
+        return Inertia::render('Faqs/Faq/Show', [
+            'faq' => $faq->load(['tag']),
             'can' => [
-                'update' => Auth::user()->can('faqs.update'),
-                'delete' => Auth::user()->can('faqs.delete'),
+                'update' => $request->user()->can('faqs.update'),
+                'delete' => $request->user()->can('faqs.delete'),
             ],
         ]);
     }
@@ -78,8 +81,9 @@ class FaqController extends Controller
     {
         $this->authorize('faqs.update', $faq);
 
-        return Inertia::render('Faq/Edit', [
-            'faq' => $faq
+        return Inertia::render('Faqs/Faq/Edit', [
+            'faq' => $faq,
+            'tags' => fn() => Tag::getTagsForSelect()
         ]);
     }
 
