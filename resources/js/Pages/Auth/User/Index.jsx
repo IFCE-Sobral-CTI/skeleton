@@ -1,3 +1,4 @@
+import Badge from "@/Components/Dashboard/Badge";
 import Pagination from "@/Components/Dashboard/Pagination";
 import Panel from "@/Components/Dashboard/Panel";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
@@ -27,8 +28,8 @@ function Index({ users, count, page, termSearch, can }) {
                 <td className="px-1 py-3 font-light">
                     <Link href={can.view? route('users.show', item.id): route('users.index', {term: term, page: currentPage})}>
                         {item.status == "1"
-                        ?<div className={"inline-flex bg-green rounded-lg py-1 px-2 text-white text-xs"}>Ativo</div>
-                        :<div className={"inline-flex bg-red-500 rounded-lg py-1 px-2 text-white text-xs"}>Inativo</div>}
+                        ?<Badge color={'green'}><span>Ativo</span></Badge>
+                        :<Badge color={'red'}><span>Inativo</span></Badge>}
                     </Link>
                 </td>
                 <td className="flex justify-end py-3 pr-2 text-neutral-400">

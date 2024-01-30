@@ -30,9 +30,9 @@ class RuleController extends Controller
 
         return Inertia::render('Auth/Rule/Index', array_merge(Rule::search($request), [
             'can' => [
-                'viewAny' => Auth::user()->can('rules.viewAny'),
-            'view' => Auth::user()->can('rules.view'),
-            'create' => Auth::user()->can('rules.create'),
+                'viewAny' => $request->user()->can('rules.viewAny'),
+            'view' => $request->user()->can('rules.view'),
+            'create' => $request->user()->can('rules.create'),
             ],
         ]));
     }
@@ -80,15 +80,15 @@ class RuleController extends Controller
      * @return Response
      * @throws AuthorizationException
      */
-    public function show(Rule $rule): Response
+    public function show(Request $request, Rule $rule): Response
     {
         $this->authorize('rules.view', $rule);
 
         return Inertia::render('Auth/Rule/Show', [
             'rule' => Rule::with('group')->find($rule->id),
             'can' => [
-                'update' => Auth::user()->can('rules.update'),
-                'delete' => Auth::user()->can('rules.delete'),
+                'update' => $request->user()->can('rules.update'),
+                'delete' => $request->user()->can('rules.delete'),
             ],
         ]);
     }
@@ -100,7 +100,7 @@ class RuleController extends Controller
      * @return Response
      * @throws AuthorizationException
      */
-    public function edit(Rule $rule): Response
+    public function edit(Request $request, Rule $rule): Response
     {
         $this->authorize('rules.update', $rule);
 
@@ -108,7 +108,7 @@ class RuleController extends Controller
             'rule' => $rule,
             'groups' => Group::select('id', 'description')->get(),
             'can' => [
-                'rules_update' => Auth::user()->can('rules.update'),
+                'rules_update' => $request->user()->can('rules.update'),
             ],
         ]);
     }

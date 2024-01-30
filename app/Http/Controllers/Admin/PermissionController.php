@@ -32,8 +32,8 @@ class PermissionController extends Controller
 
         return Inertia::render('Auth/Permission/Index', array_merge(Permission::search($request), [
             'can' => [
-                'view' => Auth::user()->can('permissions.view'),
-                'create' => Auth::user()->can('permissions.create'),
+                'view' => $request->user()->can('permissions.view'),
+                'create' => $request->user()->can('permissions.create'),
             ]
         ]));
     }
@@ -79,16 +79,16 @@ class PermissionController extends Controller
      * @param Permission $permission
      * @return Response
      */
-    public function show(Permission $permission): Response
+    public function show(Request $request, Permission $permission): Response
     {
         $this->authorize('permissions.view', $permission);
 
         return Inertia::render('Auth/Permission/Show', [
             'permission' => Permission::with('rules')->find($permission->id),
             'can' => [
-                'delete' => Auth::user()->can('permissions.delete'),
-                'update' => Auth::user()->can('permissions.update'),
-                'rules' => Auth::user()->can('permissions.rules'),
+                'delete' => $request->user()->can('permissions.delete'),
+                'update' => $request->user()->can('permissions.update'),
+                'rules' => $request->user()->can('permissions.rules'),
             ]
         ]);
     }

@@ -29,12 +29,12 @@ function EditPassword({ user }) {
                     <form onSubmit={handleSubmit} autoComplete="off">
                         <div className="mb-4">
                             <label htmlFor="password" className="font-light">Senha</label>
-                            <Input type={'password'} value={data.password} name={'password'} handleChange={onHandleChange} required={true} placeholder="Digite a matricula" />
+                            <Input type={'password'} value={data.password} name={'password'} handleChange={onHandleChange} required={true} placeholder="Digite a senha" />
                             <InputError message={errors.password} />
                         </div>
                         <div className="mb-4">
                             <label htmlFor="password_confirmation" className="font-light">Confirmação de senha</label>
-                            <Input type={'password'} value={data.password_confirmation} name={'password_confirmation'} handleChange={onHandleChange} required={true} placeholder="Digite a matricula" />
+                            <Input type={'password'} value={data.password_confirmation} name={'password_confirmation'} handleChange={onHandleChange} required={true} placeholder="Digite a confirmação senha" />
                             <InputError message={errors.password_confirmation} />
                         </div>
                         <div className="flex items-center justify-center gap-4 mt-6">

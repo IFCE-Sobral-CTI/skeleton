@@ -32,8 +32,8 @@ class UserController extends Controller
 
         return Inertia::render('Auth/User/Index', array_merge(User::search($request), [
             'can' => [
-                'create' => Auth::user()->can('users.create'),
-                'view' => Auth::user()->can('users.view'),
+                'create' => $request->user()->can('users.create'),
+                'view' => $request->user()->can('users.view'),
             ]
         ]));
     }
@@ -82,16 +82,16 @@ class UserController extends Controller
      * @return Response
      * @throws AuthorizationException
      */
-    public function show(User $user): Response
+    public function show(Request $request, User $user): Response
     {
         $this->authorize('users.view', $user);
 
         return Inertia::render('Auth/User/Show', [
             'user' => User::with('permission')->find($user->id),
             'can' => [
-                'update' => Auth::user()->can('users.update'),
-                'update_password' => Auth::user()->can('users.update.password'),
-                'delete' => Auth::user()->can('users.delete'),
+                'update' => $request->user()->can('users.update'),
+                'update_password' => $request->user()->can('users.update.password'),
+                'delete' => $request->user()->can('users.delete'),
             ]
         ]);
     }
