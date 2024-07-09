@@ -1,6 +1,6 @@
 import {
     Modal,
-    initTE,
+    initTWE,
 } from "tw-elements";
 
 import { useForm } from "@inertiajs/react";
@@ -10,7 +10,7 @@ export default function DeleteModal({ url }) {
     const { delete: destroy, processing } = useForm();
 
     useEffect(() => {
-        initTE({ Modal });
+        initTWE({ Modal });
     });
 
     const submit = (e) => {
@@ -24,8 +24,8 @@ export default function DeleteModal({ url }) {
         <>
             <button
                 type="button"
-                data-te-toggle="modal"
-                data-te-target="#delete-modal"
+                data-twe-toggle="modal"
+                data-twe-target="#delete-modal"
 
                 className="inline-flex items-center gap-2 px-4 py-2 text-sm tracking-widest text-white transition duration-150 ease-in-out bg-red-500 border border-transparent rounded-md active:bg-red-700 hover:bg-red-600"
             >
@@ -35,9 +35,9 @@ export default function DeleteModal({ url }) {
                 <span>Apagar</span>
             </button>
             <div
-                data-te-modal-init
-                data-te-backdrop="static"
-                data-te-keyboard="false"
+                data-twe-modal-init
+                data-twe-backdrop="static"
+                data-twe-keyboard="false"
                 className="fixed top-0 left-0 z-[1055] hidden h-full w-full overflow-y-auto overflow-x-hidden outline-none"
                 id="delete-modal"
                 tabIndex="-1"
@@ -46,7 +46,7 @@ export default function DeleteModal({ url }) {
                 role="dialog"
             >
                 <div
-                    data-te-modal-dialog-ref
+                    data-twe-modal-dialog-ref
                     className="pointer-events-none relative flex min-h-[calc(100%-1rem)] w-auto translate-y-[-50px] items-center opacity-0 transition-all duration-300 ease-in-out min-[576px]:mx-auto min-[576px]:mt-7 min-[576px]:min-h-[calc(100%-3.5rem)] min-[576px]:max-w-[500px]"
                 >
                     <div
@@ -64,7 +64,7 @@ export default function DeleteModal({ url }) {
                         <button
                             type="button"
                             className="box-content rounded-none border-none hover:no-underline hover:opacity-75 focus:opacity-100 focus:shadow-none focus:outline-none"
-                            data-te-modal-dismiss
+                            data-twe-modal-dismiss
                             aria-label="Close"
                         >
                             <svg
@@ -91,8 +91,8 @@ export default function DeleteModal({ url }) {
                         <button
                             type="button"
                             className="flex items-center px-6 py-2.5 bg-gray-600 text-white font-light leading-tight rounded shadow-md hover:bg-gray-700 hover:shadow-lg focus:bg-gray-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-gray-800 active:shadow-lg transition duration-150 ease-in-out"
-                            data-te-modal-dismiss
-                            data-te-ripple-color="light"
+                            data-twe-modal-dismiss
+                            data-twe-ripple-color="light"
                         >
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="w-5 h-5 mr-3" role="img" aria-hidden="true" viewBox="0 0 16 16">
                                 <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8 2.146 2.854Z"/>
@@ -103,8 +103,8 @@ export default function DeleteModal({ url }) {
                             <button
                                 type="submit"
                                 className="flex items-center px-6 py-2.5 bg-red-600 text-white font-light leading-tight rounded shadow-md hover:bg-red-700 hover:shadow-lg focus:bg-red-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-red-800 active:shadow-lg transition duration-150 ease-in-out ml-1"
-                                data-te-modal-dismiss
-                                data-te-ripple-color="light"
+                                data-twe-modal-dismiss
+                                data-twe-ripple-color="light"
                                 disabled={processing}
                             >
                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="w-5 h-5 mr-3" role="img" aria-hidden="true" viewBox="0 0 16 16">

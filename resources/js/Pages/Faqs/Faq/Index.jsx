@@ -3,7 +3,7 @@ import { Link, router } from "@inertiajs/react";
 import Pagination from "@/Components/Dashboard/Pagination";
 import Panel from "@/Components/Dashboard/Panel";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
-import Badge from "@/Components/Badge";
+import Badge from "@/Components/Dashboard/Badge";
 
 function Index({ faqs, count, page, termSearch, can }) {
     const [term, setTerm] = useState(termSearch?? '');
@@ -23,7 +23,7 @@ function Index({ faqs, count, page, termSearch, can }) {
             <tr key={index} className={"border-t transition hover:bg-neutral-100 " + (index % 2 == 0? 'bg-neutral-50': '')}>
                 <td className="px-1 py-3 font-light">
                     <Link href={can.view? route('faqs.show', item.id): route('faqs.index', {term: term, page: currentPage})}>
-                        <Badge>{item.tag.description}</Badge>
+                        <Badge color={'sky'}>{item.tag.description}</Badge>
                     </Link>
                 </td>
                 <td className="px-1 py-3 font-light"><Link href={can.view? route('faqs.show', item.id): route('faqs.index', {term: term, page: currentPage})}>{item.question}</Link></td>

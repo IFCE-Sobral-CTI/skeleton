@@ -6,7 +6,6 @@ namespace App\Providers;
 
 use App\Models\Rule;
 use App\Models\User;
-use App\Policies\RulePolicy;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Schema;

@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import {Link, useForm, usePage} from "@inertiajs/react";
 import {
     Dropdown,
-    initTE,
+    initTWE,
 } from "tw-elements";
 
 function Navbar() {
@@ -10,7 +10,7 @@ function Navbar() {
     const { post } = useForm();
 
     useEffect(() => {
-        initTE({Dropdown})
+        initTWE({Dropdown})
     }, []);
 
     const onHandleLogout = () => {
@@ -27,10 +27,10 @@ function Navbar() {
                     <button
                         type="button"
                         className="p-2"
-                        data-te-collapse-init
-                        data-te-target="#sidebar"
-                        data-te-ripple-init
-                        data-te-ripple-color="light"
+                        data-twe-collapse-init
+                        data-twe-target="#sidebar"
+                        data-twe-ripple-init
+                        data-twe-ripple-color="light"
                         aria-controls="sidebar"
                         aria-expanded="false"
                     >
@@ -46,13 +46,13 @@ function Navbar() {
                     <h1 className="text-xl font-semibold">{title}</h1>
                 </div>
                 <div className="px-4">
-                    <div data-te-dropdown-ref>
+                    <div data-twe-dropdown-ref>
                         <button className="flex items-center gap-2"
                             id="dropdownMenuButton2"
-                            data-te-dropdown-toggle-ref
+                            data-twe-dropdown-toggle-ref
                             aria-expanded="false"
-                            data-te-ripple-init
-                            data-te-ripple-color="light"
+                            data-twe-ripple-init
+                            data-twe-ripple-color="light"
                         >
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="h-7 w-7" viewBox="0 0 16 16">
                                 <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0z"/>
@@ -61,15 +61,15 @@ function Navbar() {
                             {auth.user.name.split(' ')[0]}
                         </button>
                         <ul
-                            className="absolute z-[1000] float-left m-0 hidden min-w-max list-none overflow-hidden rounded-lg border-none bg-white bg-clip-padding text-left text-base shadow-lg [&[data-te-dropdown-show]]:block"
+                            className="absolute z-[1000] float-left m-0 hidden min-w-max list-none overflow-hidden rounded-lg border-none bg-white bg-clip-padding text-left text-base shadow-lg [&[data-twe-dropdown-show]]:block"
                             aria-labelledby="dropdownMenuButton2"
-                            data-te-dropdown-menu-ref
+                            data-twe-dropdown-menu-ref
                         >
                             <li>
                                 <Link
                                     href={route('profile')}
                                     className="block w-full px-4 py-2 text-sm font-normal text-center text-gray-700 bg-transparent dropdown-item whitespace-nowrap hover:bg-gray-100"
-                                    data-te-dropdown-item-ref
+                                    data-twe-dropdown-item-ref
                                 >
                                     Perfil
                                 </Link>
@@ -78,7 +78,7 @@ function Navbar() {
                                 <button
                                     onClick={onHandleLogout}
                                     className="block w-full px-4 py-2 text-sm font-normal text-gray-700 bg-transparent dropdown-item whitespace-nowrap hover:bg-gray-100"
-                                    data-te-dropdown-item-ref
+                                    data-twe-dropdown-item-ref
                                 >
                                     Sair
                                 </button>

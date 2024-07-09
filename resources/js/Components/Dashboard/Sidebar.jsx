@@ -1,9 +1,13 @@
-import 'tw-elements';
+import { Collapse, Ripple, initTWE } from "tw-elements";
 import { Link } from "@inertiajs/react";
 import React, { useEffect, useState } from "react";
 
 function Sidebar({ can }) {
     const [width, setWidth] = useState(window.innerWidth);
+
+    useEffect(() => {
+        initTWE({Collapse, Ripple})
+    }, []);
 
     const [accessCollapse] = useState(
         route().current('users.*') ||
@@ -35,7 +39,7 @@ function Sidebar({ can }) {
 
     return (
         <>
-            <nav id="sidebar" className={"!visible mr-2 p-2 " + (width >= 1024? '': 'hidden')} data-te-collapse-item data-te-collapse-horizontal>
+            <nav id="sidebar" className={"!visible mr-2 p-2 " + (width >= 1024? '': 'hidden')} data-twe-collapse-item data-twe-collapse-horizontal>
                 <div className="flex flex-col w-48 gap-3 md:w-64">
                     <Link
                         href={route('admin')}
@@ -58,10 +62,10 @@ function Sidebar({ can }) {
                                 ) + `text-gray-600 p-3 rounded-lg hover:bg-white hover:shadow-md transition flex items-center gap-4 focus:ring-0`}
                             type="button"
 
-                            data-te-collapse-init
-                            data-te-target="#accessCollapse"
-                            data-te-ripple-init
-                            data-te-ripple-color="light"
+                            data-twe-collapse-init
+                            data-twe-target="#accessCollapse"
+                            data-twe-ripple-init
+                            data-twe-ripple-color="light"
                             aria-controls="accessCollapse"
                             aria-expanded="false"
                             onClick={toggleChevronAccess}
@@ -85,7 +89,7 @@ function Sidebar({ can }) {
                         </button>
                         <div
                             className={'flex flex-col gap-1 p-2 transition bg-neutral-200 rounded-md !visible ' + (chevronAccess? '': 'hidden')}
-                            data-te-collapse-item
+                            data-twe-collapse-item
                             id="accessCollapse"
                         >
                             {can.users_viewAny && <Link
@@ -148,10 +152,10 @@ function Sidebar({ can }) {
                                 ) + `text-gray-600 p-3 rounded-lg hover:bg-white hover:shadow-md transition flex items-center gap-4 focus:ring-0`}
                             type="button"
 
-                            data-te-collapse-init
-                            data-te-target="#faqCollapse"
-                            data-te-ripple-init
-                            data-te-ripple-color="light"
+                            data-twe-collapse-init
+                            data-twe-target="#faqCollapse"
+                            data-twe-ripple-init
+                            data-twe-ripple-color="light"
                             aria-controls="faqCollapse"
                             aria-expanded="false"
                             onClick={toggleChevronFaq}
@@ -178,7 +182,7 @@ function Sidebar({ can }) {
                         </button>
                         <div
                             className={'flex flex-col gap-1 p-2 transition bg-neutral-200 rounded-md !visible ' + (chevronFaq? '': 'hidden')}
-                            data-te-collapse-item
+                            data-twe-collapse-item
                             id="faqCollapse"
                         >
                             {can.faqs_viewAny && <Link

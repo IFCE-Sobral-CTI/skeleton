@@ -4,6 +4,7 @@ import { Head } from "@inertiajs/react";
 import Panel from "@/Components/Dashboard/Panel";
 import Button from "@/Components/Form/Button";
 import DeleteModal from "@/Components/Dashboard/DeleteModal";
+import Badge from "@/Components/Dashboard/Badge";
 
 function Show({ user, can }) {
     return (
@@ -15,8 +16,8 @@ function Show({ user, can }) {
                         <div className="text-sm font-light">Status</div>
                         <div>
                             {user.status == "1"
-                            ?<div className={"inline-flex bg-green rounded-lg py-1.5 px-4 text-white text-sm"}>Ativo</div>
-                            :<div className={"inline-flex bg-red-500 rounded-lg py-1.5 px-4 text-white text-sm"}>Inativo</div>}
+                            ?<Badge color={'green'}>Ativo</Badge>
+                            :<Badge color={'red'}>Inativo</Badge>}
                         </div>
                     </div>
                     <div className="flex flex-col">

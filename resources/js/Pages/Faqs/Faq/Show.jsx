@@ -6,7 +6,7 @@ import Button from "@/Components/Form/Button";
 import DeleteModal from "@/Components/Dashboard/DeleteModal";
 import { decode, encode } from "html-entities";
 import ShowField from "@/Components/Dashboard/ShowField";
-import Badge from "@/Components/Badge";
+import Badge from "@/Components/Dashboard/Badge";
 
 function Show({ faq, can }) {
     return (
@@ -15,7 +15,7 @@ function Show({ faq, can }) {
             <AuthenticatedLayout titleChildren={'Detalhes do FAQ'} breadcrumbs={[{ label: 'FAQ', url: route('faqs.index') }, { label: faq.question, url: route('faqs.show', faq.id) }]}>
                 <Panel className={'flex flex-col gap-4'}>
                     <ShowField label={'Tag'}>
-                        <Badge>{faq.tag.description}</Badge>
+                        <Badge color={'sky'}>{faq.tag.description}</Badge>
                     </ShowField>
                     <ShowField label={'Pergunta'}>
                         {faq.question}

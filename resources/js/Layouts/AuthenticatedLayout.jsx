@@ -1,4 +1,3 @@
-import 'tw-elements';
 import React, { useEffect, useState } from 'react';
 import {Head, Link, useForm, usePage} from '@inertiajs/react';
 import Footer from '@/Components/Public/Footer';

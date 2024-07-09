@@ -1,18 +1,22 @@
-const defaultTheme = require('tailwindcss/defaultTheme');
+import defaultTheme from 'tailwindcss/defaultTheme';
+import forms from '@tailwindcss/forms';
 
 /** @type {import('tailwindcss').Config} */
-module.exports = {
+export default {
     content: [
         './vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php',
         './storage/framework/views/*.php',
         './resources/views/**/*.blade.php',
         './resources/js/**/*.jsx',
         './src/**/*.{html,js}',
-        './node_modules/tw-elements/dist/js/**/*.js'
+        './node_modules/tw-elements/js/**/*.js'
     ],
 
     theme: {
         extend: {
+            fontFamily: {
+                sans: ['Open Sans', ...defaultTheme.fontFamily.sans],
+            },
             colors: {
                 green: {
                     light: '#54b74f',
@@ -23,11 +27,9 @@ module.exports = {
             screens: {
                 'print': {'raw': 'print'},
             },
-            fontFamily: {
-                sans: ['Open Sans', ...defaultTheme.fontFamily.sans],
-            },
         },
     },
 
-    plugins: [require('@tailwindcss/forms'), require('tw-elements/dist/plugin')],
+    // Verificar se vai quebrar o sistema
+    plugins: [forms, require('tw-elements/plugin.cjs')],
 };
