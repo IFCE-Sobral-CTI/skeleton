@@ -14,7 +14,7 @@ class TagSeeder extends Seeder
      */
     public function run(): void
     {
-        Tag::factory(25)->create()->each(function($tag) {
+        Tag::factory(3)->create()->each(function($tag) {
             $tag->faqs()->saveMany(
                 Faq::factory(rand(25, 50))->make(['tag_id' => null])
             );
