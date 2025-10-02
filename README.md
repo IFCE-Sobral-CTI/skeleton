@@ -46,28 +46,41 @@ Instale os pacotes do PHP/Laravel:
 composer update
 ```
 
+> Caso não tenha o composer instalado, mas tenha o Docker, use o comando abaixo.
+
+```sh
+docker run --rm \
+    -u "$(id -u):$(id -g)" \
+    -v "$(pwd):/var/www/html" \
+    -w /var/www/html \
+    laravelsail/php83-composer:latest \
+    composer install --ignore-platform-reqs
+```
+
+> Os comando abaixo devem ser executados com as configurações do terminal para uso pacote Sail do Laravel. Para configurar o terminal siga a documentação do Laravel no seguinte link: https://laravel.com/docs/11.x/sail#configuring-a-shell-alias
+
 Instale os pacotes Javascript/Inertia/Javascript:
 
 ```sh
-npm install
+sail npm install
 ```
 
 Gere a chave de segurança da sua aplicação Laravel:
 
 ```sh
-php artisan key:generate
+sail artisan key:generate
 ```
 
 Povoe o banco de dados:
 
 ```sh
-php artisan migrate:fresh --seed
+sail artisan migrate:fresh --seed
 ```
 
 Para executar o projeto depois das configurações:
 
 ```sh
-npm run dev
+sail npm run dev
 ```
 
 O sistema está distribuído em duas partes do front-end.
