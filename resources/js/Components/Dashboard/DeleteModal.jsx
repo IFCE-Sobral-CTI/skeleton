@@ -38,7 +38,7 @@ export default function DeleteModal({ url }) {
                 data-twe-modal-init
                 data-twe-backdrop="static"
                 data-twe-keyboard="false"
-                className="fixed top-0 left-0 z-[1055] hidden h-full w-full overflow-y-auto overflow-x-hidden outline-none"
+                className="fixed top-0 left-0 z-1055 hidden h-full w-full overflow-y-auto overflow-x-hidden outline-none"
                 id="delete-modal"
                 tabIndex="-1"
                 aria-labelledby="delete-modal-title"
@@ -53,7 +53,7 @@ export default function DeleteModal({ url }) {
                         className="pointer-events-auto w-full md:w-3/6 lg:w-2/6 md:m-auto relative flex flex-col rounded-md border-none bg-white bg-clip-padding text-current shadow-lg outline-none"
                     >
                     <div
-                        className="flex flex-shrink-0 items-center justify-between rounded-t-md border-b-2 border-neutral-100 border-opacity-100 p-4"
+                        className="flex shrink-0 items-center justify-between rounded-t-md border-b-2 border-neutral-100 border-opacity-100 p-4"
                     >
                         <h5
                             className="text-xl font-medium leading-normal text-neutral-800"
@@ -86,7 +86,7 @@ export default function DeleteModal({ url }) {
                         <p>Deseja realmente excluir este registro?</p>
                     </div>
                     <div
-                        className="flex flex-shrink-0 flex-wrap items-center justify-end rounded-b-md border-t-2 border-neutral-100 border-opacity-100 p-4"
+                        className="flex shrink-0 flex-wrap items-center justify-end rounded-b-md border-t-2 border-neutral-100 border-opacity-100 p-4"
                     >
                         <button
                             type="button"

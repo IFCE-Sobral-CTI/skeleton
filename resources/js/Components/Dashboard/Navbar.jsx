@@ -61,7 +61,7 @@ function Navbar() {
                             {auth.user.name.split(' ')[0]}
                         </button>
                         <ul
-                            className="absolute z-[1000] float-left m-0 hidden min-w-max list-none overflow-hidden rounded-lg border-none bg-white bg-clip-padding text-left text-base shadow-lg [&[data-twe-dropdown-show]]:block"
+                            className="absolute z-1000 float-left m-0 hidden min-w-max list-none overflow-hidden rounded-lg border-none bg-white bg-clip-padding text-left text-base shadow-lg data-twe-dropdown-show:block"
                             aria-labelledby="dropdownMenuButton2"
                             data-twe-dropdown-menu-ref
                         >

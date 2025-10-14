@@ -39,7 +39,7 @@ function Sidebar({ can }) {
 
     return (
         <>
-            <nav id="sidebar" className={"!visible mr-2 p-2 " + (width >= 1024? '': 'hidden')} data-twe-collapse-item data-twe-collapse-horizontal>
+            <nav id="sidebar" className={"visible! mr-2 p-2 " + (width >= 1024? '': 'hidden')} data-twe-collapse-item data-twe-collapse-horizontal>
                 <div className="flex flex-col w-48 gap-3 md:w-64">
                     <Link
                         href={route('admin')}
@@ -88,7 +88,7 @@ function Sidebar({ can }) {
                             </span>
                         </button>
                         <div
-                            className={'flex flex-col gap-1 p-2 transition bg-neutral-200 rounded-md !visible ' + (chevronAccess? '': 'hidden')}
+                            className={'flex flex-col gap-1 p-2 transition bg-neutral-200 rounded-md visible! ' + (chevronAccess? '': 'hidden')}
                             data-twe-collapse-item
                             id="accessCollapse"
                         >
@@ -181,7 +181,7 @@ function Sidebar({ can }) {
                             </span>
                         </button>
                         <div
-                            className={'flex flex-col gap-1 p-2 transition bg-neutral-200 rounded-md !visible ' + (chevronFaq? '': 'hidden')}
+                            className={'flex flex-col gap-1 p-2 transition bg-neutral-200 rounded-md visible! ' + (chevronFaq? '': 'hidden')}
                             data-twe-collapse-item
                             id="faqCollapse"
                         >
