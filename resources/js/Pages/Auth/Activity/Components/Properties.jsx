@@ -1,7 +1,6 @@
 import React from "react";
 
 export default function Properties({ properties }) {
-    console.log(properties);
     const attributes = (attributes) => {
         let result = [];
         for (const[key, value] of Object.entries(attributes)) {

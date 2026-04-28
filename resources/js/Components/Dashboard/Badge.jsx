@@ -1,17 +1,23 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { twMerge } from 'tailwind-merge';
 
-export default function Badge({color, children, className}) {
-    const [style, setStyle] = useState('');
+const colorMap = {
+    green:  'bg-green-600 text-white',
+    red:    'bg-red-500 text-white',
+    blue:   'bg-blue-500 text-white',
+    yellow: 'bg-yellow-500 text-white',
+    violet: 'bg-violet-500 text-white',
+    orange: 'bg-orange-500 text-white',
+    gray:   'bg-neutral-500 text-white',
+};
 
-    useEffect(() => {
-        if (color == 'green')
-            setStyle(`inline-flex py-1 px-2 rounded-md text-sm text-white bg-green`)
-        else
-            setStyle(`inline-flex py-1 px-2 rounded-md text-sm text-white bg-${color}-500`)
-    });
+export default function Badge({ color, children, className }) {
+    const base = 'inline-flex items-center py-0.5 px-2 rounded-md text-xs font-medium';
+    const colors = colorMap[color] ?? 'bg-neutral-500 text-white';
 
     return (
-        <div className={twMerge(className, style)}>{children}</div>
-    )
+        <span className={twMerge(base, colors, className)}>
+            {children}
+        </span>
+    );
 }

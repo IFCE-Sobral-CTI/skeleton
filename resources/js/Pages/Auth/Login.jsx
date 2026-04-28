@@ -34,6 +34,9 @@ export default function Login({ status, canResetPassword }) {
         <GuestLayout>
             <Head title="Autenticação" />
 
+            <h3 style={{ fontSize: 22, fontWeight: 800, color: 'var(--neutral-900)', marginBottom: 4 }}>Entrar no sistema</h3>
+            <p style={{ fontSize: 14, color: 'var(--text-secondary)', marginBottom: 28 }}>Use seu usuário SIGAA ou e-mail institucional</p>
+
             {status && <div className="mb-4 text-sm font-medium text-green-600">{status}</div>}
 
             <form onSubmit={submit}>

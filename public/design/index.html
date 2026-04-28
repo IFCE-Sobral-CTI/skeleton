@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Design System · IFCE Campus Sobral</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin=""/>
+<link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="styles/tokens.css"/>
+<link rel="stylesheet" href="styles/base.css"/>
+<link rel="stylesheet" href="styles/components.css"/>
+</head>
+<body>
+<div id="root"></div>
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script type="text/babel" src="components/shared.jsx"></script>
+<script type="text/babel">
+const { useEffect } = React;
+
+function LevelCard({ href, num, title, subtitle, count, items, Ic, accent }) {
+  return (
+    <a href={href} style={{
+      display:'flex', flexDirection:'column',
+      background:'#fff', border:'1px solid var(--border-subtle)',
+      borderRadius:'var(--radius-md)', padding:'var(--space-6)',
+      textDecoration:'none', color:'inherit',
+      transition:'all var(--dur-base) var(--ease)',
+      position:'relative', overflow:'hidden'
+    }}
+    onMouseEnter={e=>{
+      e.currentTarget.style.transform='translateY(-2px)';
+      e.currentTarget.style.boxShadow='var(--shadow-md)';
+      e.currentTarget.style.borderColor=accent;
+    }}
+    onMouseLeave={e=>{
+      e.currentTarget.style.transform='';
+      e.currentTarget.style.boxShadow='';
+      e.currentTarget.style.borderColor='var(--border-subtle)';
+    }}
+    >
+      <div style={{position:'absolute', top:0, left:0, right:0, height:3, background: accent}}/>
+      <div style={{display:'flex', alignItems:'flex-start', justifyContent:'space-between', marginBottom:16}}>
+        <div style={{
+          width:44, height:44, borderRadius:'var(--radius-sm)',
+          background:`${accent}18`, color: accent,
+          display:'flex', alignItems:'center', justifyContent:'center'
+        }}>
+          <Ic size={22}/>
+        </div>
+        <span style={{fontFamily:'var(--font-mono)', fontSize:11, color:'var(--text-tertiary)', letterSpacing:'0.06em'}}>
+          {num}
+        </span>
+      </div>
+      <div style={{fontSize:22, fontWeight:800, color:'var(--neutral-900)', letterSpacing:'-0.015em'}}>{title}</div>
+      <div style={{fontSize:13, color:'var(--text-secondary)', marginTop:4, marginBottom:16}}>{subtitle}</div>
+      <div style={{display:'flex', flexWrap:'wrap', gap:6, marginBottom:16}}>
+        {items.map(it => (
+          <span key={it} style={{
+            fontSize:11, fontWeight:600, padding:'3px 8px',
+            background:'var(--neutral-50)', color:'var(--text-secondary)',
+            borderRadius:'var(--radius-pill)', border:'1px solid var(--border-subtle)'
+          }}>{it}</span>
+        ))}
+      </div>
+      <div style={{
+        marginTop:'auto', display:'flex', justifyContent:'space-between',
+        alignItems:'baseline', paddingTop:12, borderTop:'1px dashed var(--border-subtle)'
+      }}>
+        <span style={{fontSize:11, fontWeight:700, letterSpacing:'0.08em', textTransform:'uppercase', color: accent}}>
+          Ver {title.toLowerCase()} →
+        </span>
+        <span style={{fontSize:11, color:'var(--text-tertiary)', fontFamily:'var(--font-mono)'}}>{count}</span>
+      </div>
+    </a>
+  );
+}
+
+function App() {
+  return (
+    <div className="ds-shell">
+      <AtomicNav active="home"/>
+      <main className="ds-main">
+        <PageHero
+          eyebrow="Design System · v2.0"
+          title="Sistema de design do IFCE Campus Sobral, organizado por Atomic Design."
+          lead="Cada peça da interface é construída a partir de blocos menores — de tokens de cor até páginas completas. Este guia é a referência oficial para Portal do Aluno, Sistema Administrativo, Portal Institucional, sistemas de extensão e app mobile."
+          meta={[
+            ['Versão','2.0 · abril 2026'],
+            ['Metodologia','Atomic Design (Brad Frost)'],
+            ['Base normativa','Manual IF 2015 · Guia Rede Federal 2024'],
+            ['Tipografia','Open Sans (400–800)'],
+          ]}
+        />
+
+        <section className="ds-section" id="metodologia">
+          <SectionHead num="01" title="A metodologia"
+            desc="Atomic Design organiza componentes em cinco níveis, do menor ao maior. Cada nível combina os anteriores, sem criar abstrações paralelas — exatamente o princípio de não-fragmentação da marca que o Guia da Rede Federal 2024 defende."/>
+
+          <div style={{display:'grid', gridTemplateColumns:'repeat(5, 1fr)', gap:16}}>
+            <LevelCard href="atoms.html" num="01 · Atoms" title="Átomos"
+              subtitle="Tokens e elementos indivisíveis: cor, tipografia, espaçamento, botões, inputs."
+              count="36 tokens · 8 elementos"
+              items={['Cor','Tipo','Espaço','Botão','Input','Badge','Avatar','Ícone']}
+              Ic={Icon.atom} accent="var(--green-600)"/>
+            <LevelCard href="molecules.html" num="02 · Molecules" title="Moléculas"
+              subtitle="Combinações simples: campo com label, card básico, item de navegação, item de tabela."
+              count="12 componentes"
+              items={['Field','Search','Breadcrumb','Tabs','Tile','Alert','Toast','Filter']}
+              Ic={Icon.molecule} accent="var(--sobral-meruoca)"/>
+            <LevelCard href="organisms.html" num="03 · Organisms" title="Organismos"
+              subtitle="Seções completas: sidebar, topbar, tabela de dados, formulário, calendário."
+              count="9 componentes"
+              items={['Sidebar','Topbar','DataTable','Form','Calendar','Modal','EmptyState']}
+              Ic={Icon.organism} accent="var(--info-500)"/>
+            <LevelCard href="templates.html" num="04 · Templates" title="Templates"
+              subtitle="Estruturas de página sem conteúdo real: Dashboard, Listagem, Formulário, Detalhe, Login."
+              count="5 layouts"
+              items={['Dashboard','Listagem','Formulário','Detalhe','Autenticação']}
+              Ic={Icon.template} accent="var(--sobral-terra)"/>
+            <LevelCard href="pages.html" num="05 · Pages" title="Páginas"
+              subtitle="Instâncias reais dos templates com dados do campus: Portal do Aluno, Admin, Portal Institucional."
+              count="3 exemplos"
+              items={['Portal Aluno','Admin/RH','Portal Sobral']}
+              Ic={Icon.page} accent="var(--red-600)"/>
+          </div>
+        </section>
+
+        <section className="ds-section" id="principios">
+          <SectionHead num="02" title="Princípios"
+            desc="Quatro critérios guiam cada decisão deste sistema."/>
+          <div style={{display:'grid', gridTemplateColumns:'repeat(4, 1fr)', gap:16}}>
+            {[
+              ['Não fragmentar','Uma só marca IFCE. Setores, cursos e laboratórios não criam submarcas.', Icon.check],
+              ['Acessibilidade','Contraste AA, foco visível, alvos ≥44px em mobile — requisito do eMAG/WCAG.', Icon.users],
+              ['Consistência','Quem conhece um sistema do IFCE reconhece o próximo. Mesmos átomos em todos.', Icon.atom],
+              ['Sotaque Sobral','Serra da Meruoca e sertão aparecem como tema secundário, nunca competindo com a marca.', Icon.mountain],
+            ].map(([t,d,Ic]) => (
+              <div key={t} className="card" style={{borderTop:'3px solid var(--green-500)'}}>
+                <div style={{display:'flex', alignItems:'center', gap:10}}>
+                  <Ic size={18} stroke="var(--green-600)"/>
+                  <div className="card-title" style={{fontSize:15}}>{t}</div>
+                </div>
+                <div className="card-desc">{d}</div>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        <section className="ds-section" id="comecar">
+          <SectionHead num="03" title="Como navegar"
+            desc="Percorra do menor ao maior — de átomos até páginas. Ao final de cada nível, um link para o próximo."/>
+          <div style={{
+            padding:32, background:'var(--sobral-areia)', borderRadius:'var(--radius-md)',
+            display:'flex', gap:16, alignItems:'center', justifyContent:'space-between', flexWrap:'wrap'
+          }}>
+            <div>
+              <div style={{
+                fontSize:11, fontWeight:800, letterSpacing:'0.12em',
+                textTransform:'uppercase', color:'var(--sobral-meruoca)'
+              }}>
+                Comece por aqui
+              </div>
+              <div style={{fontSize:20, fontWeight:800, marginTop:4, color:'var(--neutral-900)'}}>
+                Explore os átomos — a base de tudo.
+              </div>
+            </div>
+            <a href="atoms.html" className="btn btn-primary btn-lg">
+              Ir para Átomos <Icon.chevronRight size={16}/>
+            </a>
+          </div>
+        </section>
+
+        <PageFooterNav next={['atoms.html','01 · Átomos']}/>
+      </main>
+    </div>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App/>);
+</script>
+</body>
+</html>

@@ -1,39 +1,94 @@
 @import 'tailwindcss';
-
 @config '../../tailwind.config.js';
 
-/*
-  The default border color has changed to `currentcolor` in Tailwind CSS v4,
-  so we've added these compatibility styles to make sure everything still
-  looks the same as it did with Tailwind CSS v3.
+/* =====================================================================
+   IFCE Campus Sobral — Design tokens registrados como utilidades Tailwind
+   ===================================================================== */
+@theme {
+  --font-sans: 'Open Sans', system-ui, -apple-system, sans-serif;
 
-  If we ever want to remove these styles, we need to add an explicit border
-  color utility to any element that depends on these defaults.
-*/
+  /* Green — substitui a paleta padrão do Tailwind */
+  --color-green-50:  #ecfaef;
+  --color-green-100: #d1f2d9;
+  --color-green-200: #a5e4b6;
+  --color-green-300: #6fd089;
+  --color-green-400: #48b868;
+  --color-green-500: #2f9e41;
+  --color-green-600: #268236;
+  --color-green-700: #1f6a2c;
+  --color-green-800: #184f21;
+  --color-green-900: #0f3315;
+
+  /* Red */
+  --color-red-50:  #fdecec;
+  --color-red-100: #fad0d1;
+  --color-red-200: #f2a1a3;
+  --color-red-300: #e66d71;
+  --color-red-400: #dc3d43;
+  --color-red-500: #cd191e;
+  --color-red-600: #a81418;
+  --color-red-700: #820f13;
+
+  /* Neutral IFCE */
+  --color-neutral-0:   #ffffff;
+  --color-neutral-50:  #f5f5f2;
+  --color-neutral-100: #ececea;
+  --color-neutral-200: #d9d9d6;
+  --color-neutral-300: #bfbfbc;
+  --color-neutral-400: #9c9c99;
+  --color-neutral-500: #6b6b68;
+  --color-neutral-600: #4a4a47;
+  --color-neutral-700: #333331;
+  --color-neutral-800: #1f1f1d;
+  --color-neutral-900: #121210;
+
+  /* Sobral */
+  --color-meruoca:      #0e7c63;
+  --color-meruoca-soft: #e4f3ef;
+  --color-terra:        #b85a2b;
+  --color-terra-soft:   #f6ece3;
+  --color-areia:        #f4ecd8;
+
+  /* Info / Warn */
+  --color-info-50:  #e8f1fb;
+  --color-info-500: #1351b4;
+  --color-info-700: #0c3b82;
+  --color-warn-50:  #fff4dd;
+  --color-warn-500: #e0a100;
+  --color-warn-700: #8a5f00;
+}
+
+/* Variáveis sem equivalente direto em Tailwind (sombras e easing) */
+:root {
+  --shadow-xs:    0 1px 2px rgba(18,18,16,.04);
+  --shadow-sm:    0 1px 3px rgba(18,18,16,.06), 0 1px 2px rgba(18,18,16,.04);
+  --shadow-md:    0 4px 10px -2px rgba(18,18,16,.08), 0 2px 4px -1px rgba(18,18,16,.04);
+  --shadow-lg:    0 10px 24px -6px rgba(18,18,16,.10), 0 4px 8px -2px rgba(18,18,16,.05);
+  --shadow-focus: 0 0 0 3px rgba(47,158,65,.28);
+  --ease:         cubic-bezier(.2,.8,.2,1);
+  --dur-fast:     120ms;
+  --dur-base:     200ms;
+}
+
+/* =====================================================================
+   Base
+   ===================================================================== */
 @layer base {
-  *,
-  ::after,
-  ::before,
-  ::backdrop,
-  ::file-selector-button {
-    border-color: var(--color-gray-200, currentcolor);
+  *, ::after, ::before, ::backdrop, ::file-selector-button {
+    border-color: var(--color-neutral-200, currentcolor);
+  }
+  body {
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+  }
+  :focus-visible {
+    outline: 2px solid var(--color-green-500);
+    outline-offset: 2px;
   }
 }
 
-.fadeOut{
-    opacity:0;
-    width:0;
-    height:0;
-    transition: width 0.5s 0.5s, height 0.5s 0.5s, opacity 0.5s;
-
-}
-.fadeIn{
-    opacity:1;
-    width:100px;
-    height:100px;
-    transition: width 0.5s, height 0.5s, opacity 0.5s 0.5s;
-}
-
-.collapse {
-    visibility: visible;
-}
+/* =====================================================================
+   Toast — animação de entrada/saída (estado gerenciado via JS)
+   ===================================================================== */
+.fadeOut { opacity: 0; pointer-events: none; transform: translateY(-8px); transition: opacity .3s, transform .3s; }
+.fadeIn  { opacity: 1; pointer-events: all;  transform: translateY(0);    transition: opacity .3s, transform .3s; }

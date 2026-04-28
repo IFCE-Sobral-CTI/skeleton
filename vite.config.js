@@ -7,7 +7,7 @@ export default defineConfig({
     server: {
         https: false,
         host: true,
-        hmr: {host: 'localhost', protocol: 'ws'},
+        hmr: {host: '10.20.1.16', protocol: 'ws'},
     },
     plugins: [
         laravel({

@@ -5,6 +5,7 @@ import Panel from '@/Components/Public/Panel';
 import Navbar from '@/Components/Public/Navbar';
 import Header from '@/Components/Public/Header';
 import 'tw-elements';
+import { ChevronUp, Search } from "lucide-react";
 
 export default function Faq({ faqs }) {
     const [term, setTerm] = useState('');
@@ -43,20 +44,7 @@ export default function Faq({ faqs }) {
                         <span
                             className="ml-auto h-5 w-5 shrink-0 -rotate-180 fill-[#336dec] transition-transform duration-200 ease-in-out group-data-te-collapse-collapsed:rotate-0 group-data-te-collapse-collapsed:fill-[#212529] motion-reduce:transition-none"
                         >
-                            <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                fill="none"
-                                viewBox="0 0 24 24"
-                                strokeWidth="1.5"
-                                stroke="currentColor"
-                                className="h-6 w-6"
-                            >
-                                <path
-                                    strokeLinecap="round"
-                                    strokeLinejoin="round"
-                                    d="M19.5 8.25l-7.5 7.5-7.5-7.5"
-                                />
-                            </svg>
+                            <ChevronUp className="h-6 w-6" />
                         </span>
                     </button>
                 </h2>
@@ -84,9 +72,7 @@ export default function Faq({ faqs }) {
                         <Panel className={'relative flex flex-wrap justify-between gap-2'}>
                             <input type="search" value={term} onChange={e => setTerm(e.target.value)} className="w-full border rounded-md focus:ring focus:ring-green-200 focus:border-green" placeholder="Faça sua pesquisa" />
                             <span className="absolute z-10 flex items-center p-2 top-4 right-2 md:right-4 h-7 md:h-10">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="w-4 h-4" viewBox="0 0 16 16">
-                                    <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
-                                </svg>
+                                <Search size={20} />
                             </span>
                         </Panel>
                         <Panel className={'mt-2 flex flex-col gap-2'}>

@@ -1,0 +1,172 @@
+/* =========================================================
+   IFCE Campus Sobral — Design System Tokens
+   Baseado no Manual de Aplicação da Marca IF (2015) e no
+   Guia de Imagem e Identidade de Marca da Rede Federal (2024).
+   ========================================================= */
+
+:root {
+  /* ---------- COR — Marca oficial IFCE ---------- */
+  --ifce-verde: #2f9e41;        /* Pantone 362 C / R50 G160 B65 */
+  --ifce-vermelho: #cd191e;     /* Pantone 187 C / R200 G25 B30 */
+  --ifce-preto: #000000;
+
+  /* ---------- Escala Verde (primária) ---------- */
+  --green-50:  #ecfaef;
+  --green-100: #d1f2d9;
+  --green-200: #a5e4b6;
+  --green-300: #6fd089;
+  --green-400: #48b868;
+  --green-500: #2f9e41;   /* marca */
+  --green-600: #268236;
+  --green-700: #1f6a2c;
+  --green-800: #184f21;
+  --green-900: #0f3315;
+
+  /* ---------- Escala Vermelho (alerta/crítico) ---------- */
+  --red-50:  #fdecec;
+  --red-100: #fad0d1;
+  --red-200: #f2a1a3;
+  --red-300: #e66d71;
+  --red-400: #dc3d43;
+  --red-500: #cd191e;   /* marca */
+  --red-600: #a81418;
+  --red-700: #820f13;
+  --red-800: #5c0a0d;
+
+  /* ---------- Sobral — Serra da Meruoca / semiárido ----------
+     Toque local: verde-esmeralda tropical e terracota semiárido.
+     Usados apenas como secundário / decorativo — nunca competem
+     com a marca principal. */
+  --sobral-meruoca: #0e7c63;    /* verde-esmeralda serra */
+  --sobral-meruoca-soft: #e4f3ef;
+  --sobral-terra: #b85a2b;      /* terracota semiárido */
+  --sobral-terra-soft: #f6ece3;
+  --sobral-areia: #f4ecd8;      /* pano de fundo quente */
+
+  /* ---------- Neutros (gov.br-inspired, com viés quente suave) ---------- */
+  --neutral-0:   #ffffff;
+  --neutral-25:  #fbfbf9;
+  --neutral-50:  #f5f5f2;
+  --neutral-100: #ececea;
+  --neutral-200: #d9d9d6;
+  --neutral-300: #bfbfbc;
+  --neutral-400: #9c9c99;
+  --neutral-500: #6b6b68;
+  --neutral-600: #4a4a47;
+  --neutral-700: #333331;
+  --neutral-800: #1f1f1d;
+  --neutral-900: #121210;
+
+  /* ---------- Feedback ---------- */
+  --info-50: #e8f1fb;
+  --info-500: #1351b4;  /* gov.br blue para complementar */
+  --info-700: #0c3b82;
+
+  --warn-50: #fff4dd;
+  --warn-500: #e0a100;
+  --warn-700: #8a5f00;
+
+  --success-50: var(--green-50);
+  --success-500: var(--green-500);
+  --success-700: var(--green-700);
+
+  --danger-50: var(--red-50);
+  --danger-500: var(--red-500);
+  --danger-700: var(--red-700);
+
+  /* ---------- Semânticos de superfície ---------- */
+  --bg-page: var(--neutral-50);
+  --bg-surface: var(--neutral-0);
+  --bg-surface-2: var(--neutral-25);
+  --bg-subtle: var(--neutral-100);
+
+  --border-subtle: var(--neutral-200);
+  --border-default: var(--neutral-300);
+  --border-strong: var(--neutral-500);
+
+  --text-primary: var(--neutral-800);
+  --text-secondary: var(--neutral-600);
+  --text-tertiary: var(--neutral-500);
+  --text-inverse: var(--neutral-0);
+  --text-brand: var(--green-700);
+  --text-link: var(--info-500);
+
+  /* ---------- Tipografia — Open Sans (fiel ao manual) ---------- */
+  --font-sans: 'Open Sans', system-ui, -apple-system, sans-serif;
+  --font-display: 'Open Sans', system-ui, sans-serif;
+  --font-mono: ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+
+  /* Escala tipográfica — base 16, equilibrada */
+  --text-xs:   0.75rem;   /* 12 */
+  --text-sm:   0.875rem;  /* 14 */
+  --text-base: 1rem;      /* 16 */
+  --text-md:   1.125rem;  /* 18 */
+  --text-lg:   1.25rem;   /* 20 */
+  --text-xl:   1.5rem;    /* 24 */
+  --text-2xl:  1.875rem;  /* 30 */
+  --text-3xl:  2.25rem;   /* 36 */
+  --text-4xl:  3rem;      /* 48 */
+
+  --leading-tight: 1.2;
+  --leading-snug: 1.35;
+  --leading-normal: 1.55;
+  --leading-relaxed: 1.7;
+
+  --weight-regular: 400;
+  --weight-medium: 500;
+  --weight-semibold: 600;
+  --weight-bold: 700;
+  --weight-extrabold: 800;
+
+  /* ---------- Espaçamento (escala de 4px) ---------- */
+  --space-0: 0;
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-10: 40px;
+  --space-12: 48px;
+  --space-16: 64px;
+  --space-20: 80px;
+
+  /* ---------- Raio de borda — discretos, gov.br style ---------- */
+  --radius-xs: 2px;
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
+  --radius-pill: 999px;
+
+  /* ---------- Sombras (sutis) ---------- */
+  --shadow-xs: 0 1px 2px rgba(18,18,16,0.04);
+  --shadow-sm: 0 1px 3px rgba(18,18,16,0.06), 0 1px 2px rgba(18,18,16,0.04);
+  --shadow-md: 0 4px 10px -2px rgba(18,18,16,0.08), 0 2px 4px -1px rgba(18,18,16,0.04);
+  --shadow-lg: 0 10px 24px -6px rgba(18,18,16,0.10), 0 4px 8px -2px rgba(18,18,16,0.05);
+  --shadow-focus: 0 0 0 3px rgba(47,158,65,0.28);
+
+  /* ---------- Alturas e tamanhos de controle ---------- */
+  --control-sm: 32px;
+  --control-md: 40px;
+  --control-lg: 48px;
+
+  /* ---------- Camadas ---------- */
+  --z-dropdown: 50;
+  --z-sticky: 100;
+  --z-overlay: 500;
+  --z-modal: 800;
+  --z-toast: 900;
+
+  /* ---------- Transições ---------- */
+  --ease: cubic-bezier(.2,.8,.2,1);
+  --dur-fast: 120ms;
+  --dur-base: 200ms;
+  --dur-slow: 320ms;
+
+  /* ---------- Grid ---------- */
+  --max-width: 1280px;
+  --content-width: 1080px;
+  --module-x: 8px;
+}

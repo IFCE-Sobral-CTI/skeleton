@@ -1,25 +1,12 @@
 import Badge from "@/Components/Dashboard/Badge";
-import React, { useState, useEffect } from "react";
+
+const ACTION_MAP = {
+    created: { color: 'green',  label: 'Criou um registro' },
+    updated: { color: 'yellow', label: 'Atualizou um registro' },
+    deleted: { color: 'red',    label: 'Apagou um registro' },
+};
 
 export default function Description({ title }) {
-    const [result, setResult] = useState('');
-
-    useEffect(() => {
-        switch(title) {
-            case 'created':
-                setResult(<Badge color={'green'}>Criou um registro</Badge>);
-                break;
-            case 'updated':
-                setResult(<Badge color={'yellow'}>Atualizou um registro</Badge>);
-                break;
-            case 'deleted':
-                setResult(<Badge color={'red'}>Apagou um registro</Badge>);
-                break;
-            default:
-                setResult(<Badge color={'cyan'}>Informe</Badge>);
-                break;
-        }
-    }, []);
-
-    return result;
+    const action = ACTION_MAP[title] ?? { color: 'gray', label: 'Informar' };
+    return <Badge className={'sm:px-2 sm:py-1'} color={action.color}>{action.label}</Badge>;
 }

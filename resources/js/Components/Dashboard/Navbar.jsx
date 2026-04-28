@@ -1,94 +1,107 @@
-import React, { useEffect } from "react";
-import {Link, useForm, usePage} from "@inertiajs/react";
-import {
-    Dropdown,
-    initTWE,
-} from "tw-elements";
+import React, { useEffect, useRef, useState } from "react";
+import { Link, useForm, usePage } from "@inertiajs/react";
+import { Bell, ChevronDown, CircleUser, LogOut, Menu, Search } from "lucide-react";
 
-function Navbar() {
-    const { auth, title } = usePage().props;
+function Navbar({ onMenuToggle }) {
+    const { auth } = usePage().props;
     const { post } = useForm();
+    const [dropOpen, setDropOpen] = useState(false);
+    const dropRef = useRef(null);
 
     useEffect(() => {
-        initTWE({Dropdown})
+        function handleClickOutside(e) {
+            if (dropRef.current && !dropRef.current.contains(e.target)) {
+                setDropOpen(false);
+            }
+        }
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => document.removeEventListener('mousedown', handleClickOutside);
     }, []);
 
-    const onHandleLogout = () => {
-        post(route('logout'));
-    }
+    const initials = auth?.user?.name
+        ? auth.user.name.split(' ').map(x => x[0]).slice(0, 2).join('')
+        : 'U';
+
+    const firstName = auth?.user?.name?.split(' ')[0] ?? '';
 
     return (
-        <nav className="relative w-full flex flex-wrap items-center justify-between py-0.5 md:py-1 bg-green text-white shadow-lg transition">
-            <div className="w-full sm:hidden">
-                <h1 className="text-xl font-semibold text-center">{title}</h1>
+        <div className="h-[68px] flex items-center px-4 md:px-6 bg-white border-b border-neutral-200 gap-3 md:gap-4 shrink-0">
+
+            {/* Hamburger — mobile only */}
+            <button
+                type="button"
+                className="md:hidden w-9 h-9 inline-flex items-center justify-center rounded-full bg-transparent border-0 text-neutral-600 cursor-pointer transition-colors hover:bg-neutral-100 hover:text-neutral-800"
+                onClick={onMenuToggle}
+                aria-label="Abrir menu"
+            >
+                <Menu size={20} />
+            </button>
+
+            {/* Busca — hidden on mobile */}
+            <div className="hidden md:flex flex-1 max-w-[380px] relative">
+                <span className="absolute left-[11px] top-1/2 -translate-y-1/2 text-neutral-500 pointer-events-none">
+                    <Search size={16} />
+                </span>
+                <input
+                    placeholder="Buscar…"
+                    className="h-9 w-full pl-9 pr-3.5 border border-neutral-300 rounded-full bg-neutral-50 text-[13px] text-neutral-800 outline-none transition-[border-color,box-shadow] focus:border-green-500 focus:bg-white focus:shadow-[var(--shadow-focus)]"
+                />
             </div>
-            <div className="flex flex-wrap items-center justify-between w-full">
-                <div className="flex">
+
+            {/* Direita */}
+            <div className="ml-auto flex items-center gap-2.5">
+
+                {/* Notificações */}
+                <button
+                    className="w-9 h-9 inline-flex items-center justify-center rounded-full bg-transparent border-0 text-neutral-600 cursor-pointer transition-colors hover:bg-neutral-100 hover:text-neutral-800"
+                    type="button"
+                    title="Notificações"
+                >
+                    <Bell size={18} />
+                </button>
+
+                {/* Divisor */}
+                <div className="w-px h-[22px] bg-neutral-200" />
+
+                {/* User dropdown */}
+                <div className="relative" ref={dropRef}>
                     <button
                         type="button"
-                        className="p-2"
-                        data-twe-collapse-init
-                        data-twe-target="#sidebar"
-                        data-twe-ripple-init
-                        data-twe-ripple-color="light"
-                        aria-controls="sidebar"
-                        aria-expanded="false"
+                        className="flex items-center gap-2 bg-transparent border-0 cursor-pointer py-1"
+                        onClick={() => setDropOpen(v => !v)}
                     >
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="h-7 w-7" viewBox="0 0 16 16">
-                            <path fillRule="evenodd" d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5z"/>
-                        </svg>
+                        <div className="inline-flex items-center justify-center rounded-full bg-green-500 text-white font-bold shrink-0 w-8 h-8 text-xs">
+                            {initials}
+                        </div>
+                        <span className="hidden sm:inline text-[13px] font-semibold text-neutral-800">{firstName}</span>
+                        <ChevronDown size={12} className="text-neutral-500" />
                     </button>
-                    <Link className="text-xl" href={route('admin')}>
-                        <img src={route().t.url + "/img/logo_branco.svg"} className="h-14" alt="IFCE - Campus Sobral" />
-                    </Link>
-                </div>
-                <div className="hidden md:block">
-                    <h1 className="text-xl font-semibold">{title}</h1>
-                </div>
-                <div className="px-4">
-                    <div data-twe-dropdown-ref>
-                        <button className="flex items-center gap-2"
-                            id="dropdownMenuButton2"
-                            data-twe-dropdown-toggle-ref
-                            aria-expanded="false"
-                            data-twe-ripple-init
-                            data-twe-ripple-color="light"
-                        >
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="h-7 w-7" viewBox="0 0 16 16">
-                                <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0z"/>
-                                <path fillRule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z"/>
-                            </svg>
-                            {auth.user.name.split(' ')[0]}
-                        </button>
-                        <ul
-                            className="absolute z-1000 float-left m-0 hidden min-w-max list-none overflow-hidden rounded-lg border-none bg-white bg-clip-padding text-left text-base shadow-lg data-twe-dropdown-show:block"
-                            aria-labelledby="dropdownMenuButton2"
-                            data-twe-dropdown-menu-ref
-                        >
-                            <li>
-                                <Link
-                                    href={route('profile')}
-                                    className="block w-full px-4 py-2 text-sm font-normal text-center text-gray-700 bg-transparent dropdown-item whitespace-nowrap hover:bg-gray-100"
-                                    data-twe-dropdown-item-ref
-                                >
-                                    Perfil
-                                </Link>
-                            </li>
-                            <li>
-                                <button
-                                    onClick={onHandleLogout}
-                                    className="block w-full px-4 py-2 text-sm font-normal text-gray-700 bg-transparent dropdown-item whitespace-nowrap hover:bg-gray-100"
-                                    data-twe-dropdown-item-ref
-                                >
-                                    Sair
-                                </button>
-                            </li>
-                        </ul>
-                    </div>
+
+                    {dropOpen && (
+                        <div className="absolute right-0 top-[calc(100%+8px)] bg-white border border-neutral-200 rounded-lg shadow-[var(--shadow-md)] min-w-[160px] z-[200] overflow-hidden">
+                            <Link
+                                href={route('profile')}
+                                className="flex items-center gap-2 px-4 py-2.5 text-[13px] text-neutral-800 no-underline hover:bg-neutral-50"
+                                onClick={() => setDropOpen(false)}
+                            >
+                                <CircleUser size={14} />
+                                Perfil
+                            </Link>
+                            <div className="h-px bg-neutral-200" />
+                            <button
+                                type="button"
+                                onClick={() => post(route('logout'))}
+                                className="flex items-center gap-2 w-full px-4 py-2.5 text-[13px] text-red-600 bg-transparent border-0 cursor-pointer text-left hover:bg-red-50"
+                            >
+                                <LogOut size={14} />
+                                Sair
+                            </button>
+                        </div>
+                    )}
                 </div>
             </div>
-        </nav>
-    )
+        </div>
+    );
 }
 
 export default Navbar;

@@ -4,10 +4,10 @@ function Select({
     children,
     name,
     value,
-    className,
+    className = '',
     isFocused,
     handleChange,
-    required
+    required,
 }) {
     const select = useRef();
 
@@ -18,23 +18,18 @@ function Select({
     }, []);
 
     return (
-        <>
-            <select
-                name={name}
-                id={name}
-                value={value?? ''}
-                className={
-                    `w-full border-neutral-400 focus:border-emerald-300 focus:ring focus:ring-emerald-200 focus:ring-opacity-50 rounded-lg shadow-sm ` +
-                    className
-                }
-                ref={select}
-                onChange={(e) => handleChange(e)}
-                required={required}
-            >
-                {children}
-            </select>
-        </>
-    )
+        <select
+            name={name}
+            id={name}
+            value={value ?? ''}
+            className={`w-full border-neutral-400 focus:border-emerald-300 focus:ring focus:ring-emerald-200 focus:ring-opacity-50 rounded-lg shadow-sm ${className}`}
+            ref={select}
+            onChange={handleChange}
+            required={required}
+        >
+            {children}
+        </select>
+    );
 }
 
 export default Select;

@@ -1,5 +1,6 @@
 import InputError from "@/Components/InputError";
 import React, { useCallback, useEffect, useRef, useState } from "react";
+import { ChevronDown, X } from "lucide-react";
 
 function SelectMulti({ data, onChange, value, error, label, name }) {
     const [toggle, setToggle] = useState(false);
@@ -84,9 +85,7 @@ function SelectMulti({ data, onChange, value, error, label, name }) {
                             <div className="inline-flex justify-between gap-2 items-center text-neutral-700 font-light text-sm bg-neutral-200 rounded-md" key={i}>
                                 <span className="pl-2">{item.name}</span>
                                 <span onClick={() => handleUnselect(item.id)} className="pr-1 border-l border-neutral-400">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="h-4 w-4" viewBox="0 0 16 16">
-                                        <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/>
-                                    </svg>
+                                    <X size={16} />
                                 </span>
                             </div>
                         );
@@ -94,9 +93,7 @@ function SelectMulti({ data, onChange, value, error, label, name }) {
                     :<span className="text-neutral-500">Nenhum {label.toLowerCase()} selecionado</span>}
                 </div>
                 <div className="flex justify-center items-center">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="h-5 w-5" viewBox="0 0 16 16">
-                        <path fillRule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"/>
-                    </svg>
+                    <ChevronDown size={20} />
                 </div>
             </div>
             <InputError message={error} />

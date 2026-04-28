@@ -92,6 +92,7 @@ class UserController extends Controller
                 'update' => $request->user()->can('users.update'),
                 'update_password' => $request->user()->can('users.update.password'),
                 'delete' => $request->user()->can('users.delete'),
+                'verify' => $request->user()->can('users.verify'),
             ]
         ]);
     }
@@ -187,6 +188,25 @@ class UserController extends Controller
             return redirect()->route('users.show', $user)->with('flash', ['status' => 'success', 'message' => 'Registro atualizado com sucesso!']);
         } catch (Exception $e) {
             return redirect()->route('users.index')->with('flash', ['status' => 'danger', 'message' => $e->getMessage()]);
+        }
+    }
+
+    /**
+     * Verify the specified user by setting email_verified_at.
+     *
+     * @param User $user
+     * @return RedirectResponse
+     * @throws AuthorizationException
+     */
+    public function verify(User $user): RedirectResponse
+    {
+        $this->authorize('users.verify', $user);
+
+        try {
+            $user->update(['email_verified_at' => now()]);
+            return redirect()->route('users.show', $user)->with('flash', ['status' => 'success', 'message' => 'Usuário validado com sucesso!']);
+        } catch (Exception $e) {
+            return redirect()->route('users.show', $user)->with('flash', ['status' => 'danger', 'message' => $e->getMessage()]);
         }
     }
 

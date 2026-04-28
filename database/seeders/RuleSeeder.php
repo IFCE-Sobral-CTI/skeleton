@@ -39,6 +39,7 @@ class RuleSeeder extends Seeder
                 'additional' => [
                     'Perfil' => 'users.profile',
                     'Atualizar de senha' => 'users.update.password',
+                    'Validar usuário' => 'users.verify',
                 ]
             ],
         ];

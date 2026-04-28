@@ -1,5 +1,4 @@
 import React from 'react';
-import 'tw-elements';
 import Panel from '@/Components/Dashboard/Panel';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 

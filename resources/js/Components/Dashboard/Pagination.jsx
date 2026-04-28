@@ -1,48 +1,46 @@
 import { Link } from "@inertiajs/react";
 import React from "react";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 
-function Pagination({data, count}) {
+const active   = "inline-flex items-center gap-1.5 px-3 h-9 text-sm font-medium rounded-lg border border-neutral-200 bg-white text-neutral-700 hover:bg-neutral-50 hover:border-neutral-300 transition-colors no-underline select-none";
+const disabled = "inline-flex items-center gap-1.5 px-3 h-9 text-sm font-medium rounded-lg border border-neutral-100 bg-neutral-50 text-neutral-300 cursor-default select-none";
+
+function Pagination({ data, count }) {
     return (
-        <nav className="flex flex-col items-end justify-end gap-2 pt-6">
-            <ul className="flex gap-4 text-gray-500">
-                <li className="">
-                    {data.prev_page_url
-                    ?(<Link href={data.prev_page_url} className="flex items-center justify-between gap-2 p-2 transition border rounded-lg shadow-md hover:bg-gray-50">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="w-5 h-5" viewBox="0 0 16 16">
-                            <path fillRule="evenodd" d="M8.354 1.646a.5.5 0 0 1 0 .708L2.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0z"/>
-                            <path fillRule="evenodd" d="M12.354 1.646a.5.5 0 0 1 0 .708L6.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0z"/>
-                        </svg>
+        <nav className="flex items-center justify-between pt-6">
+            <p className="text-xs text-neutral-500">
+                <span className="font-semibold text-neutral-700">{count}</span> registros
+                <span className="mx-1.5 text-neutral-300">·</span>
+                Página{" "}
+                <span className="font-semibold text-neutral-700">{data.current_page}</span>
+                {" "}de{" "}
+                <span className="font-semibold text-neutral-700">{data.last_page}</span>
+            </p>
+
+            <div className="flex items-center gap-2">
+                {data.prev_page_url
+                    ? <Link href={data.prev_page_url} preserveState preserveScroll className={active}>
+                        <ChevronLeft size={15} />
                         Anterior
-                    </Link>)
-                    :(<button type="button" className="flex items-center justify-between gap-2 p-2 text-gray-300 transition border rounded-lg shadow-md cursor-auto">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="w-5 h-5" viewBox="0 0 16 16">
-                            <path fillRule="evenodd" d="M8.354 1.646a.5.5 0 0 1 0 .708L2.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0z"/>
-                            <path fillRule="evenodd" d="M12.354 1.646a.5.5 0 0 1 0 .708L6.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0z"/>
-                        </svg>
+                      </Link>
+                    : <span className={disabled}>
+                        <ChevronLeft size={15} />
                         Anterior
-                    </button>)}
-                </li>
-                <li className="">
-                    {data.next_page_url
-                    ?(<Link href={data.next_page_url} className="flex items-center justify-between gap-2 p-2 transition border rounded-lg shadow-md hover:bg-gray-50">
+                      </span>
+                }
+                {data.next_page_url
+                    ? <Link href={data.next_page_url} preserveState preserveScroll className={active}>
                         Próxima
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="w-5 h-5" viewBox="0 0 16 16">
-                            <path fillRule="evenodd" d="M3.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L9.293 8 3.646 2.354a.5.5 0 0 1 0-.708z"/>
-                            <path fillRule="evenodd" d="M7.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L13.293 8 7.646 2.354a.5.5 0 0 1 0-.708z"/>
-                        </svg>
-                    </Link>)
-                    :(<button type="button" className="flex items-center justify-between gap-2 p-2 text-gray-300 transition border rounded-lg shadow-md cursor-auto">
+                        <ChevronRight size={15} />
+                      </Link>
+                    : <span className={disabled}>
                         Próxima
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="w-5 h-5" viewBox="0 0 16 16">
-                            <path fillRule="evenodd" d="M3.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L9.293 8 3.646 2.354a.5.5 0 0 1 0-.708z"/>
-                            <path fillRule="evenodd" d="M7.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L13.293 8 7.646 2.354a.5.5 0 0 1 0-.708z"/>
-                        </svg>
-                    </button>)}
-                </li>
-            </ul>
-            <p className="flex items-end text-xs font-light text-gray-500">Total de registros<strong className="font-semibold">&nbsp;{count}&nbsp;</strong> - Página<strong className="font-semibold">&nbsp;{data.current_page}&nbsp;</strong>de<strong className="font-semibold">&nbsp;{data.last_page}</strong>.</p>
+                        <ChevronRight size={15} />
+                      </span>
+                }
+            </div>
         </nav>
-    )
+    );
 }
 
 export default Pagination;
