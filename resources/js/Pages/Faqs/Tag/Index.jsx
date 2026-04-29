@@ -1,77 +1,77 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { Link, router } from "@inertiajs/react";
-import Pagination from "@/Components/Dashboard/Pagination";
-import Panel from "@/Components/Dashboard/Panel";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
-import { ChevronRight, Plus, Search } from "lucide-react";
+import DataTable from "@/Components/Dashboard/DataTable";
+import Pagination from "@/Components/Dashboard/Pagination";
+import { Plus, Search } from "lucide-react";
 
 function Index({ data, count, page, termSearch, can }) {
-    const [term, setTerm] = useState(termSearch?? '');
-    const [currentPage, setCurrentPage] = useState(page);
+    const [term, setTerm] = useState(termSearch ?? '');
 
     useEffect(() => {
-        const debounce = setTimeout(() => {
-            setCurrentPage(1);
-            router.visit(route(route().current()), {data: {term: term, page: currentPage}, preserveState: true, replace: true});
+        const timer = setTimeout(() => {
+            router.visit(route(route().current()), {
+                data: { term, page: 1 },
+                preserveState: true,
+                replace: true,
+            });
         }, 300);
-
-        return () => clearTimeout(debounce);
+        return () => clearTimeout(timer);
     }, [term]);
 
-    const table = data.data.map((item, index) => {
-        return (
-            <tr key={index} className={"border-t transition hover:bg-neutral-100 " + (index % 2 == 0? 'bg-neutral-50': '')}>
-                <td className="px-1 py-3 font-light">
-                    <Link href={can.view? route('tags.show', item.id): route('tags.index', {term: term, page: currentPage})}>
-                        {item.description}
-                    </Link>
-                </td>
-                <td className="flex justify-end py-3 pr-2 text-neutral-400">
-                    <Link href={can.view? route('tags.show', item.id): route('tags.index', {term: term, page: currentPage})}>
-                        <ChevronRight size={20} />
-                    </Link>
-                </td>
-            </tr>
-        );
-    });
+    const columns = useMemo(() => [
+        {
+            key: 'description',
+            label: 'Descrição',
+            primary: true,
+        },
+    ], []);
+
+    const getHref = useCallback(
+        item => can.view ? route('tags.show', item.id) : null,
+        [can.view],
+    );
 
     return (
-        <>
-            <AuthenticatedLayout
-                titleChildren={'Gerenciamento de Tag'}
-                breadcrumbs={[{ label: 'Tags', url: route('tags.index') }]}
-            >
-                <div className="flex gap-2 md:flex-row md:gap-4">
-                    {can.create && <Panel className={'inline-flex'}>
-                        <Link href={route('tags.create')} className="inline-flex items-center justify-between gap-2 px-3 py-2 font-light text-white transition bg-blue-500 border border-transparent rounded-md focus:ring hover:bg-blue-600 focus:ring-sky-300">
-                            <Plus size={20} />
-                            <span>Nova</span>
-                        </Link>
-                    </Panel>}
-                    <Panel className={'flex-1 relative'}>
-                        <input type="search" value={term} onChange={e => setTerm(e.target.value)} className="w-full border rounded-md focus:ring focus:ring-green-200 focus:border-green" placeholder="Faça sua pesquisa" />
-                        <span className="absolute z-10 flex items-center p-2 top-4 right-2 md:right-4 h-7 md:h-10">
-                            <Search size={20} />
-                        </span>
-                    </Panel>
+        <AuthenticatedLayout
+            titleChildren="Gerenciamento de Tags"
+            breadcrumbs={[{ label: 'Tags', url: route('tags.index') }]}
+        >
+            <div className="flex items-center gap-3 mb-6">
+                <div className="relative flex-1">
+                    <span className="absolute left-3 top-1/2 -translate-y-1/2 text-neutral-400 pointer-events-none">
+                        <Search size={16} />
+                    </span>
+                    <input
+                        type="search"
+                        value={term}
+                        onChange={e => setTerm(e.target.value)}
+                        className="w-full h-10 pl-9 pr-3 bg-white border border-neutral-300 rounded-lg text-sm text-neutral-800 outline-none transition focus:border-green-500 focus:ring-1 focus:ring-green-200"
+                        placeholder="Buscar tags…"
+                    />
                 </div>
-                <Panel className="">
-                    <table className="w-full table-auto text-neutral-600">
-                        <thead>
-                            <tr className="border-b">
-                                <th className="px-1 pt-3 font-semibold text-left">Descrição</th>
-                                <th></th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {table}
-                        </tbody>
-                    </table>
-                    <Pagination data={data} count={count} />
-                </Panel>
-            </AuthenticatedLayout>
-        </>
-    )
+                {can.create && (
+                    <Link
+                        href={route('tags.create')}
+                        className="shrink-0 inline-flex items-center gap-2 h-10 px-4 bg-blue-500 hover:bg-blue-600 text-white text-sm font-semibold rounded-lg transition-colors no-underline"
+                    >
+                        <Plus size={16} />
+                        <span className="hidden sm:inline">Nova tag</span>
+                    </Link>
+                )}
+            </div>
+
+            <DataTable
+                layout="cards"
+                columns={columns}
+                rows={data.data}
+                href={getHref}
+                empty="Nenhuma tag encontrada."
+            />
+
+            <Pagination data={data} count={count} />
+        </AuthenticatedLayout>
+    );
 }
 
 export default Index;

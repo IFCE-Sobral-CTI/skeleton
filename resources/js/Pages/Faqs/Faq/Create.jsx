@@ -1,9 +1,8 @@
-import React from "react";
+import React, { useCallback } from "react";
 import { Head, useForm } from "@inertiajs/react";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import Panel from "@/Components/Dashboard/Panel";
 import Form from "./Components/Form";
-import { encode } from "html-entities";
 
 function Create({ tags }) {
     const { data, setData, post, processing, errors } = useForm({
@@ -12,20 +11,25 @@ function Create({ tags }) {
         tag_id: "",
     });
 
-    const onHandleChange = (event) => {
+    const onHandleChange = useCallback((event) => {
         setData(event.target.name, event.target.value);
-    };
+    }, [setData]);
 
-    const handleSubmit = (e) => {
+    const handleSubmit = useCallback((e) => {
         e.preventDefault();
-        setData('answer', encode(data.answer));
-        post(route('faqs.store'), {data});
-    };
+        post(route('faqs.store'));
+    }, [post]);
 
     return (
         <>
             <Head title="Novo FAQ" />
-            <AuthenticatedLayout titleChildren={'Cadastro de novo FAQ'} breadcrumbs={[{ label: 'FAQ', url: route('faqs.index') }, { label: 'Novo', url: route('faqs.create') }]}>
+            <AuthenticatedLayout
+                titleChildren="Cadastro de novo FAQ"
+                breadcrumbs={[
+                    { label: 'FAQ', url: route('faqs.index') },
+                    { label: 'Novo', url: route('faqs.create') },
+                ]}
+            >
                 <Panel>
                     <Form
                         data={data}
@@ -38,8 +42,7 @@ function Create({ tags }) {
                 </Panel>
             </AuthenticatedLayout>
         </>
-    )
+    );
 }
 
 export default Create;
-

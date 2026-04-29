@@ -10,7 +10,7 @@ import { ArrowLeft, Pencil } from "lucide-react";
 function Show({ tag, can }) {
     return (
         <>
-            <Head title="Detalhes da Página" />
+            <Head title="Detalhes da Tag" />
             <AuthenticatedLayout
                 titleChildren={'Detalhes da Tag'}
                 breadcrumbs={[

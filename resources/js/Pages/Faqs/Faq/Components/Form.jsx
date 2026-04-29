@@ -7,7 +7,6 @@ import SelectOnly from "@/Components/Form/SelectOnly";
 import { ArrowLeft, Send } from "lucide-react";
 
 export default function Form({data, errors, handleSubmit, onHandleChange, processing, tags }) {
-    console.log(data);
     return (
         <form onSubmit={handleSubmit} autoComplete="off">
             <SelectOnly
@@ -38,7 +37,7 @@ export default function Form({data, errors, handleSubmit, onHandleChange, proces
                     <Send size={20} />
                     <span>Enviar</span>
                 </Button>
-                <Button href={route('groups.index')} className={'gap-2'}>
+                <Button href={route('faqs.index')} className={'gap-2'}>
                     <ArrowLeft size={20} />
                     <span>Voltar</span>
                 </Button>

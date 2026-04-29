@@ -92,3 +92,22 @@
    ===================================================================== */
 .fadeOut { opacity: 0; pointer-events: none; transform: translateY(-8px); transition: opacity .3s, transform .3s; }
 .fadeIn  { opacity: 1; pointer-events: all;  transform: translateY(0);    transition: opacity .3s, transform .3s; }
+
+/* =====================================================================
+   TipTap — estilos do conteúdo editável
+   ===================================================================== */
+.tiptap-content { outline: none; }
+.tiptap-content > * + * { margin-top: .5rem; }
+.tiptap-content h1 { font-size: 1.5rem; font-weight: 700; }
+.tiptap-content h2 { font-size: 1.25rem; font-weight: 700; }
+.tiptap-content h3 { font-size: 1.1rem;  font-weight: 600; }
+.tiptap-content ul { list-style: disc;    padding-left: 1.5rem; }
+.tiptap-content ol { list-style: decimal; padding-left: 1.5rem; }
+.tiptap-content a  { color: var(--color-info-500); text-decoration: underline; }
+.tiptap-content strong { font-weight: 700; }
+.tiptap-content em     { font-style: italic; }
+.tiptap-content u      { text-decoration: underline; }
+.tiptap-content s      { text-decoration: line-through; }
+.tiptap-content blockquote { border-left: 3px solid var(--color-neutral-300); padding-left: 1rem; color: var(--color-neutral-500); }
+.tiptap-content code   { font-family: monospace; background: var(--color-neutral-100); padding: .1em .35em; border-radius: .25rem; font-size: .875em; }
+.tiptap-content p.is-editor-empty:first-child::before { content: attr(data-placeholder); color: var(--color-neutral-400); pointer-events: none; float: left; height: 0; }

@@ -26,21 +26,23 @@ function Index({ activities, count, page, termSearch, can }) {
             label: 'Ação',
             primary: true,
             render: item => <Description title={item.description} />,
-            mobileSub: item => item.causer?.name ?? '—',
         },
         {
             key: 'causer',
             label: 'Usuário',
-            render: item => item.causer?.name.split(' ').reverse().pop() ?? '—',
+            sub: true,
+            render: item => item.causer?.name ?? '—',
         },
         {
             key: 'subject_type',
             label: 'Módulo',
+            sub: true,
             render: item => item.subject_type.split('\\').pop(),
         },
         {
             key: 'created_at',
             label: 'Data',
+            cardBody: true,
         },
     ], []);
 
@@ -70,7 +72,7 @@ function Index({ activities, count, page, termSearch, can }) {
             </div>
 
             <DataTable
-                layout="table"
+                layout="cards"
                 columns={columns}
                 rows={activities.data}
                 href={getHref}

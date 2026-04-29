@@ -8,7 +8,7 @@ export default function Form({data, errors, handleSubmit, onHandleChange, proces
     return (
         <form onSubmit={handleSubmit} autoComplete="off">
             <div className="mb-4">
-                <label htmlFor="description" className="font-light">Pergunta</label>
+                <label htmlFor="description" className="font-light">Descrição</label>
                 <Input value={data.description} name={'description'} handleChange={onHandleChange} required={true} placeholder="Digite a descrição da tag" />
                 <InputError message={errors.description} />
             </div>

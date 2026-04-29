@@ -4,6 +4,7 @@ use App\Http\Controllers\Admin\ActivityController;
 use App\Http\Controllers\Admin\GroupController;
 use App\Http\Controllers\Admin\HomeController;
 use App\Http\Controllers\HomeController as Home;
+use App\Http\Controllers\Admin\SearchController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -50,6 +51,7 @@ Route::prefix('admin')->middleware(['auth', 'verified'])->group(function() {
     Route::resource('activities', ActivityController::class)->only(['index', 'show', 'destroy']);
     Route::resource('faqs', FaqController::class);
     Route::resource('tags', TagController::class);
+    Route::get('search', [SearchController::class, 'index'])->name('search');
 });
 
 require __DIR__.'/auth.php';

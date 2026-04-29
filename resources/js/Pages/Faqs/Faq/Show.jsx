@@ -12,7 +12,7 @@ import { ArrowLeft, Pencil } from "lucide-react";
 function Show({ faq, can }) {
     return (
         <>
-            <Head title="Detalhes da Página" />
+            <Head title="Detalhes do FAQ" />
             <AuthenticatedLayout titleChildren={'Detalhes do FAQ'} breadcrumbs={[{ label: 'FAQ', url: route('faqs.index') }, { label: faq.question, url: route('faqs.show', faq.id) }]}>
                 <Panel className={'flex flex-col gap-4'}>
                     <ShowField label={'Tag'}>
