@@ -62,7 +62,7 @@ function Sidebar({ can, open, onClose }) {
         }>
 
             {/* Brand */}
-            <div className="px-5 h-[68px] border-b border-neutral-200 flex items-center shrink-0">
+            <div className="px-5 h-17 border-b border-neutral-200 flex items-center shrink-0">
                 <BrandLockup style={{ height: 36, width: 'auto', maxWidth: '100%' }} />
                 <button
                     type="button"

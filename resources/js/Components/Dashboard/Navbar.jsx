@@ -113,7 +113,7 @@ function NotifDropdown({ count, onClose }) {
     const unread = items.filter(n => !n.is_read).length;
 
     return (
-        <div className="absolute right-0 top-[calc(100%+8px)] w-[340px] bg-white border border-neutral-200 rounded-xl shadow-[var(--shadow-lg)] z-[200] overflow-hidden">
+        <div className="absolute right-0 top-[calc(100%+8px)] w-85 bg-white border border-neutral-200 rounded-xl shadow-lg z-200 overflow-hidden">
             {/* Header */}
             <div className="flex items-center justify-between px-4 py-3 border-b border-neutral-100">
                 <span className="text-[13px] font-semibold text-neutral-800">Notificações</span>
@@ -139,7 +139,7 @@ function NotifDropdown({ count, onClose }) {
             </div>
 
             {/* List */}
-            <div className="max-h-[320px] overflow-y-auto">
+            <div className="max-h-80 overflow-y-auto">
                 {loading && (
                     <div className="flex justify-center py-8">
                         <span className="inline-block w-5 h-5 border-2 border-neutral-200 border-t-green-500 rounded-full animate-spin" />
@@ -260,7 +260,7 @@ function Navbar({ onMenuToggle }) {
         <div className="bg-white border-b border-neutral-200 shrink-0">
 
             {/* Main bar */}
-            <div className="h-[68px] flex items-center px-4 md:px-6 gap-3 md:gap-4">
+            <div className="h-16.75 flex items-center px-4 md:px-6 gap-3 md:gap-4">
 
                 <button
                     type="button"
@@ -272,7 +272,7 @@ function Navbar({ onMenuToggle }) {
                 </button>
 
                 {/* Desktop search */}
-                <div className="hidden md:flex flex-1 max-w-[380px]" ref={desktopRef}>
+                <div className="hidden md:flex flex-1 max-w-95" ref={desktopRef}>
                     <SearchBox
                         term={term} setTerm={setTerm}
                         results={results} searching={searching}
@@ -305,7 +305,7 @@ function Navbar({ onMenuToggle }) {
                         >
                             <Bell size={18} />
                             {unread > 0 && (
-                                <span className="absolute top-1 right-1 min-w-[16px] h-4 px-0.5 rounded-full bg-red-500 text-white text-[9px] font-bold flex items-center justify-center leading-none">
+                                <span className="absolute top-1 right-1 min-w-4 h-4 px-0.5 rounded-full bg-red-500 text-white text-[9px] font-bold flex items-center justify-center leading-none">
                                     {unread > 99 ? '99+' : unread}
                                 </span>
                             )}
@@ -319,7 +319,7 @@ function Navbar({ onMenuToggle }) {
                         )}
                     </div>
 
-                    <div className="w-px h-[22px] bg-neutral-200" />
+                    <div className="w-px h-5.5 bg-neutral-200" />
 
                     {/* User dropdown */}
                     <div className="relative" ref={dropRef}>
