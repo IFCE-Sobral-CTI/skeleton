@@ -5,6 +5,7 @@ import Panel from "@/Components/Dashboard/Panel";
 import InputError from "@/Components/InputError";
 import Button from "@/Components/Form/Button";
 import { ArrowLeft, Send } from "lucide-react";
+import Checkbox from '@/Components/Checkbox';
 
 function Rules({ permission, groups }) {
     const { data, setData, put, processing, errors } = useForm({
@@ -38,8 +39,14 @@ function Rules({ permission, groups }) {
                     return (
                         <div className="mb-2" key={'r' + j}>
                             <div className="flex gap-2">
-                                <input type="checkbox" value={rule.id} id={rule.id} onChange={onHandleChange} defaultChecked={data.rules.includes(rule.id)} className="w-5 h-5 bg-gray-100 border rounded-md text-green focus:ring-green-light" />
-                                <label className="text-sm" htmlFor={rule.id}>{rule.description}</label>
+                                <Checkbox
+                                    value={rule.id}
+                                    id={`rule_${rule.id}`}
+                                    onChange={onHandleChange}
+                                    checked={data.rules.includes(rule.id)}
+                                    className="w-4 h-4"
+                                />
+                                <label className="text-sm" htmlFor={`rule_${rule.id}`}>{rule.description}</label>
                                 <InputError message={errors.rules} />
                             </div>
                         </div>
