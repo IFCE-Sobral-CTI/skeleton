@@ -13,31 +13,31 @@ const TYPE_LABEL = {
     info:    { label: 'Informação', color: 'blue'   },
 };
 
-export default function Manage({ notifications, search: initialSearch, type: initialType }) {
-    const [search, setSearch] = useState(initialSearch ?? '');
-    const [type,   setType]   = useState(initialType   ?? '');
+export default function Manage({ notifications, termSearch, type: initialType, can }) {
+    const [term, setTerm] = useState(termSearch ?? '');
+    const [type, setType] = useState(initialType ?? '');
 
     const visit = useCallback((extra = {}) => {
         router.visit(route('notifications.index'), {
-            data: { search, type, ...extra },
+            data: { term, type, ...extra },
             preserveState: true,
             replace: true,
         });
-    }, [search, type]);
+    }, [term, type]);
 
     useEffect(() => {
-        const t = setTimeout(() => visit({ search, page: 1 }), 300);
+        const t = setTimeout(() => visit({ term, page: 1 }), 300);
         return () => clearTimeout(t);
-    }, [search]);
+    }, [term]);
 
     const handleType = useCallback((val) => {
         setType(val);
         router.visit(route('notifications.index'), {
-            data: { search, type: val, page: 1 },
+            data: { term, type: val, page: 1 },
             preserveState: true,
             replace: true,
         });
-    }, [search]);
+    }, [term]);
 
     const columns = useMemo(() => [
         {
@@ -55,11 +55,11 @@ export default function Manage({ notifications, search: initialSearch, type: ini
             },
         },
         {
-            key:   'recipients',
+            key:   'users_count',
             label: 'Destinatários',
             render: item => {
-                const unread = item.recipients - item.read_count;
-                let label = `${item.recipients} destinatário${item.recipients !== 1 ? 's' : ''}`;
+                const unread = item.users_count - item.read_count;
+                let label = `${item.users_count} destinatário${item.users_count !== 1 ? 's' : ''}`;
                 if (unread > 0) {
                     label += ` · ${unread} não ${unread !== 1 ? 'lidas' : 'lida'}`;
                 }
@@ -73,7 +73,12 @@ export default function Manage({ notifications, search: initialSearch, type: ini
         },
     ], []);
 
-    const getHref = useCallback(item => route('notifications.show', item.id), []);
+    const getHref = useCallback(
+        item => can.view
+            ? route('notifications.show', item.id)
+            : route('notifications.index', { term, page: 1 }),
+        [can.view, term],
+    );
 
     return (
         <>
@@ -93,8 +98,8 @@ export default function Manage({ notifications, search: initialSearch, type: ini
                         </span>
                         <input
                             type="search"
-                            value={search}
-                            onChange={e => setSearch(e.target.value)}
+                            value={term}
+                            onChange={e => setTerm(e.target.value)}
                             className="w-full h-10 pl-9 pr-3 bg-white border border-neutral-300 rounded-lg text-sm text-neutral-800 outline-none transition focus:border-green-500 focus:ring-1 focus:ring-green-200"
                             placeholder="Buscar por título ou mensagem…"
                         />
@@ -111,13 +116,15 @@ export default function Manage({ notifications, search: initialSearch, type: ini
                         ))}
                     </select>
 
-                    <Link
-                        href={route('notifications.create')}
-                        className="shrink-0 inline-flex items-center gap-2 h-10 px-4 bg-blue-500 hover:bg-blue-600 text-white text-sm font-semibold rounded-lg transition-colors no-underline"
-                    >
-                        <Plus size={16} />
-                        <span className="hidden sm:inline">Nova notificação</span>
-                    </Link>
+                    {can?.create && (
+                        <Link
+                            href={route('notifications.create')}
+                            className="shrink-0 inline-flex items-center gap-2 h-10 px-4 bg-blue-500 hover:bg-blue-600 text-white text-sm font-semibold rounded-lg transition-colors no-underline"
+                        >
+                            <Plus size={16} />
+                            <span className="hidden sm:inline">Nova notificação</span>
+                        </Link>
+                    )}
                 </div>
 
                 <DataTable

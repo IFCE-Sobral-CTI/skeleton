@@ -2,9 +2,11 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Http\Request;
 use Spatie\Activitylog\LogOptions;
 use Spatie\Activitylog\Traits\LogsActivity;
 
@@ -54,5 +56,26 @@ class Notification extends Model
     public function creator(): BelongsTo
     {
         return $this->belongsTo(User::class, 'created_by');
+    }
+
+    public function scopeSearch(Builder $query, Request $request): array
+    {
+        $query->withCount('users')
+            ->withCount(['users as read_count' => fn ($q) => $q->whereNotNull('notification_user.read_at')])
+            ->when($request->term, fn ($q, $t) => $q->where(function ($q) use ($t) {
+                $q->where('title', 'like', "%{$t}%")
+                    ->orWhere('message', 'like', "%{$t}%");
+            }))
+            ->when($request->type, fn ($q, $t) => $q->where('type', $t));
+
+        return [
+            'count' => $query->count(),
+            'notifications' => $query->latest()->paginate(env('APP_PAGINATION'))->appends([
+                'term' => $request->term,
+                'type' => $request->type,
+            ]),
+            'page' => $request->page ?? 1,
+            'termSearch' => $request->term,
+        ];
     }
 }

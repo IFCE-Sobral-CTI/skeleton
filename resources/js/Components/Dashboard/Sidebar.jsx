@@ -101,7 +101,7 @@ function Sidebar({ can, open, onClose }) {
                             </button>
                             {openAccess && (
                                 <div className="py-1 pl-3 flex flex-col gap-0.5">
-                                    {auth?.is_admin && (
+                                    {can.notifications_viewAny && (
                                         <Link href={route('notifications.index')} className={navLink(
                                             route().current('notifications.index') ||
                                             route().current('notifications.show') ||

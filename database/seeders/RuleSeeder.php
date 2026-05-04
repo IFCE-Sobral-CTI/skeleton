@@ -43,14 +43,7 @@ class RuleSeeder extends Seeder
             ],
             'notifications' => [
                 'group' => Group::firstOrCreate(['description' => 'Notificações']),
-                'only' => [
-                    'Página inicial' => 'viewAny',
-                    'Apagar' => 'delete',
-                ],
                 'additional' => [
-                    'Enviar notificação' => 'notifications.send',
-                    'Gerenciar notificações' => 'notifications.manage',
-                    'Editar notificação' => 'notifications.edit',
                     'Reenviar notificação' => 'notifications.resend',
                 ],
             ],

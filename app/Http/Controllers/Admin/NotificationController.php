@@ -19,35 +19,23 @@ class NotificationController extends Controller
 {
     public function index(Request $request): Response
     {
-        $this->authorize('notifications.manage');
+        $this->authorize('notifications.viewAny', Notification::class);
 
-        $query = Notification::withCount('users')
-            ->withCount(['users as read_count' => fn ($q) => $q->whereNotNull('notification_user.read_at')])
-            ->when($request->search, fn ($q, $s) => $q->where(function ($q) use ($s) {
-                $q->where('title', 'like', "%{$s}%")
-                    ->orWhere('message', 'like', "%{$s}%");
-            }))
-            ->when($request->type, fn ($q, $t) => $q->where('type', $t))
-            ->latest();
-
-        return Inertia::render('Auth/Notification/Manage', [
-            'notifications' => $query->paginate(config('app.pagination', 15))->through(fn ($n) => [
-                'id' => $n->id,
-                'title' => $n->title,
-                'message' => $n->message,
-                'type' => $n->type,
-                'created_at' => $n->created_at->format('d/m/Y H:i'),
-                'recipients' => $n->users_count,
-                'read_count' => $n->read_count,
-            ]),
-            'search' => $request->search ?? '',
-            'type' => $request->type ?? '',
-        ]);
+        return Inertia::render('Auth/Notification/Manage', array_merge(
+            Notification::search($request),
+            [
+                'type' => $request->type ?? '',
+                'can' => [
+                    'create' => $request->user()->can('notifications.create'),
+                    'view' => $request->user()->can('notifications.view'),
+                ],
+            ]
+        ));
     }
 
     public function create(Request $request): Response
     {
-        $this->authorize('notifications.send');
+        $this->authorize('notifications.create', Notification::class);
 
         return Inertia::render('Auth/Notification/Send', [
             'users' => $this->getUsersList(),
@@ -57,6 +45,8 @@ class NotificationController extends Controller
 
     public function store(SendNotificationRequest $request): RedirectResponse
     {
+        $this->authorize('notifications.create', Notification::class);
+
         $validated = $request->validated();
 
         $recipients = match ($validated['target']) {
@@ -92,11 +82,11 @@ class NotificationController extends Controller
             ->with('flash', ['status' => 'success', 'message' => "Notificação enviada para {$count} usuário(s)."]);
     }
 
-    public function show(Request $request, string $id): Response
+    public function show(Request $request, Notification $notification): Response
     {
-        $this->authorize('notifications.manage');
+        $this->authorize('notifications.view', $notification);
 
-        $notification = Notification::with('users')->findOrFail($id);
+        $notification->load('users');
 
         return Inertia::render('Auth/Notification/Show', [
             'notification' => [
@@ -118,11 +108,9 @@ class NotificationController extends Controller
         ]);
     }
 
-    public function edit(Request $request, string $id): Response
+    public function edit(Request $request, Notification $notification): Response
     {
-        $this->authorize('notifications.edit');
-
-        $notification = Notification::findOrFail($id);
+        $this->authorize('notifications.update', $notification);
 
         return Inertia::render('Auth/Notification/Edit', [
             'notification' => [
@@ -135,9 +123,9 @@ class NotificationController extends Controller
         ]);
     }
 
-    public function update(Request $request, string $id): RedirectResponse
+    public function update(Request $request, Notification $notification): RedirectResponse
     {
-        $this->authorize('notifications.edit');
+        $this->authorize('notifications.update', $notification);
 
         $validated = $request->validate([
             'title' => ['required', 'string', 'max:255'],
@@ -155,16 +143,15 @@ class NotificationController extends Controller
             'url.max' => 'O link deve ter no máximo 500 caracteres.',
         ]);
 
-        $notification = Notification::findOrFail($id);
         $notification->update($validated);
 
-        return to_route('notifications.show', $id)
+        return to_route('notifications.show', $notification->id)
             ->with('flash', ['status' => 'success', 'message' => 'Notificação atualizada.']);
     }
 
     public function resend(Request $request, string $id): Response
     {
-        $this->authorize('notifications.resend');
+        $this->authorize('notifications.resend', Notification::class);
 
         $notification = Notification::findOrFail($id);
 
@@ -180,11 +167,11 @@ class NotificationController extends Controller
         ]);
     }
 
-    public function destroy(Request $request, string $id): RedirectResponse
+    public function destroy(Request $request, Notification $notification): RedirectResponse
     {
-        $this->authorize('notifications.manage');
+        $this->authorize('notifications.delete', $notification);
 
-        Notification::findOrFail($id)->delete();
+        $notification->delete();
 
         return to_route('notifications.index')
             ->with('flash', ['status' => 'success', 'message' => 'Notificação excluída.']);
