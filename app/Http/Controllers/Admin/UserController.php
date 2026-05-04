@@ -22,8 +22,6 @@ class UserController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @param Request $request
-     * @return Response
      * @throws AuthorizationException
      */
     public function index(Request $request): Response
@@ -34,14 +32,13 @@ class UserController extends Controller
             'can' => [
                 'create' => $request->user()->can('users.create'),
                 'view' => $request->user()->can('users.view'),
-            ]
+            ],
         ]));
     }
 
     /**
      * Show the form for creating a new resource.
      *
-     * @return Response
      * @throws AuthorizationException
      */
     public function create(): Response
@@ -56,8 +53,6 @@ class UserController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param StoreUserRequest $request
-     * @return RedirectResponse
      * @throws AuthorizationException
      */
     public function store(StoreUserRequest $request): RedirectResponse
@@ -69,6 +64,7 @@ class UserController extends Controller
 
         try {
             $user = User::create($data);
+
             return redirect()->route('users.show', $user)->with('flash', ['status' => 'success', 'message' => 'Registro salvo com sucesso.']);
         } catch (Exception $e) {
             return redirect()->route('users.index')->with('flash', ['status' => 'danger', 'message' => $e->getMessage()]);
@@ -78,8 +74,6 @@ class UserController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param User $user
-     * @return Response
      * @throws AuthorizationException
      */
     public function show(Request $request, User $user): Response
@@ -93,14 +87,13 @@ class UserController extends Controller
                 'update_password' => $request->user()->can('users.update.password'),
                 'delete' => $request->user()->can('users.delete'),
                 'verify' => $request->user()->can('users.verify'),
-            ]
+            ],
         ]);
     }
 
     /**
      * Display profile user.
      *
-     * @return Response
      * @throws AuthorizationException
      */
     public function profile(): Response
@@ -117,8 +110,6 @@ class UserController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param User $user
-     * @return Response
      * @throws AuthorizationException
      */
     public function edit(User $user): Response
@@ -134,8 +125,6 @@ class UserController extends Controller
     /**
      * Show the form for editing password the specified resource.
      *
-     * @param User $user
-     * @return Response
      * @throws AuthorizationException
      */
     public function editPassword(User $user): Response
@@ -150,9 +139,6 @@ class UserController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param UpdateUserRequest $request
-     * @param User $user
-     * @return RedirectResponse
      * @throws AuthorizationException
      */
     public function update(UpdateUserRequest $request, User $user): RedirectResponse
@@ -163,6 +149,7 @@ class UserController extends Controller
 
         try {
             $user->update($data);
+
             return redirect()->route('users.show', $user)->with('flash', ['status' => 'success', 'message' => 'Registro atualizado com sucesso!']);
         } catch (Exception $e) {
             return redirect()->route('users.index')->with('flash', ['status' => 'danger', 'message' => $e->getMessage()]);
@@ -172,9 +159,6 @@ class UserController extends Controller
     /**
      * Update password the specified resource in storage.
      *
-     * @param UpdateUserPasswordRequest $request
-     * @param User $user
-     * @return RedirectResponse
      * @throws AuthorizationException
      */
     public function updatePassword(UpdateUserPasswordRequest $request, User $user): RedirectResponse
@@ -185,6 +169,7 @@ class UserController extends Controller
 
         try {
             $user->update($data);
+
             return redirect()->route('users.show', $user)->with('flash', ['status' => 'success', 'message' => 'Registro atualizado com sucesso!']);
         } catch (Exception $e) {
             return redirect()->route('users.index')->with('flash', ['status' => 'danger', 'message' => $e->getMessage()]);
@@ -194,8 +179,6 @@ class UserController extends Controller
     /**
      * Verify the specified user by setting email_verified_at.
      *
-     * @param User $user
-     * @return RedirectResponse
      * @throws AuthorizationException
      */
     public function verify(User $user): RedirectResponse
@@ -204,6 +187,7 @@ class UserController extends Controller
 
         try {
             $user->update(['email_verified_at' => now()]);
+
             return redirect()->route('users.show', $user)->with('flash', ['status' => 'success', 'message' => 'Usuário validado com sucesso!']);
         } catch (Exception $e) {
             return redirect()->route('users.show', $user)->with('flash', ['status' => 'danger', 'message' => $e->getMessage()]);
@@ -213,19 +197,19 @@ class UserController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param User $user
-     * @return RedirectResponse
      * @throws AuthorizationException
      */
     public function destroy(User $user): RedirectResponse
     {
         $this->authorize('users.delete', $user);
 
-        if ($user->id === 1)
+        if ($user->id === 1) {
             return redirect()->route('users.index')->with('flash', ['status' => 'danger', 'message' => 'Erro ao tentar apagar o registro!']);
+        }
 
         try {
             $user->delete();
+
             return redirect()->route('users.index')->with('flash', ['status' => 'success', 'message' => 'Registro apagado com sucesso!']);
         } catch (Exception $e) {
             return redirect()->route('users.index')->with('flash', ['status' => 'danger', 'message' => $e->getMessage()]);

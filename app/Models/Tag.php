@@ -23,9 +23,6 @@ class Tag extends Model
         'updated_at' => 'date:d/m/Y H:i:s',
     ];
 
-    /**
-     * @return LogOptions
-     */
     public function getActivitylogOptions(): LogOptions
     {
         return LogOptions::defaults()
@@ -48,17 +45,17 @@ class Tag extends Model
         return [
             'count' => $query->count(),
             'data' => $query->orderBy('description', 'ASC')->paginate(env('APP_PAGINATION'))->appends(['term' => $request->term]),
-            'page' => $request->page?? 1,
+            'page' => $request->page ?? 1,
             'termSearch' => $request->term,
         ];
     }
 
     public function scopeGetTagsForSelect(Builder $query)
     {
-        return $query->get()->map(function($item) {
+        return $query->get()->map(function ($item) {
             return [
                 'id' => $item->id,
-                'name' => $item->description
+                'name' => $item->description,
             ];
         });
     }

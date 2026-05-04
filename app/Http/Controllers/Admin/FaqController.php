@@ -10,7 +10,6 @@ use App\Models\Tag;
 use Exception;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -39,7 +38,7 @@ class FaqController extends Controller
         $this->authorize('faqs.create', Faq::class);
 
         return Inertia::render('Faqs/Faq/Create', [
-            'tags' => fn() => Tag::getTagsForSelect()
+            'tags' => fn () => Tag::getTagsForSelect(),
         ]);
     }
 
@@ -52,6 +51,7 @@ class FaqController extends Controller
 
         try {
             $faq = $request->user()->faqs()->create($request->validated());
+
             return redirect()->route('faqs.show', $faq)->with('flash', ['status' => 'success', 'message' => 'Registro criado com sucesso.']);
         } catch (Exception $e) {
             return redirect()->route('faqs.index')->with('flash', ['status' => 'danger', 'message' => $e->getMessage()]);
@@ -83,7 +83,7 @@ class FaqController extends Controller
 
         return Inertia::render('Faqs/Faq/Edit', [
             'faq' => $faq,
-            'tags' => fn() => Tag::getTagsForSelect()
+            'tags' => fn () => Tag::getTagsForSelect(),
         ]);
     }
 
@@ -96,6 +96,7 @@ class FaqController extends Controller
 
         try {
             $faq->update($request->validated());
+
             return redirect()->route('faqs.show', $faq)->with('flash', ['status' => 'success', 'message' => 'Registro atualizado com sucesso.']);
         } catch (Exception $e) {
             return redirect()->route('faqs.index')->with('flash', ['status' => 'danger', 'message' => $e->getMessage()]);
@@ -111,6 +112,7 @@ class FaqController extends Controller
 
         try {
             $faq->delete();
+
             return redirect()->route('faqs.index')->with('flash', ['status' => 'success', 'message' => 'Registro apagado com sucesso.']);
         } catch (Exception $e) {
             return redirect()->route('faqs.index')->with('flash', ['status' => 'danger', 'message' => $e->getMessage()]);

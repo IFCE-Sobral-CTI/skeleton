@@ -35,9 +35,6 @@ class Group extends Model
         'updated_at' => 'datetime:d/m/Y H:i:s',
     ];
 
-    /**
-     * @return LogOptions
-     */
     public function getActivitylogOptions(): LogOptions
     {
         return LogOptions::defaults()
@@ -48,19 +45,11 @@ class Group extends Model
             ->dontSubmitEmptyLogs();
     }
 
-    /**
-     * @return HasMany
-     */
     public function rules(): HasMany
     {
         return $this->hasMany(Rule::class);
     }
 
-    /**
-     * @param Builder $query
-     * @param Request $request
-     * @return array
-     */
     public function scopeSearch(Builder $query, Request $request): array
     {
         $query->where('description', 'like', "%{$request->term}%");
@@ -68,7 +57,7 @@ class Group extends Model
         return [
             'count' => $query->count(),
             'groups' => $query->orderBy('description', 'ASC')->paginate(env('APP_PAGINATION'))->appends(['term' => $request->term]),
-            'page' => $request->page?? 1,
+            'page' => $request->page ?? 1,
             'termSearch' => $request->term,
         ];
     }

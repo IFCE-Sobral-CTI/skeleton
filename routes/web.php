@@ -1,18 +1,20 @@
 <?php
 
 use App\Http\Controllers\Admin\ActivityController;
+use App\Http\Controllers\Admin\FaqController;
 use App\Http\Controllers\Admin\GroupController;
 use App\Http\Controllers\Admin\HomeController;
-use App\Http\Controllers\HomeController as Home;
+use App\Http\Controllers\Admin\NotificationController;
+use App\Http\Controllers\Admin\PermissionController;
+use App\Http\Controllers\Admin\RuleController;
 use App\Http\Controllers\Admin\SearchController;
+use App\Http\Controllers\Admin\TagController;
+use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\Admin\UserNotificationController;
+use App\Http\Controllers\HomeController as Home;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
-use App\Http\Controllers\Admin\UserController;
-use App\Http\Controllers\Admin\PermissionController;
-use App\Http\Controllers\Admin\RuleController;
-use App\Http\Controllers\Admin\FaqController;
-use App\Http\Controllers\Admin\TagController;
 
 /*
 |--------------------------------------------------------------------------
@@ -36,7 +38,7 @@ Route::get('/', function () {
 
 Route::get('faq/{tag}', [Home::class, 'faq'])->name('faq');
 
-Route::prefix('admin')->middleware(['auth', 'verified'])->group(function() {
+Route::prefix('admin')->middleware(['auth', 'verified'])->group(function () {
     Route::get('/', [HomeController::class, 'index'])->name('admin');
     Route::resource('users', UserController::class);
     Route::get('users/{user}/edit/password', [UserController::class, 'editPassword'])->name('users.edit.password');
@@ -52,6 +54,15 @@ Route::prefix('admin')->middleware(['auth', 'verified'])->group(function() {
     Route::resource('faqs', FaqController::class);
     Route::resource('tags', TagController::class);
     Route::get('search', [SearchController::class, 'index'])->name('search');
+    // Gerenciamento de notificações (admin)
+    Route::resource('notifications', NotificationController::class);
+    Route::get('notifications/{id}/resend', [NotificationController::class, 'resend'])->name('notifications.resend');
+    // Notificações pessoais do usuário
+    Route::get('my-notifications', [UserNotificationController::class, 'index'])->name('my-notifications.index');
+    Route::get('my-notifications/recent', [UserNotificationController::class, 'recent'])->name('my-notifications.recent');
+    Route::patch('my-notifications/{id}/read', [UserNotificationController::class, 'markAsRead'])->name('my-notifications.read');
+    Route::patch('my-notifications/read-all', [UserNotificationController::class, 'markAllAsRead'])->name('my-notifications.read-all');
+    Route::delete('my-notifications/{id}', [UserNotificationController::class, 'destroy'])->name('my-notifications.destroy');
 });
 
 require __DIR__.'/auth.php';

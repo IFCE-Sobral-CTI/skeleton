@@ -24,23 +24,20 @@ class Permission extends Model
     use HasFactory, LogsActivity;
 
     /**
-     * @var array $fillable
+     * @var array
      */
     protected $fillable = [
         'description',
     ];
 
     /**
-     * @var array $casts
+     * @var array
      */
     protected $casts = [
         'created_at' => 'datetime:d/m/Y H:i:s',
         'updated_at' => 'datetime:d/m/Y H:i:s',
     ];
 
-    /**
-     * @return LogOptions
-     */
     public function getActivitylogOptions(): LogOptions
     {
         return LogOptions::defaults()
@@ -51,27 +48,16 @@ class Permission extends Model
             ->dontSubmitEmptyLogs();
     }
 
-    /**
-     * @return BelongsToMany
-     */
     public function rules(): BelongsToMany
     {
         return $this->belongsToMany(Rule::class);
     }
 
-    /**
-     * @return HasMany
-     */
     public function users(): HasMany
     {
         return $this->hasMany(User::class);
     }
 
-    /**
-     * @param Builder $query
-     * @param Request $request
-     * @return array
-     */
     public function scopeSearch(Builder $query, Request $request): array
     {
         $query->where('description', 'like', "%{$request->term}%");
@@ -79,7 +65,7 @@ class Permission extends Model
         return [
             'count' => $query->count(),
             'permissions' => $query->orderBy('description', 'ASC')->paginate(env('APP_PAGINATION'))->appends(['term' => $request->term]),
-            'page' => $request->page?? 1,
+            'page' => $request->page ?? 1,
             'termSearch' => $request->term,
         ];
     }

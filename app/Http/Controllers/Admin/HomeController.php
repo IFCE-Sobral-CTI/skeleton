@@ -9,10 +9,6 @@ use Inertia\Response;
 
 class HomeController extends Controller
 {
-    /**
-     * @param Request $request
-     * @return Response
-     */
     public function index(Request $request): Response
     {
         return Inertia::render('Dashboard');

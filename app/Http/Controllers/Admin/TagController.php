@@ -48,6 +48,7 @@ class TagController extends Controller
 
         try {
             $tag = Tag::create($request->validated());
+
             return redirect()->route('tags.show', $tag)->with('flash', ['status' => 'success', 'message' => 'Registro criado com sucesso.']);
         } catch (Exception $e) {
             return redirect()->route('tags.index')->with('flash', ['status' => 'danger', 'message' => $e->getMessage()]);
@@ -91,6 +92,7 @@ class TagController extends Controller
 
         try {
             $tag->update($request->validated());
+
             return redirect()->route('tags.show', $tag)->with('flash', ['status' => 'success', 'message' => 'Registro atualizado com sucesso.']);
         } catch (Exception $e) {
             return redirect()->route('tags.index')->with('flash', ['status' => 'danger', 'message' => $e->getMessage()]);
@@ -106,6 +108,7 @@ class TagController extends Controller
 
         try {
             $tag->delete();
+
             return redirect()->route('tags.index')->with('flash', ['status' => 'success', 'message' => 'Registro apagado com sucesso.']);
         } catch (Exception $e) {
             return redirect()->route('tags.index')->with('flash', ['status' => 'danger', 'message' => $e->getMessage()]);

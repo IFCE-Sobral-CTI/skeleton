@@ -26,9 +26,6 @@ class Faq extends Model
         'updated_at' => 'date:d/m/Y H:i:s',
     ];
 
-    /**
-     * @return LogOptions
-     */
     public function getActivitylogOptions(): LogOptions
     {
         return LogOptions::defaults()
@@ -61,7 +58,7 @@ class Faq extends Model
         return [
             'count' => $query->count(),
             'faqs' => $query->orderBy('question', 'ASC')->paginate(env('APP_PAGINATION'))->appends(['term' => $request->term]),
-            'page' => $request->page?? 1,
+            'page' => $request->page ?? 1,
             'termSearch' => $request->term,
         ];
     }

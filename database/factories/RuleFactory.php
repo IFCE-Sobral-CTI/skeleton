@@ -7,12 +7,12 @@ use App\Models\Rule;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Rule>
+ * @extends Factory<Rule>
  */
 class RuleFactory extends Factory
 {
     protected $model = Rule::class;
-    
+
     /**
      * Define the model's default state.
      *

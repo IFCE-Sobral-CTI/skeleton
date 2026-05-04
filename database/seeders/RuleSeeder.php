@@ -4,7 +4,6 @@ namespace Database\Seeders;
 
 use App\Models\Group;
 use App\Models\Rule;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
 class RuleSeeder extends Seeder
@@ -32,7 +31,7 @@ class RuleSeeder extends Seeder
                 'group' => Group::firstOrCreate(['description' => 'Permissões']),
                 'additional' => [
                     'Modificar regras' => 'permissions.rules',
-                ]
+                ],
             ],
             'users' => [
                 'group' => Group::firstOrCreate(['description' => 'Usuários']),
@@ -40,23 +39,30 @@ class RuleSeeder extends Seeder
                     'Perfil' => 'users.profile',
                     'Atualizar de senha' => 'users.update.password',
                     'Validar usuário' => 'users.verify',
-                ]
+                ],
+            ],
+            'notifications' => [
+                'group' => Group::firstOrCreate(['description' => 'Notificações']),
+                'only' => [
+                    'Página inicial' => 'viewAny',
+                    'Apagar' => 'delete',
+                ],
+                'additional' => [
+                    'Enviar notificação' => 'notifications.send',
+                    'Gerenciar notificações' => 'notifications.manage',
+                    'Editar notificação' => 'notifications.edit',
+                    'Reenviar notificação' => 'notifications.resend',
+                ],
             ],
         ];
 
-        foreach($groups as $key => $value) {
-            Rule::insert($this->getInserts(page: $key, group: $value['group'], additional: $value['additional']??[], only: $value['only']?? []));
+        foreach ($groups as $key => $value) {
+            Rule::insert($this->getInserts(page: $key, group: $value['group'], additional: $value['additional'] ?? [], only: $value['only'] ?? []));
         }
     }
 
     /**
      * Generates an array of data to be inserted into the table
-     *
-     * @param string $page
-     * @param Group $group
-     * @param array $additional
-     * @param array $only
-     * @return array
      */
     private function getInserts(string $page, Group $group, array $additional = [], array $only = []): array
     {
@@ -64,7 +70,7 @@ class RuleSeeder extends Seeder
 
         $insert = [];
 
-        foreach($descriptions as $key => $value) {
+        foreach ($descriptions as $key => $value) {
             $insert[] = [
                 'description' => $key,
                 'control' => $value,
@@ -79,14 +85,10 @@ class RuleSeeder extends Seeder
 
     /**
      * Generate an array with descriptions and their controls
-     *
-     * @param string $page
-     * @param array $only
-     * @return array
      */
     private function getDescriptionControl(string $page, array $only = []): array
     {
-        if (!empty($only)) {
+        if (! empty($only)) {
             $items = [];
 
             foreach ($only as $k => $v) {

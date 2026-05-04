@@ -2,8 +2,8 @@
 
 namespace App\Http\Middleware;
 
-use Illuminate\Http\Request;
 use App\Models\Rule;
+use Illuminate\Http\Request;
 use Inertia\Middleware;
 
 class HandleInertiaRequests extends Middleware
@@ -18,7 +18,7 @@ class HandleInertiaRequests extends Middleware
     /**
      * Determine the current asset version.
      */
-    public function version(Request $request): string|null
+    public function version(Request $request): ?string
     {
         return parent::version($request);
     }
@@ -34,23 +34,32 @@ class HandleInertiaRequests extends Middleware
             ...parent::share($request),
             'auth' => [
                 'user' => $request->user(),
+                'is_admin' => $request->user()?->isAdmin() ?? false,
             ],
             'title' => config('app.name'),
             'flash' => function () use ($request) {
                 return ['flash' => fn () => $request->session()->get('flash')];
             },
+            'notifications_count' => function () use ($request) {
+                if (! $request->user()) {
+                    return 0;
+                }
+
+                return $request->user()->unreadNotifications()->count();
+            },
             'authorizations' => function () use ($request) {
-                if (!$request->user())
+                if (! $request->user()) {
                     return [];
+                }
 
                 $rules = [];
 
                 if ($request->user()->isAdmin()) {
-                    foreach(Rule::where('control', 'like', '%viewAny%')->get() as $rule) {
+                    foreach (Rule::where('control', 'like', '%viewAny%')->get() as $rule) {
                         $rules[str_replace('.', '_', $rule->control)] = true;
                     }
                 } else {
-                    foreach($request->user()->permission->rules()->where('control', 'like', '%viewAny%')->get() as $rule) {
+                    foreach ($request->user()->permission->rules()->where('control', 'like', '%viewAny%')->get() as $rule) {
                         $rules[str_replace('.', '_', $rule->control)] = true;
                     }
                 }

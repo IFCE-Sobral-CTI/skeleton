@@ -27,11 +27,11 @@ class SearchController extends Controller
                 ->orWhere('email', 'like', "%{$term}%")
                 ->limit(4)
                 ->get()
-                ->map(fn($u) => [
+                ->map(fn ($u) => [
                     'module' => 'Usuários',
-                    'label'  => $u->name,
-                    'sub'    => $u->email,
-                    'url'    => route('users.show', $u->id),
+                    'label' => $u->name,
+                    'sub' => $u->email,
+                    'url' => route('users.show', $u->id),
                 ])->toArray();
 
             $results = array_merge($results, $rows);
@@ -41,11 +41,11 @@ class SearchController extends Controller
             $rows = Group::where('description', 'like', "%{$term}%")
                 ->limit(4)
                 ->get()
-                ->map(fn($g) => [
+                ->map(fn ($g) => [
                     'module' => 'Páginas',
-                    'label'  => $g->description,
-                    'sub'    => null,
-                    'url'    => route('groups.show', $g->id),
+                    'label' => $g->description,
+                    'sub' => null,
+                    'url' => route('groups.show', $g->id),
                 ])->toArray();
 
             $results = array_merge($results, $rows);
@@ -55,11 +55,11 @@ class SearchController extends Controller
             $rows = Permission::where('description', 'like', "%{$term}%")
                 ->limit(4)
                 ->get()
-                ->map(fn($p) => [
+                ->map(fn ($p) => [
                     'module' => 'Permissões',
-                    'label'  => $p->description,
-                    'sub'    => null,
-                    'url'    => route('permissions.show', $p->id),
+                    'label' => $p->description,
+                    'sub' => null,
+                    'url' => route('permissions.show', $p->id),
                 ])->toArray();
 
             $results = array_merge($results, $rows);
@@ -70,11 +70,11 @@ class SearchController extends Controller
                 ->orWhere('control', 'like', "%{$term}%")
                 ->limit(4)
                 ->get()
-                ->map(fn($r) => [
+                ->map(fn ($r) => [
                     'module' => 'Regras',
-                    'label'  => $r->description,
-                    'sub'    => $r->control,
-                    'url'    => route('rules.show', $r->id),
+                    'label' => $r->description,
+                    'sub' => $r->control,
+                    'url' => route('rules.show', $r->id),
                 ])->toArray();
 
             $results = array_merge($results, $rows);

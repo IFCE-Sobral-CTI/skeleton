@@ -11,7 +11,6 @@ use Exception;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -20,8 +19,6 @@ class RuleController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @param Request $request
-     * @return Response
      * @throws AuthorizationException
      */
     public function index(Request $request): Response
@@ -31,8 +28,8 @@ class RuleController extends Controller
         return Inertia::render('Auth/Rule/Index', array_merge(Rule::search($request), [
             'can' => [
                 'viewAny' => $request->user()->can('rules.viewAny'),
-            'view' => $request->user()->can('rules.view'),
-            'create' => $request->user()->can('rules.create'),
+                'view' => $request->user()->can('rules.view'),
+                'create' => $request->user()->can('rules.create'),
             ],
         ]));
     }
@@ -40,7 +37,6 @@ class RuleController extends Controller
     /**
      * Show the form for creating a new resource.
      *
-     * @return Response
      * @throws AuthorizationException
      */
     public function create(): Response
@@ -55,8 +51,6 @@ class RuleController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param StoreRuleRequest $request
-     * @return RedirectResponse
      * @throws AuthorizationException
      */
     public function store(StoreRuleRequest $request): RedirectResponse
@@ -67,6 +61,7 @@ class RuleController extends Controller
 
         try {
             $rule = Rule::create($data);
+
             return redirect()->route('rules.show', $rule)->with('flash', ['status' => 'success', 'message' => 'Registro salvo com sucesso.']);
         } catch (Exception $e) {
             return redirect()->route('rules.index')->with('flash', ['status' => 'danger', 'message' => $e->getMessage()]);
@@ -76,8 +71,6 @@ class RuleController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param Rule $rule
-     * @return Response
      * @throws AuthorizationException
      */
     public function show(Request $request, Rule $rule): Response
@@ -96,8 +89,6 @@ class RuleController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param Rule $rule
-     * @return Response
      * @throws AuthorizationException
      */
     public function edit(Request $request, Rule $rule): Response
@@ -116,9 +107,6 @@ class RuleController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param UpdateRuleRequest $request
-     * @param Rule $rule
-     * @return RedirectResponse
      * @throws AuthorizationException
      */
     public function update(UpdateRuleRequest $request, Rule $rule): RedirectResponse
@@ -129,6 +117,7 @@ class RuleController extends Controller
 
         try {
             $rule->update($data);
+
             return redirect()->route('rules.show', $rule)->with('flash', ['status' => 'success', 'message' => 'Registro atualizado com sucesso.']);
         } catch (Exception $e) {
             return redirect()->route('rules.index')->with('flash', ['status' => 'danger', 'message' => $e->getMessage()]);
@@ -138,8 +127,6 @@ class RuleController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param Rule $rule
-     * @return RedirectResponse
      * @throws AuthorizationException
      */
     public function destroy(Rule $rule): RedirectResponse
@@ -148,7 +135,8 @@ class RuleController extends Controller
 
         try {
             $rule->delete();
-            return redirect()->route('rules.index',)->with('flash', ['status' => 'success', 'message' => 'Registro apagado com sucesso.']);
+
+            return redirect()->route('rules.index')->with('flash', ['status' => 'success', 'message' => 'Registro apagado com sucesso.']);
         } catch (Exception $e) {
             return redirect()->route('rules.index')->with('flash', ['status' => 'danger', 'message' => $e->getMessage()]);
         }

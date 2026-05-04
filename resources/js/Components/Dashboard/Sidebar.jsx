@@ -2,8 +2,8 @@ import { Link, usePage } from "@inertiajs/react";
 import React, { useState } from "react";
 import { BrandLockup } from "@/Components/Brand";
 import {
-    Bookmark, ChevronDown, FileText, HelpCircle,
-    Home, Lock, Monitor, Tag, UserCog, Users, X,
+    Bell, Bookmark, ChevronDown, FileText, HelpCircle,
+    Home, Lock, Monitor, Settings2, Tag, UserCog, Users, X,
 } from "lucide-react";
 
 function ChevronIcon({ open }) {
@@ -37,7 +37,8 @@ function Sidebar({ can, open, onClose }) {
         route().current('permissions.*') ||
         route().current('rules.*') ||
         route().current('groups.*') ||
-        route().current('activities.*')
+        route().current('activities.*') ||
+        route().current('notifications.*')
     );
 
     const [openFaq, setOpenFaq] = useState(
@@ -45,7 +46,7 @@ function Sidebar({ can, open, onClose }) {
         route().current('tags.*')
     );
 
-    const hasAccess = can.users_viewAny || can.permissions_viewAny || can.rules_viewAny || can.groups_viewAny || can.activities_viewAny;
+    const hasAccess = true; // notificações visíveis para todos; demais itens por permissão
     const hasFaq = can.faqs_viewAny || can.tags_viewAny;
 
     const initials = auth?.user?.name
@@ -82,6 +83,13 @@ function Sidebar({ can, open, onClose }) {
                     Início
                 </Link>
 
+                {/* <Link href={route('my-notifications.index')} className={navLink(
+                    route().current('my-notifications.index')
+                )}>
+                    <Bell size={14} />
+                    Notificações
+                </Link> */}
+
                 {hasAccess && (
                     <>
                         <div className={sectionLabel}>Acesso</div>
@@ -93,6 +101,18 @@ function Sidebar({ can, open, onClose }) {
                             </button>
                             {openAccess && (
                                 <div className="py-1 pl-3 flex flex-col gap-0.5">
+                                    {auth?.is_admin && (
+                                        <Link href={route('notifications.index')} className={navLink(
+                                            route().current('notifications.index') ||
+                                            route().current('notifications.show') ||
+                                            route().current('notifications.edit') ||
+                                            route().current('notifications.update') ||
+                                            route().current('notifications.resend')
+                                        )}>
+                                            <Settings2 size={14} />
+                                            Notificações
+                                        </Link>
+                                    )}
                                     {can.users_viewAny && (
                                         <Link href={route('users.index', { term: '', page: 1 })} className={navLink(route().current('users.*'))}>
                                             <Users size={14} />

@@ -6,6 +6,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Http\Request;
@@ -17,6 +18,7 @@ use Spatie\Activitylog\Traits\LogsActivity;
 
 /**
  * @method static search(Request $request)
+ *
  * @property int $id
  * @property string $name
  * @property string $email
@@ -25,9 +27,10 @@ use Spatie\Activitylog\Traits\LogsActivity;
  */
 class User extends Authenticatable
 {
-    use HasApiTokens, HasFactory, Notifiable, LogsActivity, CausesActivity;
+    use CausesActivity, HasApiTokens, HasFactory, LogsActivity, Notifiable;
 
     const ACTIVE = 1;
+
     const INACTIVE = 0;
 
     /**
@@ -69,9 +72,6 @@ class User extends Authenticatable
         ];
     }
 
-    /**
-     * @return LogOptions
-     */
     public function getActivitylogOptions(): LogOptions
     {
         return LogOptions::defaults()
@@ -79,15 +79,12 @@ class User extends Authenticatable
                 'name',
                 'email',
                 'registry',
-                'permission.name'
+                'permission.name',
             ])
             ->logOnlyDirty()
             ->dontSubmitEmptyLogs();
     }
 
-    /**
-     * @return BelongsTo
-     */
     public function permission(): BelongsTo
     {
         return $this->belongsTo(Permission::class);
@@ -98,28 +95,29 @@ class User extends Authenticatable
         return $this->hasMany(Faq::class);
     }
 
-    /**
-     * @return bool
-     */
+    public function notifications(): BelongsToMany
+    {
+        return $this->belongsToMany(Notification::class)
+            ->withPivot('read_at')
+            ->withTimestamps()
+            ->orderByPivot('created_at', 'desc');
+    }
+
+    public function unreadNotifications(): BelongsToMany
+    {
+        return $this->notifications()->wherePivotNull('read_at');
+    }
+
     public function isAdmin(): bool
     {
         return $this->permission->description === 'Administrador';
     }
 
-    /**
-     * @param $rule
-     * @return bool
-     */
     public function hasRule($rule): bool
     {
         return $this->permission->rules()->hasControl($rule);
     }
 
-    /**
-     * @param Builder $query
-     * @param Request $request
-     * @return array
-     */
     public function scopeSearch(Builder $query, Request $request): array
     {
         $query->with('permission')
@@ -129,7 +127,7 @@ class User extends Authenticatable
         return [
             'count' => $query->count(),
             'users' => $query->orderBy('name', 'ASC')->paginate(env('APP_PAGINATION'))->appends(['term' => $request->term]),
-            'page' => $request->page?? 1,
+            'page' => $request->page ?? 1,
             'termSearch' => $request->term,
         ];
     }
