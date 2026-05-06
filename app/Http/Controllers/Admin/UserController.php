@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreUserRequest;
+use App\Http\Requests\UpdateUserPasswordRequest;
 use App\Http\Requests\UpdateUserRequest;
 use App\Models\Permission;
 use App\Models\User;
@@ -12,7 +13,7 @@ use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Hash;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -65,7 +66,7 @@ class UserController extends Controller
                 ->orderBy('id')->value('id');
         }
 
-        $data['password'] = bcrypt(Str::random(16));
+        $data['password'] = Hash::make($request->password);
 
         try {
             $user = User::create($data);
@@ -89,6 +90,7 @@ class UserController extends Controller
             'user' => User::with('permission')->find($user->id),
             'can' => [
                 'update' => $request->user()->can('users.update'),
+                'update_password' => $request->user()->can('users.update.password'),
                 'delete' => $request->user()->can('users.delete'),
                 'verify' => $request->user()->can('users.verify'),
             ],
@@ -155,6 +157,31 @@ class UserController extends Controller
      *
      * @throws AuthorizationException
      */
+    public function editPassword(User $user): Response
+    {
+        $this->authorize('users.update.password', $user);
+
+        return Inertia::render('Auth/User/EditPassword', [
+            'user' => $user,
+        ]);
+    }
+
+    public function updatePassword(UpdateUserPasswordRequest $request, User $user): RedirectResponse
+    {
+        $this->authorize('users.update.password', $user);
+
+        $data = $request->validated();
+        $data['password'] = Hash::make($data['password']);
+
+        try {
+            $user->update($data);
+
+            return redirect()->route('users.show', $user)->with('flash', ['status' => 'success', 'message' => 'Registro atualizado com sucesso!']);
+        } catch (Exception $e) {
+            return redirect()->route('users.index')->with('flash', ['status' => 'danger', 'message' => $e->getMessage()]);
+        }
+    }
+
     public function verify(User $user): RedirectResponse
     {
         $this->authorize('users.verify', $user);

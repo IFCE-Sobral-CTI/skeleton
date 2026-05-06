@@ -4,7 +4,6 @@ namespace App\Http\Requests\Auth;
 
 use App\Models\User;
 use Illuminate\Auth\Events\Lockout;
-use Illuminate\Contracts\Validation\Rule;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
@@ -15,47 +14,74 @@ use LdapRecord\Container;
 
 class LoginRequest extends FormRequest
 {
-    /**
-     * Determine if the user is authorized to make this request.
-     */
     public function authorize(): bool
     {
         return true;
     }
 
-    /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array<string, Rule|array|string>
-     */
     public function rules(): array
     {
+        if ($this->isLdapMode()) {
+            return [
+                'registry' => ['required', 'string'],
+                'password' => ['required', 'string'],
+            ];
+        }
+
         return [
-            'registry' => ['required', 'string'],
+            'email' => ['required', 'string', 'email'],
             'password' => ['required', 'string'],
         ];
     }
 
-    /**
-     * Attempt to authenticate the request's credentials.
-     *
-     * @throws ValidationException
-     */
+    public function messages(): array
+    {
+        return [
+            'registry.required' => 'O campo de matrícula é obrigatório.',
+            'registry.string' => 'O campo de matrícula deve ser uma string.',
+            'password.required' => 'O campo de senha é obrigatório.',
+            'password.string' => 'O campo de senha deve ser uma string.',
+            'email.required' => 'O campo de email é obrigatório.',
+            'email.string' => 'O campo de email deve ser uma string.',
+            'email.email' => 'O campo de email deve ser um endereço de email válido.',
+        ];
+    }
+
     public function authenticate(): void
     {
         $this->ensureIsNotRateLimited();
 
-        $authenticated = $this->attemptLdapOrLocal();
+        $authenticated = $this->isLdapMode()
+            ? $this->attemptLdapOrLocal()
+            : $this->attemptEloquent();
 
         if (! $authenticated) {
             RateLimiter::hit($this->throttleKey());
 
             throw ValidationException::withMessages([
-                'registry' => trans('auth.failed'),
+                $this->loginField() => trans('auth.failed'),
             ]);
         }
 
         RateLimiter::clear($this->throttleKey());
+    }
+
+    protected function isLdapMode(): bool
+    {
+        return env('AUTH_MODE') === 'ldap';
+    }
+
+    protected function loginField(): string
+    {
+        return $this->isLdapMode() ? 'registry' : 'email';
+    }
+
+    protected function attemptEloquent(): bool
+    {
+        return Auth::attempt(
+            $this->only('email', 'password'),
+            $this->boolean('remember')
+        );
     }
 
     protected function attemptLdapOrLocal(): bool
@@ -96,11 +122,6 @@ class LoginRequest extends FormRequest
         }
     }
 
-    /**
-     * Ensure the login request is not rate limited.
-     *
-     * @throws ValidationException
-     */
     public function ensureIsNotRateLimited(): void
     {
         if (! RateLimiter::tooManyAttempts($this->throttleKey(), 5)) {
@@ -112,18 +133,15 @@ class LoginRequest extends FormRequest
         $seconds = RateLimiter::availableIn($this->throttleKey());
 
         throw ValidationException::withMessages([
-            'registry' => trans('auth.throttle', [
+            $this->loginField() => trans('auth.throttle', [
                 'seconds' => $seconds,
                 'minutes' => ceil($seconds / 60),
             ]),
         ]);
     }
 
-    /**
-     * Get the rate limiting throttle key for the request.
-     */
     public function throttleKey(): string
     {
-        return Str::transliterate(Str::lower($this->string('registry')).'|'.$this->ip());
+        return Str::transliterate(Str::lower($this->string($this->loginField())).'|'.$this->ip());
     }
 }

@@ -7,7 +7,7 @@ import Button from "@/Components/Form/Button";
 import DeleteModal from "@/Components/Dashboard/DeleteModal";
 import VerifyModal from "@/Components/Dashboard/VerifyModal";
 import Badge from "@/Components/Dashboard/Badge";
-import { ArrowLeft, Pencil, ShieldCheck } from "lucide-react";
+import { ArrowLeft, KeyRound, Pencil, ShieldCheck } from "lucide-react";
 
 function Show({ user, can }) {
     return (
@@ -48,6 +48,12 @@ function Show({ user, can }) {
                         <Button href={route('users.edit', user.id)} className="gap-2" color="yellow">
                             <Pencil size={20} />
                             <span>Editar</span>
+                        </Button>
+                    )}
+                    {can.update_password && (
+                        <Button href={route('users.edit.password', user.id)} className="gap-2" color="violet">
+                            <KeyRound size={20} />
+                            <span>Alterar Senha</span>
                         </Button>
                     )}
                     {can.verify && !user.email_verified_at && (
