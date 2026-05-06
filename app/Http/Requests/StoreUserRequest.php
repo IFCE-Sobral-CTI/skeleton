@@ -3,7 +3,6 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rules\Password;
 
 class StoreUserRequest extends FormRequest
 {
@@ -29,7 +28,6 @@ class StoreUserRequest extends FormRequest
             'registry' => 'required|digits_between:3,11|unique:users,registry',
             'email' => 'required|email|unique:users,email',
             'status' => 'required|in:0,1',
-            'password' => ['required', 'confirmed', Password::defaults()],
             'permission_id' => 'required|exists:permissions,id',
         ];
     }

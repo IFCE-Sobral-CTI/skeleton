@@ -17,8 +17,6 @@ function Create({ permissions }) {
     const { data, setData, post, processing, errors } = useForm({
         name: "",
         email: "",
-        password: "",
-        password_confirmation: "",
         status: '',
         registry: "",
         permission_id: "",
@@ -81,16 +79,6 @@ function Create({ permissions }) {
                                 <label htmlFor="registry" className="font-light">Matrícula</label>
                                 <Input type="number" value={data.registry} name="registry" handleChange={onHandleChange} required placeholder="Digite a matrícula" />
                                 <InputError message={errors.registry} />
-                            </div>
-                            <div className="mb-4">
-                                <label htmlFor="password" className="font-light">Senha</label>
-                                <Input type="password" value={data.password} name="password" handleChange={onHandleChange} required placeholder="Digite a senha" />
-                                <InputError message={errors.password} />
-                            </div>
-                            <div className="mb-4">
-                                <label htmlFor="password_confirmation" className="font-light">Confirmação de senha</label>
-                                <Input type="password" value={data.password_confirmation} name="password_confirmation" handleChange={onHandleChange} required placeholder="Repita a senha" />
-                                <InputError message={errors.password_confirmation} />
                             </div>
                         </div>
                         <div className="flex flex-wrap items-center justify-center gap-3 mt-2">

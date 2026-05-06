@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -12,6 +11,8 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Http\Request;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use LdapRecord\Laravel\Auth\AuthenticatesWithLdap;
+use LdapRecord\Laravel\Auth\LdapAuthenticatable;
 use Spatie\Activitylog\LogOptions;
 use Spatie\Activitylog\Traits\CausesActivity;
 use Spatie\Activitylog\Traits\LogsActivity;
@@ -25,9 +26,9 @@ use Spatie\Activitylog\Traits\LogsActivity;
  * @property int $status
  * @property Permission $permission
  */
-class User extends Authenticatable
+class User extends Authenticatable implements LdapAuthenticatable
 {
-    use CausesActivity, HasApiTokens, HasFactory, LogsActivity, Notifiable;
+    use AuthenticatesWithLdap, CausesActivity, HasApiTokens, HasFactory, LogsActivity, Notifiable;
 
     const ACTIVE = 1;
 

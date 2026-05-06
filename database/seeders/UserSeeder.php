@@ -24,6 +24,14 @@ class UserSeeder extends Seeder
             'registry' => 1000000,
             'permission_id' => Permission::where('description', 'Administrador')->first()->id,
         ]);
+        User::factory()->create([
+            'name' => 'Alan Freire',
+            'email' => 'alan.freire@ifce.edu.br',
+            'password' => Hash::make('qwe123'),
+            'status' => 1,
+            'registry' => 3024033,
+            'permission_id' => Permission::where('description', 'Administrador')->first()->id,
+        ]);
 
         User::factory()->count(10)->create();
     }

@@ -41,8 +41,6 @@ Route::get('faq/{tag}', [Home::class, 'faq'])->name('faq');
 Route::prefix('admin')->middleware(['auth', 'verified'])->group(function () {
     Route::get('/', [HomeController::class, 'index'])->name('admin');
     Route::resource('users', UserController::class);
-    Route::get('users/{user}/edit/password', [UserController::class, 'editPassword'])->name('users.edit.password');
-    Route::put('users/{user}/edit/password', [UserController::class, 'updatePassword'])->name('users.update.password');
     Route::patch('users/{user}/verify', [UserController::class, 'verify'])->name('users.verify');
     Route::get('profile', [UserController::class, 'profile'])->name('profile');
     Route::resource('rules', RuleController::class);

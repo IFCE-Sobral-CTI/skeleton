@@ -36,7 +36,15 @@ function Profile({ user }) {
                         <ShowField label="Atualizado em">{user.updated_at}</ShowField>
                         <div className="sm:col-span-2">
                             <p className="text-sm font-semibold text-neutral-600">
-                                Para alterar a senha, use a opção na página de login.
+                                Para alterar a senha, acesse o{' '}
+                                <a
+                                    href="https://suap.ifce.edu.br/comum/solicitar_trocar_senha/"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="underline hover:text-neutral-900"
+                                >
+                                    SUAP
+                                </a>.
                             </p>
                         </div>
                     </div>

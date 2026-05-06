@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\ValidationException;
 use Inertia\Inertia;
 use Inertia\Response;
+use LdapRecord\Container;
 
 class ConfirmablePasswordController extends Controller
 {
@@ -25,10 +26,9 @@ class ConfirmablePasswordController extends Controller
      */
     public function store(Request $request): RedirectResponse
     {
-        if (! Auth::guard('web')->validate([
-            'email' => $request->user()->email,
-            'password' => $request->password,
-        ])) {
+        $confirmed = $this->ldapValidate($request) || $this->localValidate($request);
+
+        if (! $confirmed) {
             throw ValidationException::withMessages([
                 'password' => __('auth.password'),
             ]);
@@ -37,5 +37,31 @@ class ConfirmablePasswordController extends Controller
         $request->session()->put('auth.password_confirmed_at', time());
 
         return redirect()->intended(route('dashboard', absolute: false));
+    }
+
+    protected function ldapValidate(Request $request): bool
+    {
+        $registry = $request->user()->registry;
+
+        if (! $registry) {
+            return false;
+        }
+
+        try {
+            return Container::getDefaultConnection()->auth()->attempt(
+                $registry.'@ad.ifce.edu.br',
+                $request->password
+            );
+        } catch (\Throwable $e) {
+            return false;
+        }
+    }
+
+    protected function localValidate(Request $request): bool
+    {
+        return Auth::guard('web')->validate([
+            'email' => $request->user()->email,
+            'password' => $request->password,
+        ]);
     }
 }
