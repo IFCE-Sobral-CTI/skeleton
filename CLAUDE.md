@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-Application skeleton for IFCE - Campus Sobral, built with **Laravel 12 + Inertia.js + React**. It provides a ready-to-fork base with authentication, a role/permission system, activity logging, and a FAQ module.
+Application skeleton for IFCE - Campus Sobral, built with **Laravel 13 + Inertia.js + React**. It provides a ready-to-fork base with LDAP/AD authentication, a role/permission system, activity logging, and a FAQ module.
 
 ## Commands
 
@@ -29,23 +29,60 @@ npm run build                     # production Vite build
 sail artisan migrate:fresh --seed # reset DB and seed all seeders
 ```
 
+### LDAP
+
+```sh
+sail artisan ldap:test            # test LDAP connection
+```
+
 ### Tests
 
 ```sh
 composer test                     # clears config cache, then runs PHPUnit
 php artisan test --filter MyTest  # run a single test class or method
+php artisan test --filter Ldap    # run only LDAP auth tests
 ```
 
-Default admin credentials (from seeder): `ti.sobral@ifce.edu.br` / `qwe123`
+Default admin credentials (from seeder): matrícula `1000000` / `qwe123`
 
 ## Architecture
 
 ### Stack
 
-- **Backend**: Laravel 12, Sanctum, Spatie ActivityLog, Ziggy (route helpers in JS)
-- **Frontend**: React 18 (JSX), Inertia.js v2, Tailwind CSS v4, `tw-elements`, `react-simple-wysiwyg`
+- **Backend**: Laravel 13, Sanctum, LdapRecord, Spatie ActivityLog, Ziggy (route helpers in JS)
+- **Frontend**: React 19 (JSX), Inertia.js v3, Tailwind CSS v4, `react-simple-wysiwyg`
 - **Database**: MariaDB 11 (via Sail), Redis (cache/queues)
-- **Dev tooling**: Laravel Sail (Docker), Vite 7, Laravel Pint
+- **Dev tooling**: Laravel Sail (Docker), Vite 8, Laravel Pint
+
+### LDAP Authentication
+
+Authentication uses the IFCE Active Directory (`ad.ifce.edu.br`).
+
+**Flow**:
+```
+Login (matrícula + senha)
+  │
+  ├─ 1. Busca usuário LOCAL por registry (matrícula)
+  │     └─ Não encontrado → rejeitado
+  │
+  ├─ 2. Bind LDAP direto como {matrícula}@ad.ifce.edu.br
+  │     └─ Sucesso → Auth::login(), sincroniza nome/email/guid
+  │
+  └─ 3. Fallback: bcrypt local (para admins locais)
+```
+
+- `LdapRecord\Container` gerencia a conexão com o AD.
+- A validação é feita via `Container::getDefaultConnection()->auth()->attempt(upn, senha)`.
+- `LDAP_DEFAULT_USERNAME`/`PASSWORD` no `.env` são opcionais (bind direto sem conta de serviço).
+- Usuários precisam estar **cadastrados no banco local** para logar.
+- Recuperação de senha redireciona para o SUAP (`https://suap.ifce.edu.br/comum/solicitar_trocar_senha/`).
+- O formulário de login pede **matrícula** (não email).
+- Os testes mockam o `LdapRecord\Auth\Guard` para simular bind LDAP.
+
+**Arquivos principais**:
+- `app/Http/Requests/Auth/LoginRequest.php` — lógica de autenticação (LDAP + fallback)
+- `app/Http/Controllers/Auth/ConfirmablePasswordController.php` — confirmação de senha (LDAP + local)
+- `.env` — `LDAP_DEFAULT_HOSTS`, `LDAP_DEFAULT_BASE_DN`, etc.
 
 ### RBAC Authorization System
 
@@ -69,6 +106,8 @@ To check in React: use the `authorizations` prop passed via Inertia shared data.
 ### Routing
 
 All admin routes live under the `/admin` prefix with `['auth', 'verified']` middleware (`routes/web.php`). Public routes (welcome, faq) are at `/`.
+
+Auth routes (`routes/auth.php`): login/logout, email verification, password confirmation. Password reset/forgot routes were removed — recovery redirects to SUAP.
 
 ### Frontend Structure
 

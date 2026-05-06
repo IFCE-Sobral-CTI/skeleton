@@ -4,11 +4,11 @@ import Footer from '@/Components/Public/Footer';
 import Panel from '@/Components/Public/Panel';
 import Navbar from '@/Components/Public/Navbar';
 import Header from '@/Components/Public/Header';
-import 'tw-elements';
 import { ChevronUp, Search } from "lucide-react";
 
 export default function Faq({ faqs }) {
     const [term, setTerm] = useState('');
+    const [openIndex, setOpenIndex] = useState(null);
 
     useEffect(() => {
         const debounce = setTimeout(() => {
@@ -18,31 +18,34 @@ export default function Faq({ faqs }) {
         return () => clearTimeout(debounce);
     }, [term]);
 
+    const toggleQuestion = (i) => {
+        setOpenIndex(openIndex === i ? null : i);
+    };
+
     const result = faqs.map((item, i, ar) => {
+        const isOpen = openIndex === i;
+
         return (
             <div
                 className={"border-neutral-200 bg-white border" + (i == 0? " rounded-t-lg": (i == ar.length-1)? " rounded-b-lg border-t-0" : " border-t-0")}
                 key={'faq-'+i}
             >
-                <h2 className={"mb-0" + (i == 0? " rounded-t-lg": (i == ar.length-1)? " rounded-b-lg border-t-0" : " border-t-0")} id={"heading-" + i}>
+                <h2 className={"mb-0"} id={"heading-" + i}>
                     <button
                         className={
-                            (i == 0)
-                            ?"group relative flex w-full items-center rounded-t-[15px] border-0 bg-white py-4 px-5 text-left text-base text-neutral-800 transition [overflow-anchor:none] hover:z-2 focus:z-3 focus:outline-none [&:not([data-te-collapse-collapsed])]:bg-white [&:not([data-te-collapse-collapsed])]:text-primary [&:not([data-te-collapse-collapsed])]:[box-shadow:inset_0_-1px_0_rgba(229,231,235)]"
-                            :(i == ar.length-1)
-                            ?"group relative flex w-full items-center border-0 bg-white py-4 px-5 text-left text-base text-neutral-800 transition [overflow-anchor:none] hover:z-2 focus:z-3 focus:outline-none [&:not([data-te-collapse-collapsed])]:bg-white [&:not([data-te-collapse-collapsed])]:text-primary [&:not([data-te-collapse-collapsed])]:[box-shadow:inset_0_-1px_0_rgba(229,231,235)] data-te-collapse-collapsed:rounded-b-[15px] data-te-collapse-collapsed:transition-none"
-                            :"group relative flex w-full items-center rounded-none border-0 bg-white py-4 px-5 text-left text-base text-neutral-800 transition [overflow-anchor:none] hover:z-2 focus:z-3 focus:outline-none [&:not([data-te-collapse-collapsed])]:bg-white [&:not([data-te-collapse-collapsed])]:text-primary [&:not([data-te-collapse-collapsed])]:[box-shadow:inset_0_-1px_0_rgba(229,231,235)]"
+                            "group relative flex w-full items-center border-0 bg-white py-4 px-5 text-left text-base text-neutral-800 transition hover:z-2 focus:z-3 focus:outline-none" +
+                            (isOpen ? "" : "") +
+                            (i == 0 && !isOpen ? " rounded-t-lg" : "") +
+                            (i == ar.length-1 && !isOpen ? " rounded-b-lg" : "")
                         }
                         type="button"
-                        data-te-collapse-init
-                        data-te-collapse-collapsed
-                        data-te-target={"#question-"+i}
-                        aria-expanded="false"
+                        onClick={() => toggleQuestion(i)}
+                        aria-expanded={isOpen}
                         aria-controls={"question-"+i}
                     >
                         {item.question}
                         <span
-                            className="ml-auto h-5 w-5 shrink-0 -rotate-180 fill-[#336dec] transition-transform duration-200 ease-in-out group-data-te-collapse-collapsed:rotate-0 group-data-te-collapse-collapsed:fill-[#212529] motion-reduce:transition-none"
+                            className={"ml-auto h-5 w-5 shrink-0 transition-transform duration-200 ease-in-out fill-[#336dec]" + (isOpen ? " rotate-0" : " rotate-180")}
                         >
                             <ChevronUp className="h-6 w-6" />
                         </span>
@@ -50,12 +53,10 @@ export default function Faq({ faqs }) {
                 </h2>
                 <div
                     id={"question-"+i}
-                    className="visible! hidden bg-neutral-100"
-                    data-te-collapse-item
+                    className={isOpen ? "visible bg-neutral-100 py-4 px-5" : "hidden"}
                     aria-labelledby={"heading" + i}
-                    data-te-parent="#accordionExample"
                 >
-                    <div className="py-4 px-5" dangerouslySetInnerHTML={{ __html: item.answer }}></div>
+                    <div dangerouslySetInnerHTML={{ __html: item.answer }}></div>
                 </div>
             </div>
         )
@@ -76,7 +77,7 @@ export default function Faq({ faqs }) {
                             </span>
                         </Panel>
                         <Panel className={'mt-2 flex flex-col gap-2'}>
-                            <div id="accordionExample">
+                            <div>
                                 {result}
                             </div>
                         </Panel>

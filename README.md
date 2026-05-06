@@ -1,6 +1,6 @@
 # ESQUELETO PARA APLICAÇÕES DO IFCE - CAMPUS SOBRAL
 
-Aplicação skeleton pronta para fork com autenticação, sistema de controle de acesso baseado em papéis (RBAC), logging de atividades e módulo de FAQ. Uma base sólida para construir aplicações web modernas no IFCE - Campus Sobral.
+Aplicação skeleton pronta para fork com autenticação LDAP/AD integrada, sistema de controle de acesso baseado em papéis (RBAC), logging de atividades e módulo de FAQ. Uma base sólida para construir aplicações web modernas no IFCE - Campus Sobral.
 
 ## STACK DE TECNOLOGIAS
 
@@ -13,6 +13,7 @@ Aplicação skeleton pronta para fork com autenticação, sistema de controle de
 - **Laravel Pint** - Padronização de código PHP
 - **Laravel Sail** - Ambiente Docker pré-configurado
 - **Laravel Pail** - Visualização de logs em tempo real
+- **LdapRecord** - Integração com Active Directory/LDAP
 
 ### Frontend
 - **React 19** - Biblioteca para interfaces declarativas
@@ -20,7 +21,6 @@ Aplicação skeleton pronta para fork com autenticação, sistema de controle de
 - **Headless UI** - Componentes UI sem estilos
 - **TipTap** - Editor de texto rico (Rich WYSIWYG)
 - **Lucide React** - Ícones SVG reutilizáveis
-- **TW Elements** - Componentes customizáveis com Tailwind
 - **Tailwind Merge** - Tratamento inteligente de classes Tailwind
 - **Vite** - Bundler e dev server de última geração
 
@@ -31,10 +31,13 @@ Aplicação skeleton pronta para fork com autenticação, sistema de controle de
 ## FUNCIONALIDADES PRINCIPAIS
 
 ### 🔐 Autenticação e Segurança
-- Sistema de login seguro com verificação de email
-- Autenticação baseada em tokens com Laravel Sanctum
-- Recuperação de senha via email
+- Login via **Active Directory (LDAP)** do IFCE — autenticação com matrícula e senha institucional
+- Validação de senha via bind LDAP direto (sem necessidade de conta de serviço)
+- Fallback para senha bcrypt local (admins locais)
+- Usuários precisam estar cadastrados previamente no banco local para acessar
+- Redirecionamento de recuperação de senha para o **SUAP** (`suap.ifce.edu.br`)
 - Gerenciamento de sessões
+- Autenticação baseada em tokens com Laravel Sanctum
 
 ### 👥 Sistema RBAC (Role-Based Access Control)
 - **Usuários** - Criação, edição, exclusão e gerenciamento de usuários
@@ -148,8 +151,9 @@ sail artisan pail             # Visualiza logs em tempo real
 |------|-----|
 | **Página Pública** | http://localhost |
 | **Dashboard Admin** | http://localhost/admin |
-| **Credenciais Padrão** | Email: `ti.sobral@ifce.edu.br` |
-| | Senha: `qwe123` |
+| **Credenciais Padrão (admin local)** | Matrícula: `sua matrícula` |
+| | Senha: `sua senha SUAP/E-mail institucional` |
+
 
 ## COMANDOS ÚTEIS
 
@@ -171,24 +175,52 @@ O sistema está distribuído em duas partes do front-end.
 * Dashboard
   * <http://url-do-app/admin>
 
-Para acessar a dashboard use as seguintes credenciais
-* Usuário: ti.sobral@ifce.edu.br
-* Senha: qwe123
+Para acessar a dashboard:
+
+**Login LDAP:** use sua **matrícula institucional** do IFCE e senha do SUAP/AD.
+**Login local:** use a matrícula do admin local (`1000000`) com senha `qwe123`.
+
+> A recuperação de senha é feita exclusivamente pelo [SUAP](https://suap.ifce.edu.br/comum/solicitar_trocar_senha/).
 
 ### TELAS
 
-Gerenciamento de Usuários
+#### Página Inicial
 
-![Gerenciamento de Usuários](https://github.com/CTI-Sobral-IFCE/skeleton/blob/main/public/screenshots/users-admin.png?raw=true "Admin users")
+![Página Inicial](public/screenshots/1_main.png "Dashboard")
 
-![Formulário de novo Usuário](https://github.com/CTI-Sobral-IFCE/skeleton/blob/main/public/screenshots/users-create.png?raw=true "Create users")
+#### 📋 Gerenciamento de Notificações
 
-![Detalhes do Usuário](https://github.com/CTI-Sobral-IFCE/skeleton/blob/main/public/screenshots/users-show.png?raw=true "Show users")
+![Notificações](public/screenshots/2_notifications.png "Notificações")
 
-### 🔑 Gerenciamento de Permissões
-Sistema robusto de controle de acesso com permissões e regras.
+![Nova Notificação](public/screenshots/2_new_notification.png "Nova notificação")
 
-![Gerenciamento de Permissões](https://github.com/CTI-Sobral-IFCE/skeleton/blob/main/public/screenshots/permissions-show.png?raw=true "Show permissions")
+![Gerenciar Notificações](public/screenshots/3_manage_my_notifications.png "Minhas notificações")
+
+#### 👥 Gerenciamento de Usuários
+
+![Usuários](public/screenshots/4_users.png "Usuários")
+
+![Novo Usuário](public/screenshots/4_new_user.png "Novo usuário")
+
+#### Páginas
+
+![Páginas](public/screenshots/5_pages.png "Páginas")
+
+#### 🔑 Gerenciamento de Permissões
+
+![Permissões](public/screenshots/6_permissions.png "Permissões")
+
+#### Regras
+
+![Regras](public/screenshots/7_rules.png "Regras")
+
+#### 📊 Logs
+
+![Logs](public/screenshots/8_logs.png "Logs")
+
+#### 🔐 Login
+
+![Login](public/screenshots/9_login.png "Login")
 
 > **Nota**: A permissão "Administrador" possui acesso a todas as funcionalidades por padrão, sem necessidade de atribuição individual de regras.
 
@@ -204,7 +236,6 @@ Sistema robusto de controle de acesso com permissões e regras.
 | **@headlessui/react** | ^2.2.10 | Componentes UI headless acessíveis |
 | **@tiptap/react** | ^3.22.5 | Editor de texto rico |
 | **lucide-react** | ^0.511.0 | Ícones SVG reutilizáveis |
-| **tw-elements** | ^2.0.0 | Componentes customizáveis |
 | **tailwind-merge** | ^3.5.0 | Merge inteligente de classes Tailwind |
 | **vite** | ^8.0.10 | Build tool e dev server |
 | **laravel-vite-plugin** | ^3.0.1 | Integração Laravel com Vite |
@@ -219,6 +250,7 @@ Sistema robusto de controle de acesso com permissões e regras.
 | **inertiajs/inertia-laravel** | ^3.0 | Adaptador Inertia para Laravel |
 | **spatie/laravel-activitylog** | ^4.8 | Auditoria e logging de ações |
 | **tightenco/ziggy** | ^2.0 | Helpers de rotas em JavaScript |
+| **directorytree/ldaprecord-laravel** | ^4.0 | Integração com Active Directory/LDAP |
 | **laravel/tinker** | ^3.0 | Console PHP interativo |
 | **laravel/sail** | ^1.26 | Environment Docker pré-configurado |
 | **laravel/pail** | ^1.2.2 | Logs em tempo real |
@@ -235,8 +267,8 @@ APP_NAME="Skeleton IFCE"
 APP_URL=http://localhost
 
 # Banco de Dados
-DB_CONNECTION=mysql
-DB_HOST=mysql
+DB_CONNECTION=mariadb
+DB_HOST=mariadb
 DB_PORT=3306
 DB_DATABASE=skeleton
 DB_USERNAME=root
@@ -254,6 +286,26 @@ MAIL_PORT=1025
 
 # Paginação
 APP_PAGINATION=15
+
+# LDAP / Active Directory
+LDAP_CONNECTION=default
+LDAP_CONNECTIONS=default
+LDAP_DEFAULT_HOSTS=ad.ifce.edu.br
+LDAP_DEFAULT_USERNAME=
+LDAP_DEFAULT_PASSWORD=
+LDAP_DEFAULT_PORT=389
+LDAP_DEFAULT_BASE_DN="OU=DG-SOB,OU=IFCE,DC=ad,DC=ifce,DC=edu,DC=br"
+LDAP_DEFAULT_TIMEOUT=5
+LDAP_DEFAULT_SSL=false
+LDAP_DEFAULT_TLS=false
+```
+
+> **Nota LDAP:** O sistema autentica via bind direto com as credenciais do usuário (matrícula@ad.ifce.edu.br), sem necessidade de conta de serviço. As credenciais `LDAP_DEFAULT_USERNAME`/`PASSWORD` são opcionais — se vazias, a conexão inicial é anônima.
+
+### Testar Conexão LDAP
+
+```sh
+sail artisan ldap:test
 ```
 
 ### Customização de Regras de Autorização
@@ -353,6 +405,7 @@ sail artisan tinker
 - [Documentação React](https://react.dev)
 - [Documentação Tailwind CSS](https://tailwindcss.com)
 - [Documentação Spatie Activity Log](https://github.com/spatie/laravel-activitylog)
+- [Documentação LdapRecord](https://ldaprecord.com/docs/laravel/v4)
 
 ## SUPORTE E CONTRIBUIÇÕES
 

@@ -7,7 +7,6 @@ export default {
         './storage/framework/views/*.php',
         './resources/views/**/*.blade.php',
         './resources/js/**/*.jsx',
-        './node_modules/tw-elements/js/**/*.js',
     ],
-    plugins: [forms, require('tw-elements/plugin.cjs')],
+    plugins: [forms],
 };
