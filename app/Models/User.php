@@ -111,11 +111,15 @@ class User extends Authenticatable implements LdapAuthenticatable
 
     public function isAdmin(): bool
     {
-        return $this->permission->description === 'Administrador';
+        return $this->permission?->description === 'Administrador';
     }
 
     public function hasRule($rule): bool
     {
+        if (! $this->permission) {
+            return false;
+        }
+
         return $this->permission->rules()->hasControl($rule);
     }
 

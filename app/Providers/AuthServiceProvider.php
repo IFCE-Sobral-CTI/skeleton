@@ -38,6 +38,8 @@ class AuthServiceProvider extends ServiceProvider
             }
 
             Gate::before(function (User $user, $ability) {
+                $user->loadMissing('permission.rules');
+
                 if ($user->isAdmin()) {
                     return true;
                 }

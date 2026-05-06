@@ -59,6 +59,12 @@ class UserController extends Controller
         $this->authorize('users.create', User::class);
 
         $data = $request->validated();
+
+        if (! $request->user()->isAdmin()) {
+            $data['permission_id'] = Permission::where('description', '!=', 'Administrador')
+                ->orderBy('id')->value('id');
+        }
+
         $data['password'] = bcrypt(Str::random(16));
 
         try {
@@ -131,6 +137,10 @@ class UserController extends Controller
 
         $data = $request->validated();
 
+        if (! $request->user()->isAdmin()) {
+            unset($data['permission_id']);
+        }
+
         try {
             $user->update($data);
 
@@ -167,7 +177,7 @@ class UserController extends Controller
     {
         $this->authorize('users.delete', $user);
 
-        if ($user->id === 1) {
+        if ($user->isAdmin()) {
             return redirect()->route('users.index')->with('flash', ['status' => 'danger', 'message' => 'Erro ao tentar apagar o registro!']);
         }
 

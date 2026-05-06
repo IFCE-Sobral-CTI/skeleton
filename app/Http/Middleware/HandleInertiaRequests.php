@@ -52,14 +52,17 @@ class HandleInertiaRequests extends Middleware
                     return [];
                 }
 
+                $user = $request->user();
+                $user->loadMissing('permission.rules');
+
                 $rules = [];
 
-                if ($request->user()->isAdmin()) {
+                if ($user->isAdmin()) {
                     foreach (Rule::where('control', 'like', '%viewAny%')->get() as $rule) {
                         $rules[str_replace('.', '_', $rule->control)] = true;
                     }
                 } else {
-                    foreach ($request->user()->permission->rules()->where('control', 'like', '%viewAny%')->get() as $rule) {
+                    foreach ($user->permission->rules()->where('control', 'like', '%viewAny%')->get() as $rule) {
                         $rules[str_replace('.', '_', $rule->control)] = true;
                     }
                 }

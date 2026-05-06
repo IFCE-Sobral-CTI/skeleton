@@ -21,7 +21,7 @@ class RuleSeeder extends Seeder
         $groups = [
             'activities' => [
                 'group' => Group::firstOrCreate(['description' => 'Logs']),
-                'only' => ['Página inicial' => 'viewAny', 'Detalhes' => 'view'],
+                'only' => ['Página inicial' => 'viewAny', 'Detalhes' => 'view', 'Apagar' => 'delete'],
             ],
             'groups' => ['group' => Group::firstOrCreate(['description' => 'Páginas'])],
             'faqs' => ['group' => Group::firstOrCreate(['description' => 'FAQ'])],
